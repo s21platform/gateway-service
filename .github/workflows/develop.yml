@@ -1,0 +1,33 @@
+name: Dev CI/CD to Development server
+on:
+  push:
+    branches:
+      - develop
+
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        run: go test -v ./...
+  build_and_push:
+    name: Build and Push Image to YC
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Yandex CR Login
+        uses: yc-actions/yc-cr-login@v0.1-alpha
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_KEY }}
+      - name: Build and Push to YC
+        run: |
+          docker build -t ${{ secrets.CR_REGISTRY }}/${{ secrets.${{ secrets.CR_NAME }} }}:develop .
+          docker push ${{ secrets.CR_REGISTRY }}/${{ secrets.${{ secrets.CR_NAME }} }}:develop

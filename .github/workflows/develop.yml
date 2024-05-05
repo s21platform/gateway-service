@@ -48,4 +48,5 @@ jobs:
           key: ${{ secrets.PRIVATE_SSH_KEY_DEVELOP }}
           passphrase: ${{ secrets.PASSPHRASE_DEVELOP }}
           script: |
-            docker-compose -f ~/s21platform/docker-compose.yml up --pull always -d gateway
+            docker pull ${{ secrets.CR_REGISTRY }}/${{ secrets.CR_NAME }}:develop
+            docker-compose -f ~/s21platform/docker-compose.yml up -d gateway

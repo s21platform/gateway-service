@@ -10,9 +10,9 @@ import (
 
 func main() {
 	cfg := config.MustLoad()
-
+	fmt.Println(cfg)
 	r := chi.NewRouter()
-	RESTHandlers.AttachHandlers(r)
+	RESTHandlers.AttachHandlers(r, cfg)
 	fmt.Println(fmt.Sprintf(":%s", cfg.Service.Port))
 	http.ListenAndServe(fmt.Sprintf(":%s", cfg.Service.Port), r)
 }

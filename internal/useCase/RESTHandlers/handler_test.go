@@ -22,7 +22,7 @@ func TestGetAuth(t *testing.T) {
 		Password: "testpass",
 	}).Return(&auth_proto.LoginResponse{Jwt: "dummy_token"}, nil)
 
-	grpsC := &grpc.GrpcClients{AuthClient: MockAuthClient}
+	grpsC := &grpc.ServiceClients{AuthClient: MockAuthClient}
 	r := chi.NewRouter()
 	AttachHandlers(r, grpsC)
 
@@ -43,7 +43,7 @@ func TestGetAuth(t *testing.T) {
 		// Проверка тела ответа
 		cookie := rr.Result().Cookies()
 		assert.Len(t, cookie, 1, "Expected one cookie")
-		assert.Equal(t, "capy_token", cookie[0].Name, "Cookie name should be 'capy_token'")
+		assert.Equal(t, "S21SPACE_AUTH_TOKEN", cookie[0].Name, "Cookie name should be 'capy_token'")
 		assert.Equal(t, "dummy_token", cookie[0].Value, "Cookie value should be 'dummy_token'")
 	})
 

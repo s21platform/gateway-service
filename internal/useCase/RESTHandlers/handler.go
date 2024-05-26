@@ -11,7 +11,8 @@ import (
 	"net/http"
 )
 
-func AttachHandlers(r chi.Router, clients *grpc2.GrpcClients) {
+func AttachHandlers(r chi.Router, clients *grpc2.ServiceClients) {
+	// Register all endpoints for /auth/
 	r.Route("/auth", func(authRouter chi.Router) {
 		authRouter.Post("/login", GetAuth(clients))
 	})
@@ -23,8 +24,6 @@ type LoginData struct {
 }
 
 func GetAuth(in Auth) func(w http.ResponseWriter, r *http.Request) {
-	// Тут я уже должен получить интерфейс, который смогу заммокать. В частности достаточно просто замокать метод самого запроса, а все коннекшены - вынести отсюда
-	//authService := auth.NewAuthServiceClient(cfg)
 	return func(w http.ResponseWriter, r *http.Request) {
 		data := &LoginData{}
 		err := json.NewDecoder(r.Body).Decode(data)
@@ -42,10 +41,10 @@ func GetAuth(in Auth) func(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		http.SetCookie(w, &http.Cookie{
-			Name:  "capy_token",
+			Name:  "S21SPACE_AUTH_TOKEN",
 			Value: response.Jwt,
 		})
-		w.WriteHeader(200)
+		w.WriteHeader(http.StatusOK)
 		return
 	}
 }

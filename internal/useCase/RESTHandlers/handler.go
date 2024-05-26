@@ -36,9 +36,10 @@ func GetAuth(in Auth) func(w http.ResponseWriter, r *http.Request) {
 		response, err := in.Login(context.Background(), &request)
 		if err != nil {
 			if statusError, ok := status.FromError(err); ok {
-				http.Error(w, statusError.Message(), int(statusError.Code()))
-				return
+				fmt.Println(int(statusError.Code()), statusError.Message())
 			}
+			w.WriteHeader(http.StatusBadRequest)
+			return
 		}
 		http.SetCookie(w, &http.Cookie{
 			Name:  "S21SPACE_AUTH_TOKEN",

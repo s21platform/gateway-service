@@ -1,6 +1,7 @@
 package RESTHandlers
 
 import (
+	"errors"
 	"github.com/go-chi/chi/v5"
 	"github.com/golang/mock/gomock"
 	auth_proto "github.com/s21platform/auth-proto/auth-proto"
@@ -74,5 +75,23 @@ func TestGetAuth(t *testing.T) {
 		// Проверка кода ответа
 		assert.Equal(t, http.StatusForbidden, rr.Code, "Expected status code to be 200")
 
+	})
+
+	t.Run("Invalid request data 2", func(t *testing.T) {
+		MockAuthClient.EXPECT().Login(gomock.Any(), &auth_proto.LoginRequest{
+			Username: "testuser",
+			Password: "testpass",
+		}).Return(nil, errors.New("error"))
+		req, err := http.NewRequest("POST", "/auth/login", strings.NewReader(`{"username":"testuser","password":"testpass"}`))
+		if err != nil {
+			t.Fatal(err)
+		}
+		req.Header.Set("Content-Type", "application/json")
+
+		rr := httptest.NewRecorder()
+		r.ServeHTTP(rr, req)
+
+		// Проверка кода ответа
+		assert.Equal(t, http.StatusBadRequest, rr.Code, "Expected status code to be 400")
 	})
 }

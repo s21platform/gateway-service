@@ -4,7 +4,9 @@ package main
 
 import (
 	"fmt"
+	chiprometheus "github.com/766b/chi-prometheus"
 	"github.com/go-chi/chi/v5"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	auth_proto "github.com/s21platform/auth-proto/auth-proto"
 	"github.com/s21platform/gateway-service/internal/config"
 	grpc2 "github.com/s21platform/gateway-service/internal/repository/grpc"
@@ -32,6 +34,11 @@ func main() {
 
 	// Create New Router for manage url endpoints
 	r := chi.NewRouter()
+
+	promMiddleWare := chiprometheus.NewMiddleware("gateway-service")
+	r.Use(promMiddleWare)
+
+	r.Handle("/metrics", promhttp.Handler())
 
 	// Register all REST Handlers
 	RESTHandlers.AttachHandlers(r, clients)

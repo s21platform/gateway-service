@@ -1,6 +1,6 @@
 name: Dev CI/CD to Development server
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -50,8 +50,8 @@ jobs:
           yc-sa-json-credentials: ${{ secrets.YC_KEY }}
       - name: Build and Push to YC
         run: |
-          docker build -t ${{ secrets.CR_REGISTRY }}/${{ secrets.CR_NAME }}:develop .
-          docker push ${{ secrets.CR_REGISTRY }}/${{ secrets.CR_NAME }}:develop
+          docker build -t ${{ secrets.CR_REGISTRY }}/${{ secrets.CR_NAME }}:prod .
+          docker push ${{ secrets.CR_REGISTRY }}/${{ secrets.CR_NAME }}:prod
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push
@@ -64,5 +64,5 @@ jobs:
           key: ${{ secrets.PRIVATE_SSH_KEY_DEVELOP }}
           passphrase: ${{ secrets.PASSPHRASE_DEVELOP }}
           script: |
-            docker pull ${{ secrets.CR_REGISTRY }}/${{ secrets.CR_NAME }}:develop
-            docker-compose -f ~/space21/docker-compose-dev.yml up -d gateway
+            docker pull ${{ secrets.CR_REGISTRY }}/${{ secrets.CR_NAME }}:prod
+            docker-compose -f ~/space21/docker-compose.yml up -d ${{ secrets.CR_NAME }}

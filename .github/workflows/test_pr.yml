@@ -12,4 +12,4 @@ jobs:
 
     steps:
       - name: test work on PR
-        run: echo 'work 2'
+        run: exit 1

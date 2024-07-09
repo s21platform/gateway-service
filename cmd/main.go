@@ -17,7 +17,7 @@ import (
 )
 
 func main() {
-	// load environments to Config struct
+	// load environments to Config  struct
 	cfg := config.MustLoad()
 
 	// Create connection to Auth service by gRPC

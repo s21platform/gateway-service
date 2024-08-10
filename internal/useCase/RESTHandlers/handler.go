@@ -38,6 +38,9 @@ func GetAuth(in Auth) func(w http.ResponseWriter, r *http.Request) {
 		if err != nil || data.Username == "" || data.Password == "" {
 			fmt.Println("some error for decode data")
 			w.WriteHeader(http.StatusForbidden)
+			json.NewEncoder(w).Encode(LoginResponse{
+				Message: "Необходимо заполнить все поля",
+			})
 			return
 		}
 		ctx := metadata.NewOutgoingContext(context.Background(), metadata.Pairs("trace-id", "-test-"))

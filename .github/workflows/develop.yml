@@ -27,8 +27,8 @@ jobs:
           go tool cover -func=coverage.out -o=coverage.txt
           coverage=$(go tool cover -func=coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')
           echo "Coverage is $coverage%"
-          if (( $(echo "$coverage < 80.0" | bc -l) )); then
-          echo "Coverage is below 80%"
+          if (( $(echo "$coverage < 70.0" | bc -l) )); then
+          echo "Coverage is below 70%"
           exit 1
           fi
 

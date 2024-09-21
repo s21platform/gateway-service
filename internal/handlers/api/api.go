@@ -3,7 +3,6 @@ package api
 import (
 	"github.com/go-chi/chi/v5"
 	"net/http"
-	"strings"
 )
 
 type Handler struct {
@@ -21,8 +20,8 @@ func (h *Handler) Test(w http.ResponseWriter, r *http.Request) {
 func CheckJWT(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Извлекаем JWT токен из заголовка Authorization
-		authHeader := r.Header.Get("Authorization")
-		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		_, err := r.Cookie("S21SPACE_AUTH_TOKEN")
+		if err != nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}

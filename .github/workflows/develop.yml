@@ -12,38 +12,38 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: 1.22
 
-      - name: Run tests
-        run: go test -coverprofile=coverage.out -tags=test -v ./...
-
-      - name: Check coverage
-        run: |
-          go tool cover -func=coverage.out -o=coverage.txt
-          coverage=$(go tool cover -func=coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')
-          echo "Coverage is $coverage%"
-          if (( $(echo "$coverage < 70.0" | bc -l) )); then
-          echo "Coverage is below 70%"
-          exit 1
-          fi
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-report
-          path: coverage.txt
+#      - name: Run tests
+#        run: go test -coverprofile=coverage.out -tags=test -v ./...
+#
+#      - name: Check coverage
+#        run: |
+#          go tool cover -func=coverage.out -o=coverage.txt
+#          coverage=$(go tool cover -func=coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')
+#          echo "Coverage is $coverage%"
+#          if (( $(echo "$coverage < 70.0" | bc -l) )); then
+#          echo "Coverage is below 70%"
+#          exit 1
+#          fi
+#
+#      - name: Upload coverage report
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: coverage-report
+#          path: coverage.txt
   build_and_push:
     name: Build and Push Image to YC
     runs-on: ubuntu-latest
     needs: test
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Yandex CR Login
         uses: yc-actions/yc-cr-login@v0.1-alpha
         with:

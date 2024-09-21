@@ -28,5 +28,6 @@ func main() {
 	authhandler.AttachAuthRoutes(r, authHandlers)
 
 	fmt.Println(fmt.Sprintf(":%s", cfg.Service.Port))
+
 	http.ListenAndServe(fmt.Sprintf(":%s", cfg.Service.Port), r)
 }

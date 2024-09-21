@@ -48,13 +48,28 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		Value:    jwt.Jwt,
 		Expires:  time.Now().Add(10 * time.Hour),
 		HttpOnly: true,
+		Path:     "/",
+		Secure:   false,
+		SameSite: http.SameSiteStrictMode,
 	})
 	w.WriteHeader(http.StatusOK)
 	return
 }
 
+func (h *Handler) Test(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("S21SPACE_AUTH_TOKEN")
+	if err != nil {
+		w.Write([]byte("Cookie не найдено:("))
+		return
+	}
+
+	// Отправляем обратно значение cookie
+	w.Write([]byte("Cookie найдено: " + cookie.Value))
+}
+
 func AttachAuthRoutes(r chi.Router, handler *Handler) {
 	r.Route("/auth", func(authRouter chi.Router) {
 		authRouter.Post("/login", handler.Login)
+		authRouter.Get("/login", handler.Test)
 	})
 }

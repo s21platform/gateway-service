@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/go-chi/chi/v5"
+	"log"
 	"net/http"
 )
 
@@ -20,8 +21,9 @@ func (h *Handler) Test(w http.ResponseWriter, r *http.Request) {
 func CheckJWT(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Извлекаем JWT токен из заголовка Authorization
-		_, err := r.Cookie("S21SPACE_AUTH_TOKEN")
+		cookie, err := r.Cookie("S21SPACE_AUTH_TOKEN")
 		if err != nil {
+			log.Println("failed to get cookie value")
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
@@ -36,6 +38,7 @@ func CheckJWT(next http.Handler) http.Handler {
 		//}
 
 		// Если JWT валиден, передаем запрос дальше
+		log.Println("got cookie value:", cookie.Value)
 		next.ServeHTTP(w, r)
 	})
 }

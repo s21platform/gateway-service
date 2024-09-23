@@ -51,6 +51,7 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 			}
+			log.Println("token:", cfg.Service.Secret)
 			return cfg.Service.Secret, nil
 		})
 		if err != nil {

@@ -51,7 +51,7 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 			}
 			log.Println("token:", cfg.Service.Secret)
-			return cfg.Service.Secret, nil
+			return []byte(cfg.Service.Secret), nil
 		})
 		if err != nil {
 			log.Printf("failed to parse token: %v", err)

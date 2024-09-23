@@ -32,7 +32,7 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-func CheckJWT(next http.Handler, cfg config.Config) http.Handler {
+func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("S21SPACE_AUTH_TOKEN")
 		if err != nil {
@@ -80,7 +80,7 @@ func CheckJWT(next http.Handler, cfg config.Config) http.Handler {
 	})
 }
 
-func AttachApiRoutes(r chi.Router, handler *Handler, cfg config.Config) {
+func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Group(func(r chi.Router) {
 		r.Use(func(next http.Handler) http.Handler {
 			return CheckJWT(next, cfg)

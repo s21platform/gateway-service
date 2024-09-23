@@ -28,7 +28,7 @@ func main() {
 
 	r := chi.NewRouter()
 	authhandler.AttachAuthRoutes(r, authHandlers)
-	api.AttachApiRoutes(r, apiHandlers)
+	api.AttachApiRoutes(r, apiHandlers, cfg)
 
 	fmt.Println(fmt.Sprintf(":%s", cfg.Service.Port))
 

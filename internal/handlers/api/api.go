@@ -1,9 +1,14 @@
 package api
 
 import (
+	"context"
+	"fmt"
 	"github.com/go-chi/chi/v5"
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/s21platform/gateway-service/internal/config"
 	"log"
 	"net/http"
+	"time"
 )
 
 type Handler struct {
@@ -14,38 +19,73 @@ func New() *Handler {
 }
 
 func (h *Handler) Test(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("OK"))
+	username := r.Context().Value("username")
+	w.Write([]byte(fmt.Sprintf("Hello, %s!", username)))
 	return
 }
 
-func CheckJWT(next http.Handler) http.Handler {
+type Claims struct {
+	Username    string    `json:"username"`
+	Role        string    `json:"role"`
+	AccessToken string    `json:"accessToken"`
+	Exp         time.Time `json:"exp"`
+	jwt.RegisteredClaims
+}
+
+func CheckJWT(next http.Handler, cfg config.Config) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Извлекаем JWT токен из заголовка Authorization
 		cookie, err := r.Cookie("S21SPACE_AUTH_TOKEN")
 		if err != nil {
 			log.Println("failed to get cookie value")
+			http.SetCookie(w, &http.Cookie{
+				Name:     "S21SPACE_AUTH_TOKEN",
+				Value:    "",
+				MaxAge:   -1,
+				HttpOnly: true,
+			})
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
 
-		//token := strings.TrimPrefix(authHeader, "Bearer ")
-
-		// Здесь вы должны добавить логику валидации JWT
-		//valid, err := ValidateJWT(token)
-		//if err != nil || !valid {
-		//	http.Error(w, "Invalid token", http.StatusUnauthorized)
-		//	return
-		//}
-
-		// Если JWT валиден, передаем запрос дальше
-		log.Println("got cookie value:", cookie.Value)
-		next.ServeHTTP(w, r)
+		token, err := jwt.ParseWithClaims(cookie.Value, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			}
+			return cfg.Service.Secret, nil
+		})
+		if err != nil {
+			log.Println("failed to parse token")
+			http.SetCookie(w, &http.Cookie{
+				Name:     "S21SPACE_AUTH_TOKEN",
+				Value:    "",
+				MaxAge:   -1,
+				HttpOnly: true,
+			})
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		claims, ok := token.Claims.(*Claims)
+		if !ok || !token.Valid {
+			http.SetCookie(w, &http.Cookie{
+				Name:     "S21SPACE_AUTH_TOKEN",
+				Value:    "",
+				MaxAge:   -1,
+				HttpOnly: true,
+			})
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		ctx := context.WithValue(r.Context(), "username", claims.Username)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
-func AttachApiRoutes(r chi.Router, handler *Handler) {
+func AttachApiRoutes(r chi.Router, handler *Handler, cfg config.Config) {
 	r.Group(func(r chi.Router) {
-		r.Use(CheckJWT)
+		r.Use(func(next http.Handler) http.Handler {
+			return CheckJWT(next, cfg)
+		})
+
 		r.Route("/api", func(r chi.Router) {
 			r.Get("/test", handler.Test)
 		})

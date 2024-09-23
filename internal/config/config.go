@@ -15,7 +15,8 @@ type Config struct {
 
 // Service struct for storage this server config variables
 type Service struct {
-	Port string `env:"GATEWAY_SERVICE_PORT"`
+	Port   string `env:"GATEWAY_SERVICE_PORT"`
+	Secret string `env:"SECRET_KEY"`
 }
 
 // Auth struct for storage auth-service config variables

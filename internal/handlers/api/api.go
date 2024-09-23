@@ -8,7 +8,6 @@ import (
 	"github.com/s21platform/gateway-service/internal/config"
 	"log"
 	"net/http"
-	"time"
 )
 
 type Handler struct {
@@ -25,10 +24,10 @@ func (h *Handler) Test(w http.ResponseWriter, r *http.Request) {
 }
 
 type Claims struct {
-	Username    string    `json:"username"`
-	Role        string    `json:"role"`
-	AccessToken string    `json:"accessToken"`
-	Exp         time.Time `json:"exp"`
+	Username    string `json:"username"`
+	Role        string `json:"role"`
+	AccessToken string `json:"accessToken"`
+	Exp         int64  `json:"exp"`
 	jwt.RegisteredClaims
 }
 

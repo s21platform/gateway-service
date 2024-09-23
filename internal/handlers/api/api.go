@@ -55,7 +55,7 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 			return cfg.Service.Secret, nil
 		})
 		if err != nil {
-			log.Println("failed to parse token")
+			log.Printf("failed to parse token: %v", err)
 			http.SetCookie(w, &http.Cookie{
 				Name:     "S21SPACE_AUTH_TOKEN",
 				Value:    "",

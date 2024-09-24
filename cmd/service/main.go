@@ -19,7 +19,7 @@ import (
 func main() {
 	cfg := config.MustLoad()
 
-	metrics, err := pkg.NewMetrics(cfg.Metrics.Host, cfg.Metrics.Port)
+	metrics, err := pkg.NewMetrics(cfg.Metrics.Host, cfg.Metrics.Port, "gateway", cfg.Metrics.Env)
 	if err != nil {
 		log.Fatalf("failed to init metrics: %v", err)
 	}

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type statusRecorder struct {
@@ -22,6 +23,7 @@ func MetricMiddleware(next http.Handler, metrics *pkg.Metrics) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		metricString := strings.Trim(strings.Replace(r.URL.Path, "/", ".", -1), ".")
 		metrics.Increment(metricString)
+		t := time.Now()
 
 		rec := &statusRecorder{
 			ResponseWriter: w,
@@ -31,6 +33,8 @@ func MetricMiddleware(next http.Handler, metrics *pkg.Metrics) http.Handler {
 		ctx := context.WithValue(r.Context(), "metrics", metrics)
 		next.ServeHTTP(rec, r.WithContext(ctx))
 
+		duration := time.Since(t).Microseconds()
 		metrics.Increment(metricString + "." + strconv.Itoa(rec.status))
+		metrics.Duration(duration, metricString)
 	})
 }

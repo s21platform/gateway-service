@@ -26,11 +26,13 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 	defer r.Body.Close()
 
 	if err := json.Unmarshal(body, &data); err != nil {
 		http.Error(w, "Данные введены не полностью", http.StatusBadRequest)
+		return
 	}
 
 	ctx := r.Context()
@@ -56,20 +58,8 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func (h *Handler) Test(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("S21SPACE_AUTH_TOKEN")
-	if err != nil {
-		w.Write([]byte("Cookie не найдено:("))
-		return
-	}
-
-	// Отправляем обратно значение cookie
-	w.Write([]byte("Cookie найдено: " + cookie.Value))
-}
-
 func AttachAuthRoutes(r chi.Router, handler *Handler) {
 	r.Route("/auth", func(authRouter chi.Router) {
 		authRouter.Post("/login", handler.Login)
-		authRouter.Get("/login", handler.Test)
 	})
 }

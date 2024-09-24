@@ -11,6 +11,7 @@ import (
 type Config struct {
 	Service Service
 	Auth    Auth
+	Metrics Metrics
 }
 
 // Service struct for storage this server config variables
@@ -23,6 +24,12 @@ type Service struct {
 type Auth struct {
 	Host string `env:"AUTH_SERVICE_HOST"`
 	Port string `env:"AUTH_SERVICE_PORT"`
+}
+
+type Metrics struct {
+	Host string `env:"GRAFANA_HOST"`
+	Port int    `env:"GRAFANA_PORT"`
+	Env  string `env:"GRAFANA_ENV"`
 }
 
 func MustLoad() *Config {

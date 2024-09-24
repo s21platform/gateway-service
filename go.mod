@@ -3,7 +3,8 @@ module github.com/s21platform/gateway-service
 go 1.22.5
 
 require (
-	github.com/go-chi/chi/v5 v5.0.12
+	github.com/go-chi/chi/v5 v5.1.0
+	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5
 	google.golang.org/grpc v1.65.0
@@ -11,10 +12,10 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.3.2 // indirect
-	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/rogpeppe/go-internal v1.10.0 // indirect
+	github.com/s21platform/metrics-lib v0.0.0-20240923221456-79c13e3c1497 // indirect
 	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/text v0.15.0 // indirect

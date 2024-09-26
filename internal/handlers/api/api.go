@@ -109,7 +109,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		})
 
 		r.Route("/api", func(r chi.Router) {
-			r.Get("/profile", handler.Test)
+			r.Get("/profile", handler.MyProfile)
 		})
 	})
 }

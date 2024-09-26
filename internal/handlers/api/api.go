@@ -19,12 +19,6 @@ func New(uS UserService) *Handler {
 	return &Handler{uS: uS}
 }
 
-func (h *Handler) Test(w http.ResponseWriter, r *http.Request) {
-	username := r.Context().Value("username")
-	w.Write([]byte(fmt.Sprintf("Hello, %s!", username)))
-	return
-}
-
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
 	resp, err := h.uS.GetInfoByUUID(r.Context())
 	if err != nil {
@@ -71,7 +65,6 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 			}
-			log.Println("token:", cfg.Service.Secret)
 			return []byte(cfg.Service.Secret), nil
 		})
 		if err != nil {
@@ -103,13 +96,11 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 }
 
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
-	r.Group(func(r chi.Router) {
+	r.Route("/api", func(r chi.Router) {
 		r.Use(func(next http.Handler) http.Handler {
 			return CheckJWT(next, cfg)
 		})
 
-		r.Route("/api", func(r chi.Router) {
-			r.Get("/profile", handler.MyProfile)
-		})
+		r.Get("/profile", handler.MyProfile)
 	})
 }

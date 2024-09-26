@@ -48,6 +48,7 @@ type Claims struct {
 
 func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Check jwt for:", r.URL.Path)
 		cookie, err := r.Cookie("S21SPACE_AUTH_TOKEN")
 		if err != nil {
 			log.Println("failed to get cookie value")
@@ -96,11 +97,11 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 }
 
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
-	r.Route("/api", func(r chi.Router) {
-		r.Use(func(next http.Handler) http.Handler {
+	r.Route("/api", func(apiRouter chi.Router) {
+		apiRouter.Use(func(next http.Handler) http.Handler {
 			return CheckJWT(next, cfg)
 		})
 
-		r.Get("/profile", handler.MyProfile)
+		apiRouter.Get("/profile", handler.MyProfile)
 	})
 }

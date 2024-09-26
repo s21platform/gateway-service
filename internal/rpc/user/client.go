@@ -7,6 +7,7 @@ import (
 	userproto "github.com/s21platform/user-proto/user-proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"log"
 )
@@ -26,6 +27,7 @@ func NewService(cfg *config.Config) *Service {
 }
 
 func (s *Service) GetInfo(ctx context.Context, uuid string) (*userproto.GetUserInfoByUUIDOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value("uuid").(string)))
 	resp, err := s.client.GetUserInfoByUUID(ctx, &userproto.GetUserInfoByUUIDIn{
 		Uuid: uuid,
 	})

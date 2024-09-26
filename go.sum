@@ -27,12 +27,10 @@ github.com/rogpeppe/go-internal v1.10.0 h1:TMyTOH3F/DB16zRVcYyreMH6GnZZrwQVAoYjR
 github.com/rogpeppe/go-internal v1.10.0/go.mod h1:UQnix2H7Ngw/k4C5ijL5+65zddjncjaFoBhdsK/akog=
 github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5 h1:5K6f9rK5I0GcGk1PYkwn1HX+Ru4NPQNnHZpOxMNRUKw=
 github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5/go.mod h1:t4KCcKAupFeksP0yEVOjgfl32xgBTOSGZ++AkbshfqU=
-github.com/s21platform/metrics-lib v0.0.0-20240923221456-79c13e3c1497 h1:k2FJghRys5+pdVISfrKOL9xIB3+WskW0vYsIK28esN4=
-github.com/s21platform/metrics-lib v0.0.0-20240923221456-79c13e3c1497/go.mod h1:9a9zIs4Yu7KgMLxNZt1O95q8jM9sNIatJRj+vIQiAPY=
-github.com/s21platform/metrics-lib v0.0.2 h1:JDE6K6Akt0qxeC23aYDEZtD7OFlAdi5Ih2lwXOER7gg=
-github.com/s21platform/metrics-lib v0.0.2/go.mod h1:9a9zIs4Yu7KgMLxNZt1O95q8jM9sNIatJRj+vIQiAPY=
 github.com/s21platform/metrics-lib v0.0.3 h1:4WGL9TE6ZqiiIrhRVcRdiZRSIh7GXn6Ip+fr1xKnOBo=
 github.com/s21platform/metrics-lib v0.0.3/go.mod h1:9a9zIs4Yu7KgMLxNZt1O95q8jM9sNIatJRj+vIQiAPY=
+github.com/s21platform/user-proto v0.0.3 h1:WReG7PMBvmgCRYp2QKHnirGx7VAUAmG4S8MrI15zqYI=
+github.com/s21platform/user-proto v0.0.3/go.mod h1:IIcTCyxXtvdIyuv3sI6a/iey2CTPJ/t7K9bvh52eazg=
 golang.org/x/net v0.25.0 h1:d/OCCoBEUq33pjydKrGQhw7IlUPI2Oylr+8qLx49kac=
 golang.org/x/net v0.25.0/go.mod h1:JkAGAh7GEvH74S6FOH42FLoXpXbE/aqXSrIQjXgsiwM=
 golang.org/x/sys v0.20.0 h1:Od9JTbYCk261bKm4M/mw7AklTlFYIa0bIp9BgSm1S8Y=
@@ -43,8 +41,8 @@ google.golang.org/genproto/googleapis/rpc v0.0.0-20240528184218-531527333157 h1:
 google.golang.org/genproto/googleapis/rpc v0.0.0-20240528184218-531527333157/go.mod h1:EfXuqaE1J41VCDicxHzUDm+8rk+7ZdXzHV0IhO/I6s0=
 google.golang.org/grpc v1.65.0 h1:bs/cUb4lp1G5iImFFd3u5ixQzweKizoZJAwBNLR42lc=
 google.golang.org/grpc v1.65.0/go.mod h1:WgYC2ypjlB0EiQi6wdKixMqukr6lBc0Vo+oOgjrM5ZQ=
-google.golang.org/protobuf v1.34.1 h1:9ddQBjfCyZPOHPUiPxpYESBLc+T8P3E+Vo4IbKZgFWg=
-google.golang.org/protobuf v1.34.1/go.mod h1:c6P6GXX6sHbq/GpV6MGZEdwhWPcYBgnhAHhKbcUYpos=
+google.golang.org/protobuf v1.34.2 h1:6xV6lTsCfpGD21XK49h7MhtcApnLqkfYgPcdHftf6hg=
+google.golang.org/protobuf v1.34.2/go.mod h1:qYOHts0dSfpeUzUFpOMr/WGzszTmLH+DiWniOlNbLDw=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c h1:Hei/4ADfdWqJk1ZMxUNpqntNwaWcugrBjAiHlqqRiVk=
 gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c/go.mod h1:JHkPIbrfpd72SG/EVd6muEfDQjcINNoR0C8j2r3qZ4Q=

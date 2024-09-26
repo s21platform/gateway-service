@@ -10,7 +10,9 @@ import (
 	authhandler "github.com/s21platform/gateway-service/internal/handlers/auth"
 	"github.com/s21platform/gateway-service/internal/middlewares"
 	"github.com/s21platform/gateway-service/internal/rpc/auth"
+	"github.com/s21platform/gateway-service/internal/rpc/user"
 	authusecase "github.com/s21platform/gateway-service/internal/useCase/auth"
+	userusecase "github.com/s21platform/gateway-service/internal/useCase/user"
 	"github.com/s21platform/metrics-lib/pkg"
 	"log"
 	"net/http"
@@ -26,13 +28,15 @@ func main() {
 
 	// rpc clients
 	authClient := auth.NewService(cfg)
+	userClient := user.NewService(cfg)
 
 	// usecases declaration
 	authUseCase := authusecase.New(authClient)
+	userUsecase := userusecase.New(userClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(authUseCase)
-	apiHandlers := api.New()
+	apiHandlers := api.New(userUsecase)
 
 	r := chi.NewRouter()
 

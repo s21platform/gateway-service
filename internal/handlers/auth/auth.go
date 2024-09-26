@@ -10,10 +10,10 @@ import (
 )
 
 type Handler struct {
-	aucSrv AuthUsecase
+	aucSrv Usecase
 }
 
-func New(aucSrv AuthUsecase) *Handler {
+func New(aucSrv Usecase) *Handler {
 	return &Handler{aucSrv: aucSrv}
 }
 

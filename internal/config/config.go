@@ -11,6 +11,7 @@ import (
 type Config struct {
 	Service Service
 	Auth    Auth
+	User    User
 	Metrics Metrics
 }
 
@@ -24,6 +25,11 @@ type Service struct {
 type Auth struct {
 	Host string `env:"AUTH_SERVICE_HOST"`
 	Port string `env:"AUTH_SERVICE_PORT"`
+}
+
+type User struct {
+	Host string `env:"USER_SERVICE_HOST"`
+	Port string `env:"USER_SERVICE_PORT"`
 }
 
 type Metrics struct {

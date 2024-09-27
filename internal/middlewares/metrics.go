@@ -21,7 +21,7 @@ func (r *statusRecorder) WriteHeader(status int) {
 
 func MetricMiddleware(next http.Handler, metrics *pkg.Metrics) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		metricString := strings.Trim(strings.Replace(r.URL.Path, "/", ".", -1), ".")
+		metricString := strings.Trim(strings.Replace(r.URL.Path, "/", "_", -1), "_")
 		metrics.Increment(metricString)
 		t := time.Now()
 

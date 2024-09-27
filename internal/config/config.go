@@ -9,16 +9,16 @@ import (
 
 // Config Common config struct
 type Config struct {
-	Service Service
-	Auth    Auth
-	User    User
-	Metrics Metrics
+	Service  Service
+	Auth     Auth
+	User     User
+	Metrics  Metrics
+	Platform Platform
 }
 
 // Service struct for storage this server config variables
 type Service struct {
-	Port   string `env:"GATEWAY_SERVICE_PORT"`
-	Secret string `env:"SECRET_KEY"`
+	Port string `env:"GATEWAY_SERVICE_PORT"`
 }
 
 // Auth struct for storage auth-service config variables
@@ -35,7 +35,11 @@ type User struct {
 type Metrics struct {
 	Host string `env:"GRAFANA_HOST"`
 	Port int    `env:"GRAFANA_PORT"`
-	Env  string `env:"GRAFANA_ENV"`
+}
+
+type Platform struct {
+	Secret string `env:"SECRET_KEY"`
+	Env    string `env:"ENV"`
 }
 
 func MustLoad() *Config {

@@ -33,7 +33,7 @@ func MetricMiddleware(next http.Handler, metrics *pkg.Metrics) http.Handler {
 		ctx := context.WithValue(r.Context(), "metrics", metrics)
 		next.ServeHTTP(rec, r.WithContext(ctx))
 
-		duration := time.Since(t).Microseconds()
+		duration := time.Since(t).Milliseconds()
 		metrics.Increment(metricString + "." + strconv.Itoa(rec.status))
 		metrics.Duration(duration, metricString)
 	})

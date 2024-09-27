@@ -21,10 +21,11 @@ import (
 func main() {
 	cfg := config.MustLoad()
 
-	metrics, err := pkg.NewMetrics(cfg.Metrics.Host, cfg.Metrics.Port, "gateway", cfg.Metrics.Env)
+	metrics, err := pkg.NewMetrics(cfg.Metrics.Host, cfg.Metrics.Port, "gateway", cfg.Platform.Env)
 	if err != nil {
 		log.Fatalf("failed to init metrics: %v", err)
 	}
+	defer metrics.Disconnect()
 
 	// rpc clients
 	authClient := auth.NewService(cfg)
@@ -49,5 +50,7 @@ func main() {
 
 	fmt.Println(fmt.Sprintf(":%s", cfg.Service.Port))
 
-	http.ListenAndServe(fmt.Sprintf(":%s", cfg.Service.Port), r)
+	if err := http.ListenAndServe(fmt.Sprintf(":%s", cfg.Service.Port), r); err != nil {
+		log.Fatalf("failed to start server: %v", err)
+	}
 }

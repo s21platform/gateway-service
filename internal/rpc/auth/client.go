@@ -3,12 +3,15 @@ package auth
 import (
 	"context"
 	"fmt"
+	"log"
+
+	"google.golang.org/grpc/credentials/insecure"
+
 	auth "github.com/s21platform/auth-proto/auth-proto"
 	"github.com/s21platform/gateway-service/internal/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"log"
 )
 
 type Service struct {
@@ -21,7 +24,7 @@ type JWT struct {
 
 func NewService(cfg *config.Config) *Service {
 	connStr := fmt.Sprintf("%s:%s", cfg.Auth.Host, cfg.Auth.Port)
-	conn, err := grpc.NewClient(connStr, grpc.WithInsecure())
+	conn, err := grpc.NewClient(connStr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("failed to create grpc connection: %v", err)
 	}

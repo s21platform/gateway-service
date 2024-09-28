@@ -4,6 +4,9 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/s21platform/gateway-service/internal/config"
 	"github.com/s21platform/gateway-service/internal/handlers/api"
@@ -14,8 +17,6 @@ import (
 	authusecase "github.com/s21platform/gateway-service/internal/useCase/auth"
 	userusecase "github.com/s21platform/gateway-service/internal/useCase/user"
 	"github.com/s21platform/metrics-lib/pkg"
-	"log"
-	"net/http"
 )
 
 func main() {
@@ -48,7 +49,7 @@ func main() {
 	authhandler.AttachAuthRoutes(r, authHandlers)
 	api.AttachApiRoutes(r, apiHandlers, cfg)
 
-	fmt.Println(fmt.Sprintf(":%s", cfg.Service.Port))
+	log.Println("Server starting...")
 
 	if err := http.ListenAndServe(fmt.Sprintf(":%s", cfg.Service.Port), r); err != nil {
 		log.Fatalf("failed to start server: %v", err)

@@ -2,11 +2,14 @@ package middlewares
 
 import (
 	"context"
-	"github.com/s21platform/metrics-lib/pkg"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/s21platform/gateway-service/internal/config"
+
+	"github.com/s21platform/metrics-lib/pkg"
 )
 
 type statusRecorder struct {
@@ -30,7 +33,7 @@ func MetricMiddleware(next http.Handler, metrics *pkg.Metrics) http.Handler {
 			status:         http.StatusOK,
 		}
 
-		ctx := context.WithValue(r.Context(), "metrics", metrics)
+		ctx := context.WithValue(r.Context(), config.KeyMetrics, metrics)
 		next.ServeHTTP(rec, r.WithContext(ctx))
 
 		duration := time.Since(t).Milliseconds()

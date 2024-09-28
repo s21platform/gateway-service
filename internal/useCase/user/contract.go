@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+
 	userproto "github.com/s21platform/user-proto/user-proto"
 )
 

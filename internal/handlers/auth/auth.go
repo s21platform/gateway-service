@@ -2,11 +2,12 @@ package auth
 
 import (
 	"encoding/json"
-	"github.com/go-chi/chi/v5"
-	"google.golang.org/grpc/status"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/go-chi/chi/v5"
+	"google.golang.org/grpc/status"
 )
 
 type Handler struct {
@@ -55,7 +56,6 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteStrictMode,
 	})
 	w.WriteHeader(http.StatusOK)
-	return
 }
 
 func AttachAuthRoutes(r chi.Router, handler *Handler) {

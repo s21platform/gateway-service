@@ -3,10 +3,11 @@ package api
 import (
 	"context"
 	"fmt"
-	"github.com/golang-jwt/jwt/v4"
-	"github.com/s21platform/gateway-service/internal/config"
 	"log"
 	"net/http"
+
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 type Claims struct {
@@ -62,8 +63,8 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
-		ctx := context.WithValue(r.Context(), "username", claims.Username)
-		ctx = context.WithValue(ctx, "uuid", claims.UUID)
+		ctx := context.WithValue(r.Context(), config.KeyUsername, claims.Username)
+		ctx = context.WithValue(ctx, config.KeyUUID, claims.UUID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

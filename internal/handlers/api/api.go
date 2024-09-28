@@ -2,10 +2,11 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/go-chi/chi/v5"
-	"github.com/s21platform/gateway-service/internal/config"
 	"log"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 type Handler struct {
@@ -31,7 +32,6 @@ func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	_, _ = w.Write(jsn)
-	return
 }
 
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {

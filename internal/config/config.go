@@ -3,8 +3,17 @@
 package config
 
 import (
-	"github.com/ilyakaznacheev/cleanenv"
 	"log"
+
+	"github.com/ilyakaznacheev/cleanenv"
+)
+
+type key string
+
+const (
+	KeyMetrics  = key("metrics")
+	KeyUUID     = key("uuid")
+	KeyUsername = key("username")
 )
 
 // Config Common config struct

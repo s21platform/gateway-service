@@ -7,7 +7,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5
-	github.com/s21platform/metrics-lib v0.0.4
+	github.com/s21platform/metrics-lib v0.0.5
 	github.com/s21platform/user-proto v0.0.3
 	google.golang.org/grpc v1.65.0
 )

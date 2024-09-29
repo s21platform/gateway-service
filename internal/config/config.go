@@ -21,6 +21,7 @@ type Config struct {
 	Service  Service
 	Auth     Auth
 	User     User
+	Avatar   Avatar
 	Metrics  Metrics
 	Platform Platform
 }
@@ -39,6 +40,11 @@ type Auth struct {
 type User struct {
 	Host string `env:"USER_SERVICE_HOST"`
 	Port string `env:"USER_SERVICE_PORT"`
+}
+
+type Avatar struct {
+	Host string `env:"AVATAR_SERVICE_HOST"`
+	Port string `env:"AVATAR_SERVICE_PORT"`
 }
 
 type Metrics struct {

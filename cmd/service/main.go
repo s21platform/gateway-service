@@ -7,6 +7,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/s21platform/gateway-service/internal/rpc/avatar"
+	avatarusecase "github.com/s21platform/gateway-service/internal/useCase/avatar"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/s21platform/gateway-service/internal/config"
 	"github.com/s21platform/gateway-service/internal/handlers/api"
@@ -31,14 +34,16 @@ func main() {
 	// rpc clients
 	authClient := auth.NewService(cfg)
 	userClient := user.NewService(cfg)
+	avatarClient := avatar.New(cfg)
 
 	// usecases declaration
 	authUseCase := authusecase.New(authClient)
 	userUsecase := userusecase.New(userClient)
+	avatarUsecase := avatarusecase.New(avatarClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(authUseCase)
-	apiHandlers := api.New(userUsecase)
+	apiHandlers := api.New(userUsecase, avatarUsecase)
 
 	r := chi.NewRouter()
 

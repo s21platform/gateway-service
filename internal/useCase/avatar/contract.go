@@ -8,5 +8,5 @@ import (
 )
 
 type AvatarClient interface {
-	SetAvatar(ctx context.Context, filename string, file multipart.File) (*avatar.SetAvatarOut, error)
+	SetAvatar(ctx context.Context, filename string, file multipart.File, uuid string) (*avatar.SetAvatarOut, error)
 }

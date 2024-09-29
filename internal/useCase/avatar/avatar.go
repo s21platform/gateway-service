@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/s21platform/gateway-service/internal/config"
+
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
 )
 
@@ -26,9 +28,10 @@ func (uc *Usecase) UploadAvatar(r *http.Request) (*avatar.SetAvatarOut, error) {
 	}
 	defer file.Close()
 
+	uuid := r.Context().Value(config.KeyUUID).(string)
 	filename := r.FormValue("filename")
 
-	resp, err := uc.aC.SetAvatar(r.Context(), filename, file)
+	resp, err := uc.aC.SetAvatar(r.Context(), filename, file, uuid)
 	if err != nil {
 		return nil, fmt.Errorf("failed to set avatar: %w", err)
 	}

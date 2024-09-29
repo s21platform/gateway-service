@@ -27,12 +27,15 @@ func New(cfg *config.Config) *Service {
 	return &Service{client: client}
 }
 
-func (s *Service) SetAvatar(ctx context.Context, filename string, file multipart.File) (*avatar.SetAvatarOut, error) {
+func (s *Service) SetAvatar(ctx context.Context, filename string, file multipart.File, uuid string) (*avatar.SetAvatarOut, error) {
 	stream, err := s.client.SetAvatar(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to set avatar: %w", err)
 	}
-	req := avatar.SetAvatarIn{Filename: filename}
+	req := avatar.SetAvatarIn{
+		Filename: filename,
+		UserUuid: uuid,
+	}
 	if err := stream.Send(&req); err != nil {
 		return nil, fmt.Errorf("failed to send set avatar: %v", err)
 	}

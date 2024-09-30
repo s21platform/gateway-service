@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+
 	"github.com/s21platform/gateway-service/internal/rpc/auth"
 )
 

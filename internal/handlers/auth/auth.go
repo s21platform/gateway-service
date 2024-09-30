@@ -2,18 +2,19 @@ package auth
 
 import (
 	"encoding/json"
-	"github.com/go-chi/chi/v5"
-	"google.golang.org/grpc/status"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/go-chi/chi/v5"
+	"google.golang.org/grpc/status"
 )
 
 type Handler struct {
-	aucSrv AuthUsecase
+	aucSrv Usecase
 }
 
-func New(aucSrv AuthUsecase) *Handler {
+func New(aucSrv Usecase) *Handler {
 	return &Handler{aucSrv: aucSrv}
 }
 
@@ -26,11 +27,13 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 	defer r.Body.Close()
 
 	if err := json.Unmarshal(body, &data); err != nil {
 		http.Error(w, "Данные введены не полностью", http.StatusBadRequest)
+		return
 	}
 
 	ctx := r.Context()
@@ -48,9 +51,11 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		Value:    jwt.Jwt,
 		Expires:  time.Now().Add(10 * time.Hour),
 		HttpOnly: true,
+		Path:     "/",
+		Secure:   false,
+		SameSite: http.SameSiteStrictMode,
 	})
 	w.WriteHeader(http.StatusOK)
-	return
 }
 
 func AttachAuthRoutes(r chi.Router, handler *Handler) {

@@ -11,7 +11,7 @@ require (
 	github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5
 	github.com/s21platform/avatar-proto v0.0.3
 	github.com/s21platform/metrics-lib v0.0.5
-	github.com/s21platform/user-proto v0.0.3
+	github.com/s21platform/user-proto v0.0.4
 	google.golang.org/grpc v1.66.0
 )
 

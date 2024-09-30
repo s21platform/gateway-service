@@ -31,8 +31,6 @@ github.com/s21platform/avatar-proto v0.0.3 h1:aFiMdGukWemohAANtibavgCkR17DEELUoP
 github.com/s21platform/avatar-proto v0.0.3/go.mod h1:Mhj3OAlFN9surfMjUjEgoW1OHqRmm6THQgZBOtAQqUI=
 github.com/s21platform/metrics-lib v0.0.5 h1:cKaBowkfTjxvssLDWUMz9LlWYJyT+8IR2K7Pa4yl1MY=
 github.com/s21platform/metrics-lib v0.0.5/go.mod h1:9a9zIs4Yu7KgMLxNZt1O95q8jM9sNIatJRj+vIQiAPY=
-github.com/s21platform/user-proto v0.0.3 h1:WReG7PMBvmgCRYp2QKHnirGx7VAUAmG4S8MrI15zqYI=
-github.com/s21platform/user-proto v0.0.3/go.mod h1:IIcTCyxXtvdIyuv3sI6a/iey2CTPJ/t7K9bvh52eazg=
 github.com/s21platform/user-proto v0.0.4 h1:ShxrjDan7cxfookpFVR7lBgTgRKIciS42RzNabTH+cI=
 github.com/s21platform/user-proto v0.0.4/go.mod h1:IIcTCyxXtvdIyuv3sI6a/iey2CTPJ/t7K9bvh52eazg=
 golang.org/x/net v0.26.0 h1:soB7SVo0PWrY4vPW/+ay0jKDNScG2X9wFeYlXIvJsOQ=

@@ -6,11 +6,11 @@ import (
 
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
 
-	user_proto "github.com/s21platform/user-proto/user-proto"
+	userproto "github.com/s21platform/user-proto/user-proto"
 )
 
 type UserService interface {
-	GetInfoByUUID(ctx context.Context) (*user_proto.GetUserInfoByUUIDOut, error)
+	GetInfoByUUID(ctx context.Context) (*userproto.GetUserInfoByUUIDOut, error)
 }
 
 type AvatarService interface {

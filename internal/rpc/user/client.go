@@ -35,6 +35,7 @@ func (s *Service) GetInfo(ctx context.Context, uuid string) (*userproto.GetUserI
 		Uuid: uuid,
 	})
 	if err != nil {
+		log.Printf("failed to call: %v", err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	return resp, nil

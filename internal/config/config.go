@@ -3,14 +3,27 @@
 package config
 
 import (
-	"github.com/ilyakaznacheev/cleanenv"
 	"log"
+
+	"github.com/ilyakaznacheev/cleanenv"
+)
+
+type key string
+
+const (
+	KeyMetrics  = key("metrics")
+	KeyUUID     = key("uuid")
+	KeyUsername = key("username")
 )
 
 // Config Common config struct
 type Config struct {
-	Service Service
-	Auth    Auth
+	Service  Service
+	Auth     Auth
+	User     User
+	Avatar   Avatar
+	Metrics  Metrics
+	Platform Platform
 }
 
 // Service struct for storage this server config variables
@@ -22,6 +35,26 @@ type Service struct {
 type Auth struct {
 	Host string `env:"AUTH_SERVICE_HOST"`
 	Port string `env:"AUTH_SERVICE_PORT"`
+}
+
+type User struct {
+	Host string `env:"USER_SERVICE_HOST"`
+	Port string `env:"USER_SERVICE_PORT"`
+}
+
+type Avatar struct {
+	Host string `env:"AVATAR_SERVICE_HOST"`
+	Port string `env:"AVATAR_SERVICE_PORT"`
+}
+
+type Metrics struct {
+	Host string `env:"GRAFANA_HOST"`
+	Port int    `env:"GRAFANA_PORT"`
+}
+
+type Platform struct {
+	Secret string `env:"SECRET_KEY"`
+	Env    string `env:"ENV"`
 }
 
 func MustLoad() *Config {

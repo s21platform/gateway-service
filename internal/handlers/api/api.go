@@ -50,6 +50,24 @@ func (h *Handler) SetAvatar(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) GetAllAvatars(w http.ResponseWriter, r *http.Request) {
+	avatars, err := h.aS.GetAvatarsList(r)
+	if err != nil {
+		log.Printf("get all avatars error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(avatars)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(func(next http.Handler) http.Handler {
@@ -58,5 +76,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 
 		apiRouter.Get("/profile", handler.MyProfile)
 		apiRouter.Post("/avatar", handler.SetAvatar)
+		apiRouter.Get("/avatar", handler.GetAllAvatars)
 	})
 }

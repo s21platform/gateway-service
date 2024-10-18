@@ -37,3 +37,14 @@ func (uc *Usecase) UploadAvatar(r *http.Request) (*avatar.SetAvatarOut, error) {
 	}
 	return resp, nil
 }
+
+func (uc *Usecase) GetAvatarsList(r *http.Request) (*avatar.GetAllAvatarsOut, error) {
+	uuid := r.Context().Value(config.KeyUUID).(string)
+
+	resp, err := uc.aC.GetAllAvatars(r.Context(), uuid)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get avatars: %w", err)
+	}
+
+	return resp, nil
+}

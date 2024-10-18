@@ -60,3 +60,16 @@ func (s *Service) SetAvatar(ctx context.Context, filename string, file multipart
 	}
 	return resp, nil
 }
+
+func (s *Service) GetAllAvatars(ctx context.Context, uuid string) (*avatar.GetAllAvatarsOut, error) {
+	req := avatar.GetAllAvatarsIn{
+		UserUuid: uuid,
+	}
+
+	resp, err := s.client.GetAllAvatars(ctx, &req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get all avatars: %w", err)
+	}
+
+	return resp, nil
+}

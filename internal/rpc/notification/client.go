@@ -36,6 +36,12 @@ func (c *Client) GetCountNotification(ctx context.Context) (*notificationproto.N
 	return result, nil
 }
 
-func (c *Client) GetNotifications(ctx context.Context, limit int64, offset int64) {
-
+func (c *Client) GetNotifications(ctx context.Context, limit int64, offset int64) (*notificationproto.NotificationOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	result, err := c.client.GetNotification(ctx, &notificationproto.NotificationIn{Limit: limit, Offset: offset})
+	if err != nil {
+		log.Printf("failed to get notifications: %v", err)
+		return nil, fmt.Errorf("failed to get notifications: %v", err)
+	}
+	return result, nil
 }

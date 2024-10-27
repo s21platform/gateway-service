@@ -7,6 +7,6 @@ import (
 )
 
 type NotificationClient interface {
-	GetNotifications(ctx context.Context, limit int64, offset int64)
+	GetNotifications(ctx context.Context, limit int64, offset int64) (*notificationproto.NotificationOut, error)
 	GetCountNotification(ctx context.Context) (*notificationproto.NotificationCountOut, error)
 }

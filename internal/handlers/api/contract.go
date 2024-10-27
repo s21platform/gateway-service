@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	notification_proto "github.com/s21platform/notification-proto/notification-proto"
+	notificationproto "github.com/s21platform/notification-proto/notification-proto"
 
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
 
@@ -22,5 +22,6 @@ type AvatarService interface {
 }
 
 type NotificationService interface {
-	GetCountNotification(r *http.Request) (*notification_proto.NotificationCountOut, error)
+	GetCountNotification(r *http.Request) (*notificationproto.NotificationCountOut, error)
+	GetNotification(r *http.Request) (*notificationproto.NotificationOut, error)
 }

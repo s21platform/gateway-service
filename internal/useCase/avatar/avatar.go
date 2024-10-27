@@ -1,6 +1,7 @@
 package avatar
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -50,7 +51,10 @@ func (uc *Usecase) GetAvatarsList(r *http.Request) (*avatar.GetAllAvatarsOut, er
 }
 
 func (uc *Usecase) RemoveAvatar(r *http.Request) (*avatar.Avatar, error) {
-	id := r.Context().Value(config.KeyAvatarID).(int32)
+	id, err := getAvatarId(r)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get avatar id: %w", err)
+	}
 
 	resp, err := uc.aC.DeleteAvatar(r.Context(), id)
 	if err != nil {
@@ -58,4 +62,16 @@ func (uc *Usecase) RemoveAvatar(r *http.Request) (*avatar.Avatar, error) {
 	}
 
 	return resp, nil
+}
+
+func getAvatarId(r *http.Request) (int32, error) {
+	var requestData struct {
+		ID int32 `json:"id"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&requestData); err != nil {
+		return 0, fmt.Errorf("failed to decode request body: %w", err)
+	}
+
+	return requestData.ID, nil
 }

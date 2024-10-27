@@ -11,6 +11,7 @@ import (
 	"github.com/s21platform/gateway-service/internal/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 )
 
 type Service struct {
@@ -75,6 +76,8 @@ func (s *Service) GetAllAvatars(ctx context.Context, uuid string) (*avatar.GetAl
 }
 
 func (s *Service) DeleteAvatar(ctx context.Context, id int32) (*avatar.Avatar, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
 	req := avatar.DeleteAvatarIn{
 		AvatarId: id,
 	}

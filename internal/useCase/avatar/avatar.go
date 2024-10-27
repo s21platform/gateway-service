@@ -48,3 +48,14 @@ func (uc *Usecase) GetAvatarsList(r *http.Request) (*avatar.GetAllAvatarsOut, er
 
 	return resp, nil
 }
+
+func (uc *Usecase) RemoveAvatar(r *http.Request) (*avatar.Avatar, error) {
+	id := r.Context().Value(config.KeyAvatarID).(int32)
+
+	resp, err := uc.aC.DeleteAvatar(r.Context(), id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to delete avatar: %w", err)
+	}
+
+	return resp, nil
+}

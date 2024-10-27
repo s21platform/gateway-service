@@ -73,3 +73,16 @@ func (s *Service) GetAllAvatars(ctx context.Context, uuid string) (*avatar.GetAl
 
 	return resp, nil
 }
+
+func (s *Service) DeleteAvatar(ctx context.Context, id int32) (*avatar.Avatar, error) {
+	req := avatar.DeleteAvatarIn{
+		AvatarId: id,
+	}
+
+	resp, err := s.client.DeleteAvatar(ctx, &req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to delete avatar: %w", err)
+	}
+
+	return resp, nil
+}

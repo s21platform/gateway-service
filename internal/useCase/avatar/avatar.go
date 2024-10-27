@@ -1,7 +1,9 @@
 package avatar
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/s21platform/gateway-service/internal/config"
@@ -47,4 +49,40 @@ func (uc *Usecase) GetAvatarsList(r *http.Request) (*avatar.GetAllAvatarsOut, er
 	}
 
 	return resp, nil
+}
+
+func (uc *Usecase) RemoveAvatar(r *http.Request) (*avatar.Avatar, error) {
+	id, err := getAvatarId(r)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get avatar id: %w", err)
+	}
+
+	resp, err := uc.aC.DeleteAvatar(r.Context(), id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to delete avatar: %w", err)
+	}
+
+	return resp, nil
+}
+
+func getAvatarId(r *http.Request) (int32, error) {
+	var requestData struct {
+		ID int32 `json:"id"`
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return 0, fmt.Errorf("failed to read request body: %w", err)
+	}
+	defer r.Body.Close()
+
+	if len(body) == 0 {
+		return 0, fmt.Errorf("request body is empty")
+	}
+
+	if err := json.Unmarshal(body, &requestData); err != nil {
+		return 0, fmt.Errorf("failed to decode request body: %w", err)
+	}
+
+	return requestData.ID, nil
 }

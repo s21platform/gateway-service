@@ -16,4 +16,5 @@ type UserService interface {
 type AvatarService interface {
 	UploadAvatar(r *http.Request) (*avatar.SetAvatarOut, error)
 	GetAvatarsList(r *http.Request) (*avatar.GetAllAvatarsOut, error)
+	RemoveAvatar(r *http.Request) (*avatar.Avatar, error)
 }

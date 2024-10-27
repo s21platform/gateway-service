@@ -3,6 +3,7 @@ package avatar
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/s21platform/gateway-service/internal/config"
@@ -69,7 +70,17 @@ func getAvatarId(r *http.Request) (int32, error) {
 		ID int32 `json:"id"`
 	}
 
-	if err := json.NewDecoder(r.Body).Decode(&requestData); err != nil {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return 0, fmt.Errorf("failed to read request body: %w", err)
+	}
+	defer r.Body.Close()
+
+	if len(body) == 0 {
+		return 0, fmt.Errorf("request body is empty")
+	}
+
+	if err := json.Unmarshal(body, &requestData); err != nil {
 		return 0, fmt.Errorf("failed to decode request body: %w", err)
 	}
 

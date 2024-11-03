@@ -18,12 +18,13 @@ const (
 
 // Config Common config struct
 type Config struct {
-	Service  Service
-	Auth     Auth
-	User     User
-	Avatar   Avatar
-	Metrics  Metrics
-	Platform Platform
+	Service      Service
+	Auth         Auth
+	User         User
+	Avatar       Avatar
+	Notification Notification
+	Metrics      Metrics
+	Platform     Platform
 }
 
 // Service struct for storage this server config variables
@@ -45,6 +46,11 @@ type User struct {
 type Avatar struct {
 	Host string `env:"AVATAR_SERVICE_HOST"`
 	Port string `env:"AVATAR_SERVICE_PORT"`
+}
+
+type Notification struct {
+	Host string `env:"NOTIFICATION_SERVICE_HOST"`
+	Port string `env:"NOTIFICATION_SERVICE_PORT"`
 }
 
 type Metrics struct {

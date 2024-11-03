@@ -12,10 +12,11 @@ import (
 type Handler struct {
 	uS UserService
 	aS AvatarService
+	nS NotificationService
 }
 
-func New(uS UserService, aS AvatarService) *Handler {
-	return &Handler{uS: uS, aS: aS}
+func New(uS UserService, aS AvatarService, nS NotificationService) *Handler {
+	return &Handler{uS: uS, aS: aS, nS: nS}
 }
 
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
@@ -79,8 +80,46 @@ func (h *Handler) DeleteAvatar(w http.ResponseWriter, r *http.Request) {
 	jsn, err := json.Marshal(deletedAvatar)
 	if err != nil {
 		log.Printf("json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) CountNotifications(w http.ResponseWriter, r *http.Request) {
+	result, err := h.nS.GetCountNotification(r)
+	if err != nil {
+		log.Printf("get count notification error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) GetNotifications(w http.ResponseWriter, r *http.Request) {
+	result, err := h.nS.GetNotification(r)
+	if err != nil {
+		log.Printf("get notification error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(jsn)
@@ -96,5 +135,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/avatar", handler.SetAvatar)
 		apiRouter.Get("/avatar", handler.GetAllAvatars)
 		apiRouter.Delete("/avatar", handler.DeleteAvatar)
+		apiRouter.Get("/notification/count", handler.CountNotifications)
+		apiRouter.Get("/notification", handler.GetNotifications)
 	})
 }

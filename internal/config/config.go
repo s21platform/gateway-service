@@ -53,6 +53,11 @@ type Friends struct {
 	Port string `env:"FRIENDS_SERVICE_PORT"`
 }
 
+type Notification struct {
+	Host string `env:"NOTIFICATION_SERVICE_HOST"`
+	Port string `env:"NOTIFICATION_SERVICE_PORT"`
+}
+
 type Metrics struct {
 	Host string `env:"GRAFANA_HOST"`
 	Port int    `env:"GRAFANA_PORT"`

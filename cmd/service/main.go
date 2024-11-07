@@ -7,8 +7,11 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/s21platform/gateway-service/internal/rpc/notification"
+
 	"github.com/s21platform/gateway-service/internal/rpc/avatar"
 	avatarusecase "github.com/s21platform/gateway-service/internal/useCase/avatar"
+	notificationusecase "github.com/s21platform/gateway-service/internal/useCase/notification"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/s21platform/gateway-service/internal/config"
@@ -36,17 +39,21 @@ func main() {
 	userClient := user.NewService(cfg)
 	avatarClient := avatar.New(cfg)
 	//friendsClient := friends.NewService(cfg)
+	notificationClient := notification.New(cfg)
+
 
 	// usecases declaration
 	authUseCase := authusecase.New(authClient)
 	userUsecase := userusecase.New(userClient)
 	avatarUsecase := avatarusecase.New(avatarClient)
 	//friendsUsecase := friendsusecase.New(friendsClient)
-	//
+
+	notificationUsecase := notificationusecase.New(notificationClient)
+
 
 	// handlers declaration
 	authHandlers := authhandler.New(authUseCase)
-	apiHandlers := api.New(userUsecase, avatarUsecase)
+	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase)
 
 	r := chi.NewRouter()
 

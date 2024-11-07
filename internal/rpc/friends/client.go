@@ -3,6 +3,7 @@ package friends
 import (
 	"context"
 	"fmt"
+	"google.golang.org/grpc/metadata"
 	"log"
 
 	friends_proto "github.com/s21platform/friends-proto/friends-proto"
@@ -26,6 +27,7 @@ func NewService(cfg *config.Config) *Service {
 }
 
 func (s *Service) GetCountFriends(ctx context.Context) (*friends_proto.GetCountFriendsOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	resp, err := s.client.GetCountFriends(ctx, &friends_proto.EmptyFriends{})
 	if err != nil {
 		return nil, fmt.Errorf("s.client.GetCountFriends: %v", err)

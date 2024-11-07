@@ -38,18 +38,15 @@ func main() {
 	authClient := auth.NewService(cfg)
 	userClient := user.NewService(cfg)
 	avatarClient := avatar.New(cfg)
-	//friendsClient := friends.NewService(cfg)
 	notificationClient := notification.New(cfg)
-
+	//friendsClient := friends.NewService(cfg)
 
 	// usecases declaration
 	authUseCase := authusecase.New(authClient)
 	userUsecase := userusecase.New(userClient)
 	avatarUsecase := avatarusecase.New(avatarClient)
-	//friendsUsecase := friendsusecase.New(friendsClient)
-
 	notificationUsecase := notificationusecase.New(notificationClient)
-
+	//friendsUsecase := friendsusecase.New(friendsClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(authUseCase)

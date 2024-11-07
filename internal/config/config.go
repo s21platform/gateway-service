@@ -18,13 +18,14 @@ const (
 
 // Config Common config struct
 type Config struct {
-	Service  Service
-	Auth     Auth
-	User     User
-	Avatar   Avatar
-	Friends  Friends
-	Metrics  Metrics
-	Platform Platform
+	Service      Service
+	Auth         Auth
+	User         User
+	Avatar       Avatar
+	Friends      Friends
+	Metrics      Metrics
+	Platform     Platform
+	Notification Notification
 }
 
 // Service struct for storage this server config variables

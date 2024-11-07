@@ -33,5 +33,6 @@ func (s *Service) GetCountFriends(ctx context.Context) (*friends_proto.GetCountF
 	if err != nil {
 		return nil, fmt.Errorf("s.client.GetCountFriends: %v", err)
 	}
+	log.Println("resp: ", resp)
 	return resp, nil
 }

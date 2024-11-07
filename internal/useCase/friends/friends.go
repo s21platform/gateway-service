@@ -16,8 +16,7 @@ func New(fC FriendsClient) *Usecase {
 }
 
 func (u *Usecase) GetCountFriends(r *http.Request) (*friends.GetCountFriendsOut, error) {
-	req := &friends.Empty{}
-	resp, err := u.fC.GetCountFriends(r.Context(), req)
+	resp, err := u.fC.GetCountFriends(r.Context())
 	if err != nil {
 		return nil, fmt.Errorf("u.fC.GetCountFriends: %v", err)
 	}

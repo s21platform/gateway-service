@@ -7,5 +7,5 @@ import (
 )
 
 type FriendsClient interface {
-	GetCountFriends(ctx context.Context, in *friends.Empty) (*friends.GetCountFriendsOut, error)
+	GetCountFriends(ctx context.Context) (*friends.GetCountFriendsOut, error)
 }

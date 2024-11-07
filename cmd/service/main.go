@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/s21platform/gateway-service/internal/rpc/friends"
+
 	"github.com/s21platform/gateway-service/internal/rpc/notification"
 
 	"github.com/s21platform/gateway-service/internal/rpc/avatar"
@@ -21,6 +23,7 @@ import (
 	"github.com/s21platform/gateway-service/internal/rpc/auth"
 	"github.com/s21platform/gateway-service/internal/rpc/user"
 	authusecase "github.com/s21platform/gateway-service/internal/useCase/auth"
+	friendsusecase "github.com/s21platform/gateway-service/internal/useCase/friends"
 	userusecase "github.com/s21platform/gateway-service/internal/useCase/user"
 	"github.com/s21platform/metrics-lib/pkg"
 )
@@ -39,18 +42,18 @@ func main() {
 	userClient := user.NewService(cfg)
 	avatarClient := avatar.New(cfg)
 	notificationClient := notification.New(cfg)
-	//friendsClient := friends.NewService(cfg)
+	friendsClient := friends.NewService(cfg)
 
 	// usecases declaration
 	authUseCase := authusecase.New(authClient)
 	userUsecase := userusecase.New(userClient)
 	avatarUsecase := avatarusecase.New(avatarClient)
 	notificationUsecase := notificationusecase.New(notificationClient)
-	//friendsUsecase := friendsusecase.New(friendsClient)
+	friendsUsecase := friendsusecase.New(friendsClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(authUseCase)
-	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase)
+	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUsecase)
 
 	r := chi.NewRouter()
 

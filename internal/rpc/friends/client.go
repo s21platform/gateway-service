@@ -3,8 +3,9 @@ package friends
 import (
 	"context"
 	"fmt"
-	"google.golang.org/grpc/metadata"
 	"log"
+
+	"google.golang.org/grpc/metadata"
 
 	friends_proto "github.com/s21platform/friends-proto/friends-proto"
 	"github.com/s21platform/gateway-service/internal/config"

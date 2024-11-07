@@ -26,7 +26,7 @@ func NewService(cfg *config.Config) *Service {
 }
 
 func (s *Service) GetCountFriends(ctx context.Context) (*friends_proto.GetCountFriendsOut, error) {
-	resp, err := s.client.GetCountFriends(ctx, &friends_proto.Empty{})
+	resp, err := s.client.GetCountFriends(ctx, &friends_proto.EmptyFriends{})
 	if err != nil {
 		return nil, fmt.Errorf("s.client.GetCountFriends: %v", err)
 	}

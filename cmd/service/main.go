@@ -49,11 +49,11 @@ func main() {
 	userUsecase := userusecase.New(userClient)
 	avatarUsecase := avatarusecase.New(avatarClient)
 	notificationUsecase := notificationusecase.New(notificationClient)
-	friendsUsecase := friendsusecase.New(friendsClient)
+	friendsUseCase := friendsusecase.New(friendsClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(authUseCase)
-	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUsecase)
+	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase)
 
 	r := chi.NewRouter()
 

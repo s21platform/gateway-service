@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/s21platform/gateway-service/internal/useCase/society"
+
 	"google.golang.org/grpc/metadata"
 
 	"github.com/s21platform/gateway-service/internal/config"
@@ -27,14 +29,14 @@ func NewService(cfg *config.Config) *Service {
 	return &Service{client: client}
 }
 
-func (s *Service) CreateSociety(ctx context.Context, name string, desc string, isPrivate bool, dirID int64, accessLevel int64) (*society_proto.SetSocietyOut, error) {
+func (s *Service) CreateSociety(ctx context.Context, req *society.RequestData) (*society_proto.SetSocietyOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	request := &society_proto.SetSocietyIn{
-		Name:          name,
-		Description:   desc,
-		IsPrivate:     isPrivate,
-		DirectionId:   dirID,
-		AccessLevelId: accessLevel,
+		Name:          req.Name,
+		Description:   req.Description,
+		IsPrivate:     req.IsPrivate,
+		DirectionId:   req.DirectionId,
+		AccessLevelId: req.AccessLevelId,
 	}
 
 	resp, err := s.client.CreateSociety(ctx, request)

@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	society "github.com/s21platform/society-proto/society-proto"
+
 	friends "github.com/s21platform/friends-proto/friends-proto"
 
 	notificationproto "github.com/s21platform/notification-proto/notification-proto"
@@ -30,4 +32,8 @@ type NotificationService interface {
 
 type FriendsService interface {
 	GetCountFriends(r *http.Request) (*friends.GetCountFriendsOut, error)
+}
+
+type SocietyService interface {
+	CreateSociety(r *http.Request) (*society.SetSocietyOut, error)
 }

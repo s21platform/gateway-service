@@ -12,11 +12,13 @@ import (
 type Handler struct {
 	uS UserService
 	aS AvatarService
+	nS NotificationService
+	fs FriendsService
 	oS OptionService
 }
 
-func New(uS UserService, aS AvatarService, oS OptionService) *Handler {
-	return &Handler{uS: uS, aS: aS, oS: oS}
+func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsService, oS OptionService) *Handler {
+	return &Handler{uS: uS, aS: aS, nS: nS, fs: fS, oS: oS}
 }
 
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
@@ -87,6 +89,63 @@ func (h *Handler) DeleteAvatar(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) CountNotifications(w http.ResponseWriter, r *http.Request) {
+	result, err := h.nS.GetCountNotification(r)
+	if err != nil {
+		log.Printf("get count notification error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) GetNotifications(w http.ResponseWriter, r *http.Request) {
+	result, err := h.nS.GetNotification(r)
+	if err != nil {
+		log.Printf("get notification error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) GetCountFriends(w http.ResponseWriter, r *http.Request) {
+	result, err := h.fs.GetCountFriends(r)
+	if err != nil {
+		log.Printf("get friends error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	log.Println("json: ", string(jsn))
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func (h *Handler) GetOsById(w http.ResponseWriter, r *http.Request) {
 	osInfo, err := h.oS.GetOS(r)
 	if err != nil {
@@ -115,6 +174,9 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/avatar", handler.SetAvatar)
 		apiRouter.Get("/avatar", handler.GetAllAvatars)
 		apiRouter.Delete("/avatar", handler.DeleteAvatar)
+		apiRouter.Get("/notification/count", handler.CountNotifications)
+		apiRouter.Get("/notification", handler.GetNotifications)
+		apiRouter.Get("/friends/counts", handler.GetCountFriends)
 		apiRouter.Get("/option/os", handler.GetOsById)
 	})
 }

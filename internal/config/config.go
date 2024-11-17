@@ -18,13 +18,15 @@ const (
 
 // Config Common config struct
 type Config struct {
-	Service  Service
-	Auth     Auth
-	User     User
-	Avatar   Avatar
-	Option   Option
-	Metrics  Metrics
-	Platform Platform
+	Service      Service
+	Auth         Auth
+	User         User
+	Avatar       Avatar
+	Friends      Friends
+	Option       Option
+	Metrics      Metrics
+	Platform     Platform
+	Notification Notification
 }
 
 // Service struct for storage this server config variables
@@ -51,6 +53,16 @@ type Avatar struct {
 type Option struct {
 	Host string `env:"OPTIONHUB_SERVICE_HOST"`
 	Port string `env:"OPTIONHUB_SERVICE_PORT"`
+}
+
+type Friends struct {
+	Host string `env:"FRIENDS_SERVICE_HOST"`
+	Port string `env:"FRIENDS_SERVICE_PORT"`
+}
+
+type Notification struct {
+	Host string `env:"NOTIFICATION_SERVICE_HOST"`
+	Port string `env:"NOTIFICATION_SERVICE_PORT"`
 }
 
 type Metrics struct {

@@ -7,10 +7,15 @@ import (
 	"log"
 	"net/http"
 
-	avatarusecase "github.com/s21platform/gateway-service/internal/useCase/avatar"
-	optionusecase "github.com/s21platform/gateway-service/internal/useCase/option"
+	"github.com/s21platform/gateway-service/internal/rpc/friends"
+
+	"github.com/s21platform/gateway-service/internal/rpc/notification"
 
 	"github.com/s21platform/gateway-service/internal/rpc/avatar"
+	avatarusecase "github.com/s21platform/gateway-service/internal/useCase/avatar"
+	notificationusecase "github.com/s21platform/gateway-service/internal/useCase/notification"
+	optionusecase "github.com/s21platform/gateway-service/internal/useCase/option"
+
 	"github.com/s21platform/gateway-service/internal/rpc/option"
 
 	"github.com/go-chi/chi/v5"
@@ -21,6 +26,7 @@ import (
 	"github.com/s21platform/gateway-service/internal/rpc/auth"
 	"github.com/s21platform/gateway-service/internal/rpc/user"
 	authusecase "github.com/s21platform/gateway-service/internal/useCase/auth"
+	friendsusecase "github.com/s21platform/gateway-service/internal/useCase/friends"
 	userusecase "github.com/s21platform/gateway-service/internal/useCase/user"
 	"github.com/s21platform/metrics-lib/pkg"
 )
@@ -38,17 +44,21 @@ func main() {
 	authClient := auth.NewService(cfg)
 	userClient := user.NewService(cfg)
 	avatarClient := avatar.New(cfg)
+	notificationClient := notification.New(cfg)
+	friendsClient := friends.NewService(cfg)
 	optionClient := option.New(cfg)
 
 	// usecases declaration
 	authUseCase := authusecase.New(authClient)
 	userUsecase := userusecase.New(userClient)
 	avatarUsecase := avatarusecase.New(avatarClient)
+	notificationUsecase := notificationusecase.New(notificationClient)
+	friendsUseCase := friendsusecase.New(friendsClient)
 	optionUsecase := optionusecase.New(optionClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(authUseCase)
-	apiHandlers := api.New(userUsecase, avatarUsecase, optionUsecase)
+	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase)
 
 	r := chi.NewRouter()
 

@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/s21platform/gateway-service/internal/rpc/search"
 	"log"
 	"net/http"
 
@@ -43,6 +44,7 @@ func main() {
 	avatarClient := avatar.New(cfg)
 	notificationClient := notification.New(cfg)
 	friendsClient := friends.NewService(cfg)
+	_ = search.New(cfg)
 
 	// usecases declaration
 	authUseCase := authusecase.New(authClient)

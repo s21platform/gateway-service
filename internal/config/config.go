@@ -23,6 +23,7 @@ type Config struct {
 	User         User
 	Avatar       Avatar
 	Friends      Friends
+	Search       Search
 	Metrics      Metrics
 	Platform     Platform
 	Notification Notification
@@ -57,6 +58,11 @@ type Friends struct {
 type Notification struct {
 	Host string `env:"NOTIFICATION_SERVICE_HOST"`
 	Port string `env:"NOTIFICATION_SERVICE_PORT"`
+}
+
+type Search struct {
+	Host string `env:"SEARCH_SERVICE_HOST"`
+	Port string `env:"SEARCH_SERVICE_PORT"`
 }
 
 type Metrics struct {

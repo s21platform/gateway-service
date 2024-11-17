@@ -31,3 +31,6 @@ type NotificationService interface {
 type FriendsService interface {
 	GetCountFriends(r *http.Request) (*friends.GetCountFriendsOut, error)
 }
+
+type SearchService struct {
+}

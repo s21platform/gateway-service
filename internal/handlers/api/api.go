@@ -2,11 +2,10 @@ package api
 
 import (
 	"encoding/json"
-	"log"
-	"net/http"
-
 	"github.com/go-chi/chi/v5"
 	"github.com/s21platform/gateway-service/internal/config"
+	"log"
+	"net/http"
 )
 
 type Handler struct {
@@ -147,6 +146,10 @@ func (h *Handler) GetCountFriends(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) Search(w http.ResponseWriter, r *http.Request) {
+
+}
+
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(func(next http.Handler) http.Handler {
@@ -160,5 +163,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Get("/notification/count", handler.CountNotifications)
 		apiRouter.Get("/notification", handler.GetNotifications)
 		apiRouter.Get("/friends/counts", handler.GetCountFriends)
+		apiRouter.Get("/search", handler.Search)
 	})
 }

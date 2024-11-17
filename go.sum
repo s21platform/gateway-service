@@ -37,6 +37,8 @@ github.com/s21platform/notification-proto v0.0.2 h1:BKw6BdpXTt+1TKpUIIHrYpcQ/AAT
 github.com/s21platform/notification-proto v0.0.2/go.mod h1:4K7d3RmGB4tYHkvZ6sU0UePgnBMo5ARq52lzJitp5as=
 github.com/s21platform/society-proto v0.0.5 h1:ysYFfWXWIjc+yp2XsGP5lpzkfY8yRohmRL8raGufAaU=
 github.com/s21platform/society-proto v0.0.5/go.mod h1:FzN4uECbQ2m7zswITPYnERs6Z2OdmuxqDKwn/Ll65V8=
+github.com/s21platform/society-proto v0.0.8 h1:bhAEqOmX0JMClIH0fAaR9EpSS/lwKx7lQ7YISwArnjM=
+github.com/s21platform/society-proto v0.0.8/go.mod h1:FzN4uECbQ2m7zswITPYnERs6Z2OdmuxqDKwn/Ll65V8=
 github.com/s21platform/user-proto v0.0.7 h1:nR64ulAPBDR2326FEbvsvH3l6jDSyEbXbkmkhwYsA/E=
 github.com/s21platform/user-proto v0.0.7/go.mod h1:IIcTCyxXtvdIyuv3sI6a/iey2CTPJ/t7K9bvh52eazg=
 golang.org/x/net v0.30.0 h1:AcW1SDZMkb8IpzCdQUaIq2sP4sZ4zw+55h6ynffypl4=

@@ -146,7 +146,7 @@ func (h *Handler) GetCountFriends(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
-func (h *Handler) GetOsById(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetOsByID(w http.ResponseWriter, r *http.Request) {
 	osInfo, err := h.oS.GetOS(r)
 	if err != nil {
 		log.Printf("failed to get osInfo: %v", err)
@@ -177,6 +177,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Get("/notification/count", handler.CountNotifications)
 		apiRouter.Get("/notification", handler.GetNotifications)
 		apiRouter.Get("/friends/counts", handler.GetCountFriends)
-		apiRouter.Get("/option/os", handler.GetOsById)
+		apiRouter.Get("/option/os", handler.GetOsByID)
 	})
 }

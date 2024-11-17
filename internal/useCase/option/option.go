@@ -23,7 +23,7 @@ func (uc *Usecase) GetOS(r *http.Request) (*optionhub.GetByIdOut, error) {
 		return nil, fmt.Errorf("failed to extract os id: %w", err)
 	}
 
-	resp, err := uc.oC.GetOSById(r.Context(), id)
+	resp, err := uc.oC.GetOSByID(r.Context(), id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get os in usercase: %w", err)
 	}

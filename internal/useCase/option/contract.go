@@ -7,5 +7,5 @@ import (
 )
 
 type OptionClient interface {
-	GetOSById(ctx context.Context, id int64) (*optionhub.GetByIdOut, error)
+	GetOSByID(ctx context.Context, id int64) (*optionhub.GetByIdOut, error)
 }

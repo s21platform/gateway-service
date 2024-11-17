@@ -43,7 +43,7 @@ func (u *UseCase) CreateSociety(r *http.Request) (*society_proto.SetSocietyOut, 
 
 	resp, err := u.sC.CreateSociety(r.Context(), &requestData)
 	if err != nil {
-		return nil, fmt.Errorf("u.sC.CreateSociety: %v", err)
+		return nil, fmt.Errorf("failed to create society: %v", err)
 	}
 	return resp, nil
 }

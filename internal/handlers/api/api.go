@@ -180,6 +180,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Get("/notification/count", handler.CountNotifications)
 		apiRouter.Get("/notification", handler.GetNotifications)
 		apiRouter.Get("/friends/counts", handler.GetCountFriends)
-		apiRouter.Post("/create_society", handler.CreateSociety)
+		apiRouter.Post("/society", handler.CreateSociety)
 	})
 }

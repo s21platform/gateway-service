@@ -1,11 +1,10 @@
 package option
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 
+	"github.com/s21platform/gateway-service/internal/config"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 )
 
@@ -18,10 +17,7 @@ func New(oC OptionClient) *Usecase {
 }
 
 func (uc *Usecase) GetOS(r *http.Request) (*optionhub.GetByIdOut, error) {
-	id, err := extractOSID(r)
-	if err != nil {
-		return nil, fmt.Errorf("failed to extract os id: %w", err)
-	}
+	id := r.Context().Value(config.KeyID).(int64)
 
 	resp, err := uc.oC.GetOSByID(r.Context(), id)
 	if err != nil {
@@ -29,26 +25,4 @@ func (uc *Usecase) GetOS(r *http.Request) (*optionhub.GetByIdOut, error) {
 	}
 
 	return resp, nil
-}
-
-func extractOSID(r *http.Request) (int64, error) {
-	var requestData struct {
-		ID int64 `json:"id"`
-	}
-
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		return 0, fmt.Errorf("failed to read request body: %w", err)
-	}
-	defer r.Body.Close()
-
-	if len(body) == 0 {
-		return 0, fmt.Errorf("request body is empty")
-	}
-
-	if err := json.Unmarshal(body, &requestData); err != nil {
-		return 0, fmt.Errorf("failed to decode request body: %w", err)
-	}
-
-	return requestData.ID, nil
 }

@@ -34,5 +34,5 @@ type FriendsService interface {
 }
 
 type OptionService interface {
-	GetOS(r *http.Request) (*optionhub.GetByIdOut, error)
+	GetOsList(r *http.Request) (*optionhub.GetAllOut, error)
 }

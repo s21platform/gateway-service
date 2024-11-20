@@ -28,14 +28,10 @@ func New(cfg *config.Config) *Service {
 	return &Service{client: client}
 }
 
-func (s *Service) GetOSByID(ctx context.Context, id int64) (*optionhub.GetByIdOut, error) {
-	req := optionhub.GetByIdIn{
-		Id: id,
-	}
-
-	resp, err := s.client.GetOsById(ctx, &req) // эта функция наебнется
+func (s *Service) GetAllOs(ctx context.Context) (*optionhub.GetAllOut, error) {
+	resp, err := s.client.GetAllOs(ctx, &optionhub.GetAllIn{})
 	if err != nil {
-		return nil, fmt.Errorf("failed to get os in grpc: %w", err)
+		return nil, fmt.Errorf("failed to get os list in grpc: %w", err)
 	}
 
 	return resp, nil

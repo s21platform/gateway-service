@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/s21platform/gateway-service/internal/config"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 )
 
@@ -16,12 +15,10 @@ func New(oC OptionClient) *Usecase {
 	return &Usecase{oC: oC}
 }
 
-func (uc *Usecase) GetOS(r *http.Request) (*optionhub.GetByIdOut, error) {
-	id := r.Context().Value(config.KeyID).(int64)
-
-	resp, err := uc.oC.GetOSByID(r.Context(), id)
+func (uc *Usecase) GetOsList(r *http.Request) (*optionhub.GetAllOut, error) {
+	resp, err := uc.oC.GetAllOs(r.Context())
 	if err != nil {
-		return nil, fmt.Errorf("failed to get os in usercase: %w", err)
+		return nil, fmt.Errorf("failed to get os list in usercase: %w", err)
 	}
 
 	return resp, nil

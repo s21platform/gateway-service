@@ -14,7 +14,6 @@ const (
 	KeyMetrics  = key("metrics")
 	KeyUUID     = key("uuid")
 	KeyUsername = key("username")
-	KeyID       = key("id")
 )
 
 // Config Common config struct

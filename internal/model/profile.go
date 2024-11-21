@@ -12,19 +12,23 @@ type OS struct {
 }
 
 type ProfileData struct {
-	FullName  string    `json:"fullName"`
-	BirthDate time.Time `json:"birthDate"`
-	Telegram  string    `json:"telegram"`
-	GitLink   string    `json:"gitLink"`
-	Os        OS        `json:"os"`
+	Name      string     `json:"name"`
+	Birthdate *time.Time `json:"birthdate"`
+	Telegram  string     `json:"telegram"`
+	Git       string     `json:"git"`
+	Os        OS         `json:"os"`
 }
 
 func (pd *ProfileData) FromDTO() *userproto.UpdateProfileIn {
+	var birthday string
+	if pd.Birthdate != nil {
+		birthday = pd.Birthdate.Format(time.RFC3339)
+	}
 	return &userproto.UpdateProfileIn{
-		Name:     pd.FullName,
-		Birthday: pd.BirthDate.Format(time.RFC3339),
+		Name:     pd.Name,
+		Birthday: birthday,
 		Telegram: pd.Telegram,
-		Github:   pd.GitLink,
+		Github:   pd.Git,
 		OsId:     pd.Os.Id,
 	}
 }

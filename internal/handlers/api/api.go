@@ -22,12 +22,13 @@ func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsSer
 
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
 	resp, err := h.uS.GetInfoByUUID(r.Context())
+
 	if err != nil {
 		log.Printf("get info by uuid error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
+	log.Println(resp)
 	jsn, err := json.Marshal(resp)
 	if err != nil {
 		log.Printf("json marshal error: %v", err)
@@ -175,7 +176,7 @@ func (h *Handler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	//log.Println(t.FullName, t.BirthDate, t.Telegram, t.GitLink, t.Os)
+	//log.Println(t.FullName, t.Birthdate, t.Telegram, t.GitLink, t.Os)
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(jsn)
 }

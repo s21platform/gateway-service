@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/s21platform/gateway-service/internal/model"
+
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/s21platform/gateway-service/internal/config"
@@ -37,6 +39,15 @@ func (s *Service) GetInfo(ctx context.Context, uuid string) (*userproto.GetUserI
 	if err != nil {
 		log.Printf("failed to call: %v", err)
 		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return resp, nil
+}
+
+func (s *Service) UpdateProfile(ctx context.Context, data model.ProfileData) (*userproto.UpdateProfileOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	resp, err := s.client.UpdateProfile(ctx, data.FromDTO())
+	if err != nil {
+		return nil, fmt.Errorf("failed to update user profile: %v", err)
 	}
 	return resp, nil
 }

@@ -2,6 +2,12 @@ package user
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+
+	"github.com/s21platform/gateway-service/internal/model"
 
 	"github.com/s21platform/gateway-service/internal/config"
 
@@ -22,5 +28,27 @@ func (u *Usecase) GetInfoByUUID(ctx context.Context) (*userproto.GetUserInfoByUU
 	if err != nil {
 		return nil, err
 	}
+	return resp, nil
+}
+
+func (u *Usecase) UpdateProfileInfo(r *http.Request) (*userproto.UpdateProfileOut, error) {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read body for update profile: %w", err)
+	}
+	defer r.Body.Close()
+
+	var data model.ProfileData
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal body for update profile: %w", err)
+	}
+	fmt.Println(data)
+
+	resp, err := u.uC.UpdateProfile(r.Context(), data)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update profile: %w", err)
+	}
+
 	return resp, nil
 }

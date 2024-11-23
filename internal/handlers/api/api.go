@@ -82,6 +82,8 @@ func (h *Handler) DeleteAvatar(w http.ResponseWriter, r *http.Request) {
 	jsn, err := json.Marshal(deletedAvatar)
 	if err != nil {
 		log.Printf("json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -164,6 +166,39 @@ func (h *Handler) GetOsBySearchName(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
+	//body, err := io.ReadAll(r.Body)
+	//if err != nil {
+	//	log.Printf("read body error: %v", err)
+	//	w.WriteHeader(http.StatusBadRequest)
+	//	return
+	//}
+	//defer r.Body.Close()
+	//
+	//var t model.ProfileData
+	//err = json.Unmarshal(body, &t)
+	//if err != nil {
+	//	log.Printf("json unmarshal error: %v", err)
+	//	w.WriteHeader(http.StatusBadRequest)
+	//	return
+	//}
+	resp, err := h.uS.UpdateProfileInfo(r)
+	if err != nil {
+		log.Printf("update profile info error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(resp)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	//log.Println(t.FullName, t.Birthdate, t.Telegram, t.GitLink, t.Os)
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(func(next http.Handler) http.Handler {
@@ -171,6 +206,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		})
 
 		apiRouter.Get("/profile", handler.MyProfile)
+		apiRouter.Put("/profile", handler.UpdateProfile)
 		apiRouter.Post("/avatar", handler.SetAvatar)
 		apiRouter.Get("/avatar", handler.GetAllAvatars)
 		apiRouter.Delete("/avatar", handler.DeleteAvatar)

@@ -66,7 +66,7 @@ func (s *Service) GetAllAvatars(ctx context.Context, uuid string) (*avatar.GetAl
 	req := avatar.GetAllAvatarsIn{
 		UserUuid: uuid,
 	}
-
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	resp, err := s.client.GetAllAvatars(ctx, &req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get all avatars: %w", err)

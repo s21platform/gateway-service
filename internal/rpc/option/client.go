@@ -28,8 +28,8 @@ func New(cfg *config.Config) *Service {
 	return &Service{client: client}
 }
 
-func (s *Service) GetAllOs(ctx context.Context) (*optionhub.GetAllOut, error) {
-	resp, err := s.client.GetAllOs(ctx, &optionhub.GetAllIn{})
+func (s *Service) GetOsBySearchName(ctx context.Context, searchName *optionhub.GetByNameIn) (*optionhub.GetByNameOut, error) {
+	resp, err := s.client.GetOsBySearchName(ctx, searchName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get os list in grpc: %w", err)
 	}

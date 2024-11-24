@@ -18,11 +18,11 @@ func New(sC SocietyClient) *UseCase {
 }
 
 type RequestData struct {
-	Name          string `json:"Name"`
-	Description   string `json:"Description"`
-	IsPrivate     bool   `json:"IsPrivate"`
-	DirectionId   int64  `json:"DirectionId"`
-	AccessLevelId int64  `json:"AccessLevelId"`
+	Name          string `json:"name"`
+	Description   string `json:"description"`
+	IsPrivate     bool   `json:"is_private"`
+	DirectionId   int64  `json:"direction_id"`
+	AccessLevelId int64  `json:"access_level_id"`
 }
 
 func (u *UseCase) CreateSociety(r *http.Request) (*society_proto.SetSocietyOut, error) {

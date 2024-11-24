@@ -17,6 +17,7 @@ import (
 
 type UserService interface {
 	GetInfoByUUID(ctx context.Context) (*userproto.GetUserInfoByUUIDOut, error)
+	UpdateProfileInfo(r *http.Request) (*userproto.UpdateProfileOut, error)
 }
 
 type AvatarService interface {

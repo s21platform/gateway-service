@@ -41,7 +41,7 @@ func (s *Service) CreateSociety(ctx context.Context, req *society.RequestData) (
 
 	resp, err := s.client.CreateSociety(ctx, request)
 	if err != nil {
-		return nil, fmt.Errorf("failed grpc request: %v", err)
+		return nil, fmt.Errorf("failed to create society: %v", err)
 	}
 	log.Println("resp: ", resp)
 	return resp, nil

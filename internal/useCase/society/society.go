@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/http"
 
-	society_proto "github.com/s21platform/society-proto/society-proto"
+	societyproto "github.com/s21platform/society-proto/society-proto"
 )
 
 type UseCase struct {
@@ -25,7 +25,7 @@ type RequestData struct {
 	AccessLevelId int64  `json:"access_level_id"`
 }
 
-func (u *UseCase) CreateSociety(r *http.Request) (*society_proto.SetSocietyOut, error) {
+func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error) {
 	requestData := RequestData{}
 	body, err := io.ReadAll(r.Body)
 	if err != nil {

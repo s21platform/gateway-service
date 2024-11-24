@@ -10,13 +10,13 @@ import (
 	"google.golang.org/grpc/metadata"
 
 	"github.com/s21platform/gateway-service/internal/config"
-	society_proto "github.com/s21platform/society-proto/society-proto"
+	societyproto "github.com/s21platform/society-proto/society-proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 type Service struct {
-	client society_proto.SocietyServiceClient
+	client societyproto.SocietyServiceClient
 }
 
 func NewService(cfg *config.Config) *Service {
@@ -25,13 +25,13 @@ func NewService(cfg *config.Config) *Service {
 	if err != nil {
 		log.Fatalf("failed to create gRPC client: %v", err)
 	}
-	client := society_proto.NewSocietyServiceClient(conn)
+	client := societyproto.NewSocietyServiceClient(conn)
 	return &Service{client: client}
 }
 
-func (s *Service) CreateSociety(ctx context.Context, req *society.RequestData) (*society_proto.SetSocietyOut, error) {
+func (s *Service) CreateSociety(ctx context.Context, req *society.RequestData) (*societyproto.SetSocietyOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
-	request := &society_proto.SetSocietyIn{
+	request := &societyproto.SetSocietyIn{
 		Name:          req.Name,
 		Description:   req.Description,
 		IsPrivate:     req.IsPrivate,

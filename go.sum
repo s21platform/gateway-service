@@ -37,6 +37,8 @@ github.com/s21platform/notification-proto v0.0.2 h1:BKw6BdpXTt+1TKpUIIHrYpcQ/AAT
 github.com/s21platform/notification-proto v0.0.2/go.mod h1:4K7d3RmGB4tYHkvZ6sU0UePgnBMo5ARq52lzJitp5as=
 github.com/s21platform/society-proto v0.0.9 h1:6cji1WjMZf2rwXlyxDCSMvdAD2aOImg9RaP7msnyFRs=
 github.com/s21platform/society-proto v0.0.9/go.mod h1:FzN4uECbQ2m7zswITPYnERs6Z2OdmuxqDKwn/Ll65V8=
+github.com/s21platform/society-proto v0.0.10 h1:oGdrtHY9cUoVGm5FIoVXb6fNQoCf5NDCSC/UvjYfWGw=
+github.com/s21platform/society-proto v0.0.10/go.mod h1:wLBVqLkJplzBeE0T25OUJGR2uV4I1Ut97K2Ouhc3sTQ=
 github.com/s21platform/user-proto v0.0.9 h1:RXl8ZaBANzEYVm3U6b3hZgysy0x8teRumLawhuhA4Ao=
 github.com/s21platform/user-proto v0.0.9/go.mod h1:+W3ciXEQrPUZ3+KOiEyXV7OZCxcfoyVV2WUkR25NfHM=
 golang.org/x/net v0.30.0 h1:AcW1SDZMkb8IpzCdQUaIq2sP4sZ4zw+55h6ynffypl4=
@@ -49,6 +51,8 @@ google.golang.org/genproto/googleapis/rpc v0.0.0-20241021214115-324edc3d5d38 h1:
 google.golang.org/genproto/googleapis/rpc v0.0.0-20241021214115-324edc3d5d38/go.mod h1:GX3210XPVPUjJbTUbvwI8f2IpZDMZuPJWDzDuebbviI=
 google.golang.org/grpc v1.67.1 h1:zWnc1Vrcno+lHZCOofnIMvycFcc0QRGIzm9dhnDX68E=
 google.golang.org/grpc v1.67.1/go.mod h1:1gLDyUQU7CTLJI90u3nXZ9ekeghjeM7pTDZlqFNg2AA=
+google.golang.org/grpc v1.68.0 h1:aHQeeJbo8zAkAa3pRzrVjZlbz6uSfeOXlJNQM0RAbz0=
+google.golang.org/grpc v1.68.0/go.mod h1:fmSPC5AsjSBCK54MyHRx48kpOti1/jRfOlwEWywNjWA=
 google.golang.org/protobuf v1.35.1 h1:m3LfL6/Ca+fqnjnlqQXNpFPABW1UD7mjh8KO2mKFytA=
 google.golang.org/protobuf v1.35.1/go.mod h1:9fA7Ob0pmnwhb644+1+CVWFRbNajQ6iRojtC/QF5bRE=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=

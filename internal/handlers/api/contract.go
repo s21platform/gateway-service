@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	society "github.com/s21platform/society-proto/society-proto"
+	societyproto "github.com/s21platform/society-proto/society-proto"
 
 	friends "github.com/s21platform/friends-proto/friends-proto"
 
@@ -36,5 +36,5 @@ type FriendsService interface {
 }
 
 type SocietyService interface {
-	CreateSociety(r *http.Request) (*society.SetSocietyOut, error)
+	CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error)
 }

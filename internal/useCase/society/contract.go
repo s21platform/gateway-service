@@ -3,9 +3,9 @@ package society
 import (
 	"context"
 
-	society_proto "github.com/s21platform/society-proto/society-proto"
+	societyproto "github.com/s21platform/society-proto/society-proto"
 )
 
 type SocietyClient interface {
-	CreateSociety(ctx context.Context, req *RequestData) (*society_proto.SetSocietyOut, error)
+	CreateSociety(ctx context.Context, req *RequestData) (*societyproto.SetSocietyOut, error)
 }

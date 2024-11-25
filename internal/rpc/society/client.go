@@ -48,6 +48,7 @@ func (s *Service) CreateSociety(ctx context.Context, req *society.RequestData) (
 }
 
 func (s *Service) GetAccessLevel(ctx context.Context) (*societyproto.GetAccessLevelOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	resp, err := s.client.GetAccessLevel(ctx, &societyproto.EmptySociety{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get access level: %v", err)

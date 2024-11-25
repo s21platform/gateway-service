@@ -26,6 +26,7 @@ type Config struct {
 	Metrics      Metrics
 	Platform     Platform
 	Notification Notification
+	Society      Society
 }
 
 // Service struct for storage this server config variables
@@ -67,6 +68,11 @@ type Metrics struct {
 type Platform struct {
 	Secret string `env:"SECRET_KEY"`
 	Env    string `env:"ENV"`
+}
+
+type Society struct {
+	Host string `env:"SOCIETY_SERVICE_HOST"`
+	Port string `env:"SOCIETY_SERVICE_PORT"`
 }
 
 func MustLoad() *Config {

@@ -37,4 +37,5 @@ type FriendsService interface {
 
 type SocietyService interface {
 	CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error)
+	GetAccessLevel(r *http.Request) (*societyproto.GetAccessLevelOut, error)
 }

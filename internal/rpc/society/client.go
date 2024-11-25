@@ -52,6 +52,5 @@ func (s *Service) GetAccessLevel(ctx context.Context) (*societyproto.GetAccessLe
 	if err != nil {
 		return nil, fmt.Errorf("failed to get access level: %v", err)
 	}
-	log.Println("resp: ", resp)
 	return resp, nil
 }

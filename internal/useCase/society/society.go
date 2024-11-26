@@ -47,3 +47,11 @@ func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, e
 	}
 	return resp, nil
 }
+
+func (u *UseCase) GetAccessLevel(r *http.Request) (*societyproto.GetAccessLevelOut, error) {
+	resp, err := u.sC.GetAccessLevel(r.Context())
+	if err != nil {
+		return nil, fmt.Errorf("failed to get access level: %v", err)
+	}
+	return resp, nil
+}

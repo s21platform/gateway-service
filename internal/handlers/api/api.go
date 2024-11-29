@@ -15,10 +15,11 @@ type Handler struct {
 	nS NotificationService
 	fs FriendsService
 	oS OptionService
+	sS SocietyService
 }
 
-func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsService, oS OptionService) *Handler {
-	return &Handler{uS: uS, aS: aS, nS: nS, fs: fS, oS: oS}
+func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsService, oS OptionService, sS SocietyService) *Handler {
+	return &Handler{uS: uS, aS: aS, nS: nS, fs: fS, oS: oS, sS: sS}
 }
 
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
@@ -199,6 +200,43 @@ func (h *Handler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) CreateSociety(w http.ResponseWriter, r *http.Request) {
+	result, err := h.sS.CreateSociety(r)
+	if err != nil {
+		log.Printf("create society error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	log.Println("json: ", string(jsn))
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) GetAccessLevel(w http.ResponseWriter, r *http.Request) {
+	result, err := h.sS.GetAccessLevel(r)
+	if err != nil {
+		log.Printf("get access level error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(func(next http.Handler) http.Handler {
@@ -214,5 +252,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Get("/notification", handler.GetNotifications)
 		apiRouter.Get("/friends/counts", handler.GetCountFriends)
 		apiRouter.Get("/option/os", handler.GetOsBySearchName)
+		apiRouter.Post("/society", handler.CreateSociety)
+		apiRouter.Get("/society/access", handler.GetAccessLevel)
 	})
 }

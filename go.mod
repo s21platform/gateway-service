@@ -12,6 +12,7 @@ require (
 	github.com/s21platform/metrics-lib v0.0.6
 	github.com/s21platform/notification-proto v0.0.2
 	github.com/s21platform/optionhub-proto v1.0.3
+	github.com/s21platform/society-proto v0.0.11
 	github.com/s21platform/user-proto v0.0.9
 	google.golang.org/grpc v1.68.0
 )

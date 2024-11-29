@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	societyproto "github.com/s21platform/society-proto/society-proto"
+
 	friends "github.com/s21platform/friends-proto/friends-proto"
 
 	notificationproto "github.com/s21platform/notification-proto/notification-proto"
@@ -36,4 +38,9 @@ type FriendsService interface {
 
 type OptionService interface {
 	GetOsList(r *http.Request) (*optionhub.GetByNameOut, error)
+}
+
+type SocietyService interface {
+	CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error)
+	GetAccessLevel(r *http.Request) (*societyproto.GetAccessLevelOut, error)
 }

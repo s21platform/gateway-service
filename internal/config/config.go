@@ -23,6 +23,7 @@ type Config struct {
 	User         User
 	Avatar       Avatar
 	Friends      Friends
+	Option       Option
 	Metrics      Metrics
 	Platform     Platform
 	Notification Notification
@@ -48,6 +49,11 @@ type User struct {
 type Avatar struct {
 	Host string `env:"AVATAR_SERVICE_HOST"`
 	Port string `env:"AVATAR_SERVICE_PORT"`
+}
+
+type Option struct {
+	Host string `env:"OPTIONHUB_SERVICE_HOST"`
+	Port string `env:"OPTIONHUB_SERVICE_PORT"`
 }
 
 type Friends struct {

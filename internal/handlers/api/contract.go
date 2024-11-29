@@ -11,6 +11,7 @@ import (
 	notificationproto "github.com/s21platform/notification-proto/notification-proto"
 
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
+	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 
 	userproto "github.com/s21platform/user-proto/user-proto"
 )
@@ -33,6 +34,10 @@ type NotificationService interface {
 
 type FriendsService interface {
 	GetCountFriends(r *http.Request) (*friends.GetCountFriendsOut, error)
+}
+
+type OptionService interface {
+	GetOsList(r *http.Request) (*optionhub.GetByNameOut, error)
 }
 
 type SocietyService interface {

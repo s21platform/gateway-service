@@ -15,6 +15,9 @@ import (
 	"github.com/s21platform/gateway-service/internal/rpc/avatar"
 	avatarusecase "github.com/s21platform/gateway-service/internal/useCase/avatar"
 	notificationusecase "github.com/s21platform/gateway-service/internal/useCase/notification"
+	optionusecase "github.com/s21platform/gateway-service/internal/useCase/option"
+
+	"github.com/s21platform/gateway-service/internal/rpc/option"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/s21platform/gateway-service/internal/config"
@@ -45,6 +48,7 @@ func main() {
 	avatarClient := avatar.New(cfg)
 	notificationClient := notification.New(cfg)
 	friendsClient := friends.NewService(cfg)
+	optionClient := option.New(cfg)
 	societyClient := society.NewService(cfg)
 
 	// usecases declaration
@@ -53,11 +57,12 @@ func main() {
 	avatarUsecase := avatarusecase.New(avatarClient)
 	notificationUsecase := notificationusecase.New(notificationClient)
 	friendsUseCase := friendsusecase.New(friendsClient)
+	optionUsecase := optionusecase.New(optionClient)
 	societyUseCase := societyusecase.New(societyClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(authUseCase)
-	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, societyUseCase)
+	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase)
 
 	r := chi.NewRouter()
 

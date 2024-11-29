@@ -14,11 +14,12 @@ type Handler struct {
 	aS AvatarService
 	nS NotificationService
 	fs FriendsService
+	oS OptionService
 	sS SocietyService
 }
 
-func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsService, sS SocietyService) *Handler {
-	return &Handler{uS: uS, aS: aS, nS: nS, fs: fS, sS: sS}
+func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsService, oS OptionService, sS SocietyService) *Handler {
+	return &Handler{uS: uS, aS: aS, nS: nS, fs: fS, oS: oS, sS: sS}
 }
 
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
@@ -28,7 +29,7 @@ func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	log.Println(resp)
+
 	jsn, err := json.Marshal(resp)
 	if err != nil {
 		log.Printf("json marshal error: %v", err)
@@ -148,6 +149,24 @@ func (h *Handler) GetCountFriends(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) GetOsBySearchName(w http.ResponseWriter, r *http.Request) {
+	osList, err := h.oS.GetOsList(r)
+	if err != nil {
+		log.Printf("failed to get os list: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(osList)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func (h *Handler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	//body, err := io.ReadAll(r.Body)
 	//if err != nil {
@@ -232,6 +251,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Get("/notification/count", handler.CountNotifications)
 		apiRouter.Get("/notification", handler.GetNotifications)
 		apiRouter.Get("/friends/counts", handler.GetCountFriends)
+		apiRouter.Get("/option/os", handler.GetOsBySearchName)
 		apiRouter.Post("/society", handler.CreateSociety)
 		apiRouter.Get("/society/access", handler.GetAccessLevel)
 	})

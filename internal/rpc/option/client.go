@@ -9,6 +9,7 @@ import (
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 )
 
 type Service struct {
@@ -29,6 +30,8 @@ func New(cfg *config.Config) *Service {
 }
 
 func (s *Service) GetOsBySearchName(ctx context.Context, searchName *optionhub.GetByNameIn) (*optionhub.GetByNameOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
 	resp, err := s.client.GetOsBySearchName(ctx, searchName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get os list in grpc: %w", err)

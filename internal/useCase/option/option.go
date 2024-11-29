@@ -17,10 +17,6 @@ func New(oC OptionClient) *Usecase {
 
 func (uc *Usecase) GetOsList(r *http.Request) (*optionhub.GetByNameOut, error) {
 	name := r.URL.Query().Get("name")
-	if name == "" {
-		return nil, fmt.Errorf("missing 'name' query parameter")
-	}
-
 	searchName := &optionhub.GetByNameIn{Name: name}
 
 	resp, err := uc.oC.GetOsBySearchName(r.Context(), searchName)

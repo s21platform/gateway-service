@@ -38,6 +38,11 @@ type FriendsService interface {
 
 type OptionService interface {
 	GetOsList(r *http.Request) (*optionhub.GetByNameOut, error)
+	GetWorkPlaceList(r *http.Request) (*optionhub.GetByNameOut, error)
+	GetStudyPlaceList(r *http.Request) (*optionhub.GetByNameOut, error)
+	GetHobbyList(r *http.Request) (*optionhub.GetByNameOut, error)
+	GetSkillList(r *http.Request) (*optionhub.GetByNameOut, error)
+	GetCityList(r *http.Request) (*optionhub.GetByNameOut, error)
 	GetSocietyDirectionList(r *http.Request) (*optionhub.GetByNameOut, error)
 }
 

@@ -167,6 +167,96 @@ func (h *Handler) GetOsBySearchName(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) GetWorkPlaceBySearchName(w http.ResponseWriter, r *http.Request) {
+	osList, err := h.oS.GetWorkPlaceList(r)
+	if err != nil {
+		log.Printf("failed to get workplace list: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(osList)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) GetStudyPlaceBySearchName(w http.ResponseWriter, r *http.Request) {
+	osList, err := h.oS.GetStudyPlaceList(r)
+	if err != nil {
+		log.Printf("failed to get study place list: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(osList)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) GetHobbyBySearchName(w http.ResponseWriter, r *http.Request) {
+	osList, err := h.oS.GetHobbyList(r)
+	if err != nil {
+		log.Printf("failed to get hobby list: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(osList)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) GetSkillBySearchName(w http.ResponseWriter, r *http.Request) {
+	osList, err := h.oS.GetSkillList(r)
+	if err != nil {
+		log.Printf("failed to get skill list: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(osList)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) GetCityBySearchName(w http.ResponseWriter, r *http.Request) {
+	osList, err := h.oS.GetCityList(r)
+	if err != nil {
+		log.Printf("failed to get city list: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(osList)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func (h *Handler) GetSocietyDirectionBySearchName(w http.ResponseWriter, r *http.Request) {
 	osList, err := h.oS.GetSocietyDirectionList(r)
 	if err != nil {
@@ -270,6 +360,11 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Get("/notification", handler.GetNotifications)
 		apiRouter.Get("/friends/counts", handler.GetCountFriends)
 		apiRouter.Get("/option/os", handler.GetOsBySearchName)
+		apiRouter.Get("/option/workplace", handler.GetWorkPlaceBySearchName)
+		apiRouter.Get("/option/study-place", handler.GetStudyPlaceBySearchName)
+		apiRouter.Get("/option/hobby", handler.GetHobbyBySearchName)
+		apiRouter.Get("/option/skill", handler.GetSkillBySearchName)
+		apiRouter.Get("/option/city", handler.GetCityBySearchName)
 		apiRouter.Get("/option/society-direction", handler.GetSocietyDirectionBySearchName)
 		apiRouter.Post("/society", handler.CreateSociety)
 		apiRouter.Get("/society/access", handler.GetAccessLevel)

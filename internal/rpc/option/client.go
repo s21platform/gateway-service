@@ -40,6 +40,61 @@ func (s *Service) GetOsBySearchName(ctx context.Context, searchName *optionhub.G
 	return resp, nil
 }
 
+func (s *Service) GetWorkPlaceBySearchName(ctx context.Context, searchName *optionhub.GetByNameIn) (*optionhub.GetByNameOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
+	resp, err := s.client.GetWorkPlaceBySearchName(ctx, searchName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get os list workplace grpc: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (s *Service) GetStudyPlaceBySearchName(ctx context.Context, searchName *optionhub.GetByNameIn) (*optionhub.GetByNameOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
+	resp, err := s.client.GetStudyPlaceBySearchName(ctx, searchName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get os list study place grpc: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (s *Service) GetHobbyBySearchName(ctx context.Context, searchName *optionhub.GetByNameIn) (*optionhub.GetByNameOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
+	resp, err := s.client.GetHobbyBySearchName(ctx, searchName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get hobby list in grpc: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (s *Service) GetSkillBySearchName(ctx context.Context, searchName *optionhub.GetByNameIn) (*optionhub.GetByNameOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
+	resp, err := s.client.GetSkillBySearchName(ctx, searchName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get skill list in grpc: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (s *Service) GetCityBySearchName(ctx context.Context, searchName *optionhub.GetByNameIn) (*optionhub.GetByNameOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
+	resp, err := s.client.GetCityBySearchName(ctx, searchName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get city list in grpc: %w", err)
+	}
+
+	return resp, nil
+}
+
 func (s *Service) GetSocietyDirectionBySearchName(ctx context.Context, searchName *optionhub.GetByNameIn) (*optionhub.GetByNameOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 

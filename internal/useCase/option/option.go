@@ -26,3 +26,15 @@ func (uc *Usecase) GetOsList(r *http.Request) (*optionhub.GetByNameOut, error) {
 
 	return resp, nil
 }
+
+func (uc *Usecase) GetSocietyDirectionList(r *http.Request) (*optionhub.GetByNameOut, error) {
+	name := r.URL.Query().Get("name")
+	searchName := &optionhub.GetByNameIn{Name: name}
+
+	resp, err := uc.oC.GetSocietyDirectionBySearchName(r.Context(), searchName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get society direction list in usercase: %w", err)
+	}
+
+	return resp, nil
+}

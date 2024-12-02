@@ -38,6 +38,7 @@ type FriendsService interface {
 
 type OptionService interface {
 	GetOsList(r *http.Request) (*optionhub.GetByNameOut, error)
+	GetSocietyDirectionList(r *http.Request) (*optionhub.GetByNameOut, error)
 }
 
 type SocietyService interface {

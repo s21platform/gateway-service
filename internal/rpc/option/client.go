@@ -39,3 +39,14 @@ func (s *Service) GetOsBySearchName(ctx context.Context, searchName *optionhub.G
 
 	return resp, nil
 }
+
+func (s *Service) GetSocietyDirectionBySearchName(ctx context.Context, searchName *optionhub.GetByNameIn) (*optionhub.GetByNameOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
+	resp, err := s.client.GetSocietyDirectionBySearchName(ctx, searchName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get society direction list in grpc: %w", err)
+	}
+
+	return resp, nil
+}

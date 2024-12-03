@@ -25,6 +25,10 @@ type RequestData struct {
 	AccessLevelId int64  `json:"access_level_id"`
 }
 
+type SocietyId struct {
+	Id int64 `json:"id"`
+}
+
 func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error) {
 	requestData := RequestData{}
 	body, err := io.ReadAll(r.Body)
@@ -57,7 +61,7 @@ func (u *UseCase) GetAccessLevel(r *http.Request) (*societyproto.GetAccessLevelO
 }
 
 func (u *UseCase) GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error) {
-	var id int64
+	id := SocietyId{}
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read request body: %w", err)
@@ -67,7 +71,7 @@ func (u *UseCase) GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoO
 		return nil, fmt.Errorf("failed to decode request body: %w", err)
 	}
 
-	resp, err := u.sC.GetSocietyInfo(r.Context(), id)
+	resp, err := u.sC.GetSocietyInfo(r.Context(), id.Id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get access level: %v", err)
 	}

@@ -55,3 +55,22 @@ func (u *UseCase) GetAccessLevel(r *http.Request) (*societyproto.GetAccessLevelO
 	}
 	return resp, nil
 }
+
+func (u *UseCase) GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error) {
+	var id int64
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read request body: %w", err)
+	}
+
+	if err := json.Unmarshal(body, &id); err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %w", err)
+	}
+
+	resp, err := u.sC.GetSocietyInfo(r.Context(), id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get access level: %v", err)
+	}
+
+	return resp, nil
+}

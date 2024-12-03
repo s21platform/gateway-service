@@ -55,3 +55,16 @@ func (s *Service) GetAccessLevel(ctx context.Context) (*societyproto.GetAccessLe
 	}
 	return resp, nil
 }
+
+func (s *Service) GetSocietyInfo(ctx context.Context, id int64) (*societyproto.GetSocietyInfoOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	request := &societyproto.GetSocietyInfoIn{
+		Id: id,
+	}
+
+	resp, err := s.client.GetSocietyInfo(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get access level: %v", err)
+	}
+	return resp, nil
+}

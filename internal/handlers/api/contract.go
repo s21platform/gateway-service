@@ -4,8 +4,6 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/s21platform/gateway-service/internal/model"
-
 	societyproto "github.com/s21platform/society-proto/society-proto"
 
 	friends "github.com/s21platform/friends-proto/friends-proto"
@@ -39,7 +37,7 @@ type FriendsService interface {
 }
 
 type OptionService interface {
-	GetOsList(r *http.Request) (*model.OptionsStruct, error)
+	GetOsList(r *http.Request) (*optionhub.GetByNameOut, error)
 	GetWorkPlaceList(r *http.Request) (*optionhub.GetByNameOut, error)
 	GetStudyPlaceList(r *http.Request) (*optionhub.GetByNameOut, error)
 	GetHobbyList(r *http.Request) (*optionhub.GetByNameOut, error)

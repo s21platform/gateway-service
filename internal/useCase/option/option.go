@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/s21platform/gateway-service/internal/model"
+
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 )
 
@@ -15,7 +17,7 @@ func New(oC OptionClient) *Usecase {
 	return &Usecase{oC: oC}
 }
 
-func (uc *Usecase) GetOsList(r *http.Request) (*optionhub.GetByNameOut, error) {
+func (uc *Usecase) GetOsList(r *http.Request) (*model.OptionsStruct, error) {
 	name := r.URL.Query().Get("name")
 	searchName := &optionhub.GetByNameIn{Name: name}
 
@@ -24,7 +26,15 @@ func (uc *Usecase) GetOsList(r *http.Request) (*optionhub.GetByNameOut, error) {
 		return nil, fmt.Errorf("failed to get os list in usecase: %w", err)
 	}
 
-	return resp, nil
+	var res model.OptionsStruct
+	for _, obj := range resp.Options {
+		res.Options = append(res.Options, model.Option{
+			Id:    obj.Id,
+			Label: obj.Label,
+		})
+	}
+
+	return &res, nil
 }
 
 func (uc *Usecase) GetWorkPlaceList(r *http.Request) (*optionhub.GetByNameOut, error) {

@@ -27,6 +27,7 @@ func (uc *Usecase) GetOsList(r *http.Request) (*model.OptionsStruct, error) {
 	}
 
 	var res model.OptionsStruct
+	res.Options = []model.Option{}
 	for _, obj := range resp.Options {
 		res.Options = append(res.Options, model.Option{
 			Id:    obj.Id,

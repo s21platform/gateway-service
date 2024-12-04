@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/s21platform/gateway-service/internal/model"
-
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
+
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Usecase struct {

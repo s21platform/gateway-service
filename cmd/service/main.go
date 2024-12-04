@@ -7,30 +7,28 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/s21platform/gateway-service/internal/rpc/friends"
-	"github.com/s21platform/gateway-service/internal/rpc/society"
-
-	"github.com/s21platform/gateway-service/internal/rpc/notification"
-
-	"github.com/s21platform/gateway-service/internal/rpc/avatar"
-	avatarusecase "github.com/s21platform/gateway-service/internal/useCase/avatar"
-	notificationusecase "github.com/s21platform/gateway-service/internal/useCase/notification"
-	optionusecase "github.com/s21platform/gateway-service/internal/useCase/option"
-
-	"github.com/s21platform/gateway-service/internal/rpc/option"
-
 	"github.com/go-chi/chi/v5"
+
+	"github.com/s21platform/metrics-lib/pkg"
+
 	"github.com/s21platform/gateway-service/internal/config"
 	"github.com/s21platform/gateway-service/internal/handlers/api"
 	authhandler "github.com/s21platform/gateway-service/internal/handlers/auth"
 	"github.com/s21platform/gateway-service/internal/middlewares"
 	"github.com/s21platform/gateway-service/internal/rpc/auth"
+	"github.com/s21platform/gateway-service/internal/rpc/avatar"
+	"github.com/s21platform/gateway-service/internal/rpc/friends"
+	"github.com/s21platform/gateway-service/internal/rpc/notification"
+	"github.com/s21platform/gateway-service/internal/rpc/option"
+	"github.com/s21platform/gateway-service/internal/rpc/society"
 	"github.com/s21platform/gateway-service/internal/rpc/user"
 	authusecase "github.com/s21platform/gateway-service/internal/useCase/auth"
+	avatarusecase "github.com/s21platform/gateway-service/internal/useCase/avatar"
 	friendsusecase "github.com/s21platform/gateway-service/internal/useCase/friends"
+	notificationusecase "github.com/s21platform/gateway-service/internal/useCase/notification"
+	optionusecase "github.com/s21platform/gateway-service/internal/useCase/option"
 	societyusecase "github.com/s21platform/gateway-service/internal/useCase/society"
 	userusecase "github.com/s21platform/gateway-service/internal/useCase/user"
-	"github.com/s21platform/metrics-lib/pkg"
 )
 
 func main() {

@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/s21platform/gateway-service/internal/config"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
+
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 type Service struct {

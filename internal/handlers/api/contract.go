@@ -4,18 +4,14 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/s21platform/gateway-service/internal/model"
-
-	societyproto "github.com/s21platform/society-proto/society-proto"
-
-	friends "github.com/s21platform/friends-proto/friends-proto"
-
-	notificationproto "github.com/s21platform/notification-proto/notification-proto"
-
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
+	friends "github.com/s21platform/friends-proto/friends-proto"
+	notificationproto "github.com/s21platform/notification-proto/notification-proto"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
-
+	societyproto "github.com/s21platform/society-proto/society-proto"
 	userproto "github.com/s21platform/user-proto/user-proto"
+
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type UserService interface {

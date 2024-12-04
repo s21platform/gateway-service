@@ -5,16 +5,16 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/s21platform/gateway-service/internal/model"
-
-	"google.golang.org/grpc/credentials/insecure"
-
-	"github.com/s21platform/gateway-service/internal/config"
-	userproto "github.com/s21platform/user-proto/user-proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
+
+	userproto "github.com/s21platform/user-proto/user-proto"
+
+	"github.com/s21platform/gateway-service/internal/config"
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Service struct {

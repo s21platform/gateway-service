@@ -4,16 +4,14 @@ import (
 	"context"
 	"net/http"
 
-	societyproto "github.com/s21platform/society-proto/society-proto"
-
-	friends "github.com/s21platform/friends-proto/friends-proto"
-
-	notificationproto "github.com/s21platform/notification-proto/notification-proto"
-
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
+	friends "github.com/s21platform/friends-proto/friends-proto"
+	notificationproto "github.com/s21platform/notification-proto/notification-proto"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
-
+	societyproto "github.com/s21platform/society-proto/society-proto"
 	userproto "github.com/s21platform/user-proto/user-proto"
+
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type UserService interface {
@@ -37,7 +35,7 @@ type FriendsService interface {
 }
 
 type OptionService interface {
-	GetOsList(r *http.Request) (*optionhub.GetByNameOut, error)
+	GetOsList(r *http.Request) (*model.OptionsStruct, error)
 	GetWorkPlaceList(r *http.Request) (*optionhub.GetByNameOut, error)
 	GetStudyPlaceList(r *http.Request) (*optionhub.GetByNameOut, error)
 	GetHobbyList(r *http.Request) (*optionhub.GetByNameOut, error)

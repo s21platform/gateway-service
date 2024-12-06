@@ -143,7 +143,41 @@ func (h *Handler) GetCountFriends(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	log.Println("json: ", string(jsn))
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) SetFriends(w http.ResponseWriter, r *http.Request) {
+	result, err := h.fs.SetFriends(r)
+	if err != nil {
+		log.Printf("set friends error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) RemoveFriends(w http.ResponseWriter, r *http.Request) {
+	result, err := h.fs.RemoveFriends(r)
+	if err != nil {
+		log.Printf("remove friends error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(jsn)
@@ -387,5 +421,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/society", handler.CreateSociety)
 		apiRouter.Get("/society/access", handler.GetAccessLevel)
 		apiRouter.Get("/society", handler.GetSocietyInfo)
+		apiRouter.Post("/user/friends", handler.SetFriends)
+		apiRouter.Delete("/user/friends", handler.RemoveFriends)
 	})
 }

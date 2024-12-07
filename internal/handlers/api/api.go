@@ -44,6 +44,7 @@ func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	_, _ = w.Write(jsn)
+	logger.Info(fmt.Sprintf("get info by uuid: %v", resp.Name))
 }
 
 func (h *Handler) SetAvatar(w http.ResponseWriter, r *http.Request) {

@@ -46,5 +46,10 @@ func (s *Service) SetFriends(ctx context.Context, peer *friends_proto.SetFriends
 }
 
 func (s *Service) RemoveFriends(ctx context.Context, peer *friends_proto.RemoveFriendsIn) (*friends_proto.RemoveFriendsOut, error) {
-	return nil, nil
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	resp, err := s.client.RemoveFriends(ctx, peer)
+	if err != nil {
+		return nil, fmt.Errorf("s.client.RemoveFriends: %v", err)
+	}
+	return resp, nil
 }

@@ -40,7 +40,7 @@ func (s *Service) SetAvatar(ctx context.Context, filename string, file multipart
 	if err := stream.Send(&req); err != nil {
 		return nil, fmt.Errorf("failed to send set avatar: %v", err)
 	}
-	buf := make([]byte, 1024)
+	buf := make([]byte, 10*1024)
 	for {
 		n, err := file.Read(buf)
 		if err != nil {

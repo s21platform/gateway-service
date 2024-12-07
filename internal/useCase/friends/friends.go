@@ -20,7 +20,7 @@ func New(fC FriendsClient) *Usecase {
 func (u *Usecase) GetCountFriends(r *http.Request) (*friends.GetCountFriendsOut, error) {
 	resp, err := u.fC.GetCountFriends(r.Context())
 	if err != nil {
-		return nil, fmt.Errorf("u.fC.GetCountFriends: %v", err)
+		return nil, fmt.Errorf("failed to u.fC.GetCountFriends: %v", err)
 	}
 	return resp, nil
 }
@@ -32,7 +32,7 @@ func (u *Usecase) SetFriends(r *http.Request) (*friends.SetFriendsOut, error) {
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		return nil, fmt.Errorf("r.Body.ReadAll: %v", err)
+		return nil, fmt.Errorf("failed to r.Body.ReadAll: %v", err)
 	}
 	defer r.Body.Close()
 	if len(body) == 0 {
@@ -43,7 +43,7 @@ func (u *Usecase) SetFriends(r *http.Request) (*friends.SetFriendsOut, error) {
 	}
 	resp, err := u.fC.SetFriends(r.Context(), &friends.SetFriendsIn{Peer: readPeer.Peer})
 	if err != nil {
-		return nil, fmt.Errorf("u.fC.SetFriends: %v", err)
+		return nil, fmt.Errorf("failed to u.fC.SetFriends: %v", err)
 	}
 	return resp, nil
 }
@@ -54,18 +54,18 @@ func (u *Usecase) RemoveFriends(r *http.Request) (*friends.RemoveFriendsOut, err
 	}
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		return nil, fmt.Errorf("r.Body.ReadAll: %v", err)
+		return nil, fmt.Errorf("failed to r.Body.ReadAll: %v", err)
 	}
 	defer r.Body.Close()
 	if len(body) == 0 {
-		return nil, fmt.Errorf("request body is empty")
+		return nil, fmt.Errorf("failed to request body is empty")
 	}
 	if err = json.Unmarshal(body, &readPeer); err != nil {
-		return nil, fmt.Errorf("json.Unmarshal: %v", err)
+		return nil, fmt.Errorf("failed to json.Unmarshal: %v", err)
 	}
 	resp, err := u.fC.RemoveFriends(r.Context(), &friends.RemoveFriendsIn{Peer: readPeer.Peer})
 	if err != nil {
-		return nil, fmt.Errorf("u.fC.RemoveFriends: %v", err)
+		return nil, fmt.Errorf("failed to u.fC.RemoveFriends: %v", err)
 	}
 	return resp, nil
 }

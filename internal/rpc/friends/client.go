@@ -31,7 +31,7 @@ func (s *Service) GetCountFriends(ctx context.Context) (*friends_proto.GetCountF
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	resp, err := s.client.GetCountFriends(ctx, &friends_proto.EmptyFriends{})
 	if err != nil {
-		return nil, fmt.Errorf("s.client.GetCountFriends: %v", err)
+		return nil, fmt.Errorf("failed to s.client.GetCountFriends: %v", err)
 	}
 	return resp, nil
 }
@@ -40,7 +40,7 @@ func (s *Service) SetFriends(ctx context.Context, peer *friends_proto.SetFriends
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	resp, err := s.client.SetFriends(ctx, peer)
 	if err != nil {
-		return nil, fmt.Errorf("s.client.SetFriends: %v", err)
+		return nil, fmt.Errorf("failed to s.client.SetFriends: %v", err)
 	}
 	return resp, nil
 }
@@ -49,7 +49,7 @@ func (s *Service) RemoveFriends(ctx context.Context, peer *friends_proto.RemoveF
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	resp, err := s.client.RemoveFriends(ctx, peer)
 	if err != nil {
-		return nil, fmt.Errorf("s.client.RemoveFriends: %v", err)
+		return nil, fmt.Errorf("failed to s.client.RemoveFriends: %v", err)
 	}
 	return resp, nil
 }

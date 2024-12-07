@@ -20,7 +20,7 @@ func New(aC AvatarClient) *Usecase {
 }
 
 func (uc *Usecase) UploadAvatar(r *http.Request) (*avatar.SetAvatarOut, error) {
-	err := r.ParseMultipartForm(10 << 20)
+	err := r.ParseMultipartForm(10 * 1024 * 1024)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse multipart form: %w", err)
 	}

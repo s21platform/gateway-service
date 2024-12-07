@@ -379,7 +379,6 @@ func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	_, _ = w.Write(jsn)
-
 }
 
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {

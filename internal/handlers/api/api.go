@@ -2,8 +2,11 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+
+	logger_lib "github.com/s21platform/logger-lib"
 
 	"github.com/go-chi/chi/v5"
 
@@ -24,16 +27,19 @@ func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsSer
 }
 
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("MyProfile")
+
 	resp, err := h.uS.GetInfoByUUID(r)
 	if err != nil {
-		log.Printf("get info by uuid error: %v", err)
+		logger.Error(fmt.Sprintf("get info by uuid error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	jsn, err := json.Marshal(resp)
 	if err != nil {
-		log.Printf("json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -148,13 +154,48 @@ func (h *Handler) GetNotifications(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) GetCountFriends(w http.ResponseWriter, r *http.Request) {
 	result, err := h.fs.GetCountFriends(r)
 	if err != nil {
-		log.Printf("get friends error: %v", err)
+		log.Printf("failed to get friends error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	jsn, err := json.Marshal(result)
 	if err != nil {
-		log.Printf("json marshal error: %v", err)
+		log.Printf("failed to json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) SetFriends(w http.ResponseWriter, r *http.Request) {
+	result, err := h.fs.SetFriends(r)
+	if err != nil {
+		log.Printf("failed to set friends error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		log.Printf("failed to json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) RemoveFriends(w http.ResponseWriter, r *http.Request) {
+	result, err := h.fs.RemoveFriends(r)
+	if err != nil {
+		log.Printf("failed to remove friends error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		log.Printf("failed to json marshal error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -291,34 +332,21 @@ func (h *Handler) GetSocietyDirectionBySearchName(w http.ResponseWriter, r *http
 }
 
 func (h *Handler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
-	//body, err := io.ReadAll(r.Body)
-	//if err != nil {
-	//	log.Printf("read body error: %v", err)
-	//	w.WriteHeader(http.StatusBadRequest)
-	//	return
-	//}
-	//defer r.Body.Close()
-	//
-	//var t model.ProfileData
-	//err = json.Unmarshal(body, &t)
-	//if err != nil {
-	//	log.Printf("json unmarshal error: %v", err)
-	//	w.WriteHeader(http.StatusBadRequest)
-	//	return
-	//}
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("UpdateProfile")
+
 	resp, err := h.uS.UpdateProfileInfo(r)
 	if err != nil {
-		log.Printf("update profile info error: %v", err)
+		logger.Error(fmt.Sprintf("update profile info error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	jsn, err := json.Marshal(resp)
 	if err != nil {
-		log.Printf("json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	//log.Println(t.FullName, t.Birthdate, t.Telegram, t.GitLink, t.Os)
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(jsn)
 }
@@ -402,6 +430,8 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/society", handler.CreateSociety)
 		apiRouter.Get("/society/access", handler.GetAccessLevel)
 		apiRouter.Get("/society", handler.GetSocietyInfo)
+		apiRouter.Post("/user", handler.SetFriends)
+		apiRouter.Delete("/user", handler.RemoveFriends)
 		apiRouter.Get("/peer/{uuid}", handler.PeerInfo)
 	})
 }

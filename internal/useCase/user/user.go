@@ -1,7 +1,6 @@
 package user
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -22,9 +21,21 @@ func New(uC UserClient) *Usecase {
 	return &Usecase{uC: uC}
 }
 
-func (u *Usecase) GetInfoByUUID(ctx context.Context) (*userproto.GetUserInfoByUUIDOut, error) {
-	uuid := ctx.Value(config.KeyUUID).(string)
-	resp, err := u.uC.GetInfo(ctx, uuid)
+func (u *Usecase) GetInfoByUUID(r *http.Request) (*userproto.GetUserInfoByUUIDOut, error) {
+	uuid := r.Context().Value(config.KeyUUID).(string)
+	resp, err := u.uC.GetInfo(r.Context(), uuid)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (u *Usecase) GetPeerInfo(r *http.Request) (*userproto.GetUserInfoByUUIDOut, error) {
+	uuid := r.PathValue("uuid")
+	if uuid == "" {
+		return nil, fmt.Errorf("uuid is empty")
+	}
+	resp, err := u.uC.GetInfo(r.Context(), uuid)
 	if err != nil {
 		return nil, err
 	}

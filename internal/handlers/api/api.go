@@ -30,7 +30,7 @@ func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 	logger.AddFuncName("MyProfile")
 
-	resp, err := h.uS.GetInfoByUUID(r.Context())
+	resp, err := h.uS.GetInfoByUUID(r)
 	if err != nil {
 		logger.Error(fmt.Sprintf("get info by uuid error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
@@ -42,6 +42,20 @@ func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
 		logger.Error(fmt.Sprintf("json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
+	}
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) PeerInfo(w http.ResponseWriter, r *http.Request) {
+	resp, err := h.uS.GetPeerInfo(r)
+	if err != nil {
+		log.Printf("get peer info error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(resp)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
 	}
 	_, _ = w.Write(jsn)
 }
@@ -185,6 +199,7 @@ func (h *Handler) RemoveFriends(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	log.Println("json: ", string(jsn))
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(jsn)
@@ -417,5 +432,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Get("/society", handler.GetSocietyInfo)
 		apiRouter.Post("/user", handler.SetFriends)
 		apiRouter.Delete("/user", handler.RemoveFriends)
+		apiRouter.Get("/peer/{uuid}", handler.PeerInfo)
 	})
 }

@@ -24,7 +24,7 @@ func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsSer
 }
 
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
-	resp, err := h.uS.GetInfoByUUID(r.Context())
+	resp, err := h.uS.GetInfoByUUID(r)
 	if err != nil {
 		log.Printf("get info by uuid error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -36,6 +36,20 @@ func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
 		log.Printf("json marshal error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
+	}
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) PeerInfo(w http.ResponseWriter, r *http.Request) {
+	resp, err := h.uS.GetPeerInfo(r)
+	if err != nil {
+		log.Printf("get peer info error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(resp)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
 	}
 	_, _ = w.Write(jsn)
 }
@@ -388,5 +402,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/society", handler.CreateSociety)
 		apiRouter.Get("/society/access", handler.GetAccessLevel)
 		apiRouter.Get("/society", handler.GetSocietyInfo)
+		apiRouter.Get("/peer/{uuid}", handler.PeerInfo)
 	})
 }

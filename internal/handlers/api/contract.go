@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"net/http"
 
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
@@ -15,8 +14,9 @@ import (
 )
 
 type UserService interface {
-	GetInfoByUUID(ctx context.Context) (*userproto.GetUserInfoByUUIDOut, error)
+	GetInfoByUUID(r *http.Request) (*userproto.GetUserInfoByUUIDOut, error)
 	UpdateProfileInfo(r *http.Request) (*userproto.UpdateProfileOut, error)
+	GetPeerInfo(r *http.Request) (*userproto.GetUserInfoByUUIDOut, error)
 }
 
 type AvatarService interface {

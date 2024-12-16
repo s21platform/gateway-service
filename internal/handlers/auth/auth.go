@@ -6,6 +6,9 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/s21platform/gateway-service/internal/config"
+	logger_lib "github.com/s21platform/logger-lib"
+
 	"github.com/go-chi/chi/v5"
 	"google.golang.org/grpc/status"
 )
@@ -19,6 +22,8 @@ func New(aucSrv Usecase) *Handler {
 }
 
 func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("Login")
 	var data struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
@@ -26,12 +31,14 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
+		logger.Error(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()
 
 	if err := json.Unmarshal(body, &data); err != nil {
+		logger.Error(err.Error())
 		http.Error(w, "Данные введены не полностью", http.StatusBadRequest)
 		return
 	}
@@ -40,9 +47,11 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	jwt, err := h.aucSrv.Login(ctx, data.Username, data.Password)
 	if err != nil {
 		if st, ok := status.FromError(err); ok {
+			logger.Error(st.Message())
 			http.Error(w, st.Message(), http.StatusForbidden)
 			return
 		}
+		logger.Error(err.Error())
 		http.Error(w, err.Error(), http.StatusForbidden)
 		return
 	}
@@ -56,6 +65,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteStrictMode,
 	})
 	w.WriteHeader(http.StatusOK)
+	logger.Info("OK")
 }
 
 func AttachAuthRoutes(r chi.Router, handler *Handler) {

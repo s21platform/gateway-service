@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 
+	logger_lib "github.com/s21platform/logger-lib"
+
 	"github.com/go-chi/chi/v5"
 
 	"github.com/s21platform/metrics-lib/pkg"
@@ -40,6 +42,8 @@ func main() {
 	}
 	defer metrics.Disconnect()
 
+	logger := logger_lib.New(cfg.Logger.Host, cfg.Logger.Port, cfg.Service.Name, cfg.Platform.Env)
+
 	// rpc clients
 	authClient := auth.NewService(cfg)
 	userClient := user.NewService(cfg)
@@ -66,6 +70,9 @@ func main() {
 
 	r.Use(func(next http.Handler) http.Handler {
 		return middlewares.MetricMiddleware(next, metrics)
+	})
+	r.Use(func(next http.Handler) http.Handler {
+		return middlewares.LoggerMiddleware(next, logger)
 	})
 
 	authhandler.AttachAuthRoutes(r, authHandlers)

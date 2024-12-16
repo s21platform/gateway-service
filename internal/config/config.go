@@ -14,6 +14,7 @@ const (
 	KeyMetrics  = key("metrics")
 	KeyUUID     = key("uuid")
 	KeyUsername = key("username")
+	KeyLogger   = key("logger")
 )
 
 // Config Common config struct
@@ -28,11 +29,13 @@ type Config struct {
 	Platform     Platform
 	Notification Notification
 	Society      Society
+	Logger       Logger
 }
 
 // Service struct for storage this server config variables
 type Service struct {
 	Port string `env:"GATEWAY_SERVICE_PORT"`
+	Name string `env:"GATEWAY_SERVICE_NAME"`
 }
 
 // Auth struct for storage auth-service config variables
@@ -79,6 +82,11 @@ type Platform struct {
 type Society struct {
 	Host string `env:"SOCIETY_SERVICE_HOST"`
 	Port string `env:"SOCIETY_SERVICE_PORT"`
+}
+
+type Logger struct {
+	Host string `env:"LOGGER_SERVICE_HOST"`
+	Port string `env:"LOGGER_SERVICE_PORT"`
 }
 
 func MustLoad() *Config {

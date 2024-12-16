@@ -24,6 +24,9 @@ func (pd *ProfileData) FromDTO() *userproto.UpdateProfileIn {
 	if pd.Birthdate != nil {
 		birthday = pd.Birthdate.Format(time.RFC3339)
 	}
+
+	//TODO: telegram
+
 	return &userproto.UpdateProfileIn{
 		Name:     pd.Name,
 		Birthday: birthday,

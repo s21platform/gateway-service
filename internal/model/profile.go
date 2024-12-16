@@ -1,6 +1,7 @@
 package model
 
 import (
+	"log"
 	"time"
 
 	userproto "github.com/s21platform/user-proto/user-proto"
@@ -24,6 +25,13 @@ func (pd *ProfileData) FromDTO() *userproto.UpdateProfileIn {
 	if pd.Birthdate != nil {
 		birthday = pd.Birthdate.Format(time.RFC3339)
 	}
+
+	// Check and remove "@" from Telegram username if present
+	if len(pd.Telegram) > 0 && pd.Telegram[0] == '@' {
+		log.Printf("Telegram username changed from %s to %s", pd.Telegram, pd.Telegram[1:])
+		pd.Telegram = pd.Telegram[1:]
+	}
+
 	return &userproto.UpdateProfileIn{
 		Name:     pd.Name,
 		Birthday: birthday,

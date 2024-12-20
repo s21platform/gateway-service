@@ -3,9 +3,10 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	society_proto "github.com/s21platform/society-proto/society-proto"
 	"log"
 	"net/http"
+
+	society_proto "github.com/s21platform/society-proto/society-proto"
 
 	logger_lib "github.com/s21platform/logger-lib"
 

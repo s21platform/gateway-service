@@ -427,7 +427,7 @@ func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNoContent) // Если указатель `result` равен nil
 	}
 
-	if reflect.DeepEqual(*result, society_proto.SubscribeToSocietyOut{}) {
+	if reflect.DeepEqual(result, society_proto.SubscribeToSocietyOut{}) {
 		w.WriteHeader(http.StatusAccepted) // Если структура пустая
 		return
 	}

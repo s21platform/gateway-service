@@ -423,7 +423,7 @@ func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if result.Success {
 		w.WriteHeader(http.StatusOK)
-	} else if result.Success == false {
+	} else if !result.Success {
 		w.WriteHeader(http.StatusCreated)
 	} else if result == (&society_proto.SubscribeToSocietyOut{}) {
 		w.WriteHeader(http.StatusAccepted)

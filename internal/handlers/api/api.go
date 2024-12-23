@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"reflect"
+
+	society_proto "github.com/s21platform/society-proto/society-proto"
 
 	logger_lib "github.com/s21platform/logger-lib"
 
@@ -364,7 +367,6 @@ func (h *Handler) CreateSociety(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	log.Println("json: ", string(jsn))
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	_, _ = w.Write(jsn)
@@ -406,6 +408,41 @@ func (h *Handler) GetSocietyInfo(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("SubscribeToSociety")
+	result, err := h.sS.SubscribeToSociety(r)
+	if err != nil {
+		log.Printf("get society info error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(result)
+	logger.Info(string(jsn))
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+
+	if result == nil {
+		w.WriteHeader(http.StatusNoContent) // Если указатель `result` равен nil
+	}
+
+	if reflect.DeepEqual(result, society_proto.SubscribeToSocietyOut{}) {
+		w.WriteHeader(http.StatusAccepted) // Если структура пустая
+		return
+	}
+
+	if result.Success {
+		w.WriteHeader(http.StatusOK)
+	} else {
+		w.WriteHeader(http.StatusCreated)
+	}
+	_, _ = w.Write(jsn)
+}
+
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(func(next http.Handler) http.Handler {
@@ -433,5 +470,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/user", handler.SetFriends)
 		apiRouter.Delete("/user", handler.RemoveFriends)
 		apiRouter.Get("/peer/{uuid}", handler.PeerInfo)
+		apiRouter.Post("/society/member", handler.SubscribeToSociety)
 	})
 }

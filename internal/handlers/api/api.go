@@ -409,6 +409,8 @@ func (h *Handler) GetSocietyInfo(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("SubscribeToSociety")
 	result, err := h.sS.SubscribeToSociety(r)
 	if err != nil {
 		log.Printf("get society info error: %v", err)
@@ -416,6 +418,7 @@ func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	jsn, err := json.Marshal(result)
+	logger.Info(string(jsn))
 	if err != nil {
 		log.Printf("json marshal error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)

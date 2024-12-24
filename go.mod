@@ -9,7 +9,7 @@ require (
 	github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5
 	github.com/s21platform/avatar-proto v0.0.8
 	github.com/s21platform/friends-proto v0.0.11
-	github.com/s21platform/logger-lib v0.0.2
+	github.com/s21platform/logger-lib v0.0.3
 	github.com/s21platform/metrics-lib v0.0.6
 	github.com/s21platform/notification-proto v0.0.2
 	github.com/s21platform/optionhub-proto v1.0.6

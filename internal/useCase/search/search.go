@@ -3,9 +3,10 @@ package search
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/s21platform/search-proto/search"
 	"io"
 	"net/http"
+
+	"github.com/s21platform/search-proto/search"
 )
 
 type UseCase struct {

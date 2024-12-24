@@ -4,10 +4,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/s21platform/gateway-service/internal/rpc/search"
-	searchusecase "github.com/s21platform/gateway-service/internal/useCase/search"
 	"log"
 	"net/http"
+
+	"github.com/s21platform/gateway-service/internal/rpc/search"
+	searchusecase "github.com/s21platform/gateway-service/internal/useCase/search"
 
 	logger_lib "github.com/s21platform/logger-lib"
 

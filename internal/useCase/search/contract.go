@@ -2,6 +2,7 @@ package search
 
 import (
 	"context"
+
 	"github.com/s21platform/search-proto/search"
 )
 

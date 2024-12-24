@@ -207,7 +207,7 @@ func (h *Handler) RemoveFriends(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetUsersWithLimit(w http.ResponseWriter, r *http.Request) {
-	result, err := h.srS.GetUserWithLimit(r)
+	result, err := h.srS.GetUsersWithLimit(r)
 	if err != nil {
 		log.Printf("failed to get users with limit error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -453,6 +453,5 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Delete("/user", handler.RemoveFriends)
 		apiRouter.Get("/peer/{uuid}", handler.PeerInfo)
 		apiRouter.Get("/search", handler.GetUsersWithLimit)
-
 	})
 }

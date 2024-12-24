@@ -1,8 +1,9 @@
 package api
 
 import (
-	"github.com/s21platform/search-proto/search"
 	"net/http"
+
+	"github.com/s21platform/search-proto/search"
 
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
 	friends "github.com/s21platform/friends-proto/friends-proto"

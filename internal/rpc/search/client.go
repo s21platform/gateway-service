@@ -3,12 +3,13 @@ package search
 import (
 	"context"
 	"fmt"
+	"log"
+
 	"github.com/s21platform/gateway-service/internal/config"
 	"github.com/s21platform/search-proto/search"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
-	"log"
 )
 
 type Service struct {

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/s21platform/search-proto/search"
 	"net/http"
 
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
@@ -50,4 +51,8 @@ type SocietyService interface {
 	CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error)
 	GetAccessLevel(r *http.Request) (*societyproto.GetAccessLevelOut, error)
 	GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error)
+}
+
+type SearchService interface {
+	GetUserWithLimit(r *http.Request) (*search.GetUserWithLimitOut, error)
 }

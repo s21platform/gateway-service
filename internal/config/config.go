@@ -30,6 +30,7 @@ type Config struct {
 	Notification Notification
 	Society      Society
 	Logger       Logger
+	Search       Search
 }
 
 // Service struct for storage this server config variables
@@ -87,6 +88,11 @@ type Society struct {
 type Logger struct {
 	Host string `env:"LOGGER_SERVICE_HOST"`
 	Port string `env:"LOGGER_SERVICE_PORT"`
+}
+
+type Search struct {
+	Host string `env:"SEARCH_SERVICE_HOST"`
+	Port string `env:"SEARCH_SERVICE_PORT"`
 }
 
 func MustLoad() *Config {

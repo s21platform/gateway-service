@@ -34,6 +34,7 @@ type FriendsService interface {
 	GetCountFriends(r *http.Request) (*friends.GetCountFriendsOut, error)
 	SetFriends(r *http.Request) (*friends.SetFriendsOut, error)
 	RemoveFriends(r *http.Request) (*friends.RemoveFriendsOut, error)
+	CheckSubscribe(r *http.Request) (*model.CheckSubscribe, error)
 }
 
 type OptionService interface {

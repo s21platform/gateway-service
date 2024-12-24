@@ -51,21 +51,11 @@ func (u *Usecase) SetFriends(r *http.Request) (*friends.SetFriendsOut, error) {
 }
 
 func (u *Usecase) RemoveFriends(r *http.Request) (*friends.RemoveFriendsOut, error) {
-	var readPeer struct {
-		Peer string `json:"peer"`
+	peer := r.URL.Query().Get("peer")
+	if peer == "" {
+		return nil, fmt.Errorf("no peer in request")
 	}
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to r.Body.ReadAll: %v", err)
-	}
-	defer r.Body.Close()
-	if len(body) == 0 {
-		return nil, fmt.Errorf("failed to request body is empty")
-	}
-	if err = json.Unmarshal(body, &readPeer); err != nil {
-		return nil, fmt.Errorf("failed to json.Unmarshal: %v", err)
-	}
-	resp, err := u.fC.RemoveFriends(r.Context(), &friends.RemoveFriendsIn{Peer: readPeer.Peer})
+	resp, err := u.fC.RemoveFriends(r.Context(), &friends.RemoveFriendsIn{Peer: peer})
 	if err != nil {
 		return nil, fmt.Errorf("failed to u.fC.RemoveFriends: %v", err)
 	}

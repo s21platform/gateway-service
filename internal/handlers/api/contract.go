@@ -54,5 +54,5 @@ type SocietyService interface {
 }
 
 type SearchService interface {
-	GetUserWithLimit(r *http.Request) (*search.GetUserWithLimitOut, error)
+	GetUsersWithLimit(r *http.Request) (*search.GetUserWithLimitOut, error)
 }

@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/s21platform/gateway-service/internal/model"
+
 	friends "github.com/s21platform/friends-proto/friends-proto"
 )
 
@@ -68,4 +70,19 @@ func (u *Usecase) RemoveFriends(r *http.Request) (*friends.RemoveFriendsOut, err
 		return nil, fmt.Errorf("failed to u.fC.RemoveFriends: %v", err)
 	}
 	return resp, nil
+}
+
+func (u *Usecase) CheckSubscribe(r *http.Request) (*model.CheckSubscribe, error) {
+	peer := r.URL.Query().Get("peer")
+	if peer == "" {
+		return nil, fmt.Errorf("peer is empty")
+	}
+	resp, err := u.fC.CheckSubscribeToPeer(r.Context(), &friends.IsFriendExistIn{Peer: peer})
+	if err != nil {
+		return nil, fmt.Errorf("failed to check subscription: %v", err)
+	}
+	result := model.CheckSubscribe{
+		Exist: resp.Success,
+	}
+	return &result, nil
 }

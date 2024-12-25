@@ -53,3 +53,12 @@ func (s *Service) RemoveFriends(ctx context.Context, peer *friends_proto.RemoveF
 	}
 	return resp, nil
 }
+
+func (s *Service) CheckSubscribeToPeer(ctx context.Context, peer *friends_proto.IsFriendExistIn) (*friends_proto.IsFriendExistOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	resp, err := s.client.IsFriendExist(ctx, peer)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

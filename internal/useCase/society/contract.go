@@ -11,4 +11,5 @@ type SocietyClient interface {
 	GetAccessLevel(ctx context.Context) (*societyproto.GetAccessLevelOut, error)
 	GetSocietyInfo(ctx context.Context, id int64) (*societyproto.GetSocietyInfoOut, error)
 	SubscribeToSociety(ctx context.Context, id int64) (*societyproto.SubscribeToSocietyOut, error)
+	GetPermission(ctx context.Context) (*societyproto.GetPermissionsOut, error)
 }

@@ -97,3 +97,11 @@ func (u *UseCase) SubscribeToSociety(r *http.Request) (*societyproto.SubscribeTo
 
 	return resp, nil
 }
+
+func (u *UseCase) GetPermission(r *http.Request) (*societyproto.GetPermissionsOut, error) {
+	resp, err := u.sC.GetPermission(r.Context())
+	if err != nil {
+		return nil, fmt.Errorf("failed to get permission: %v", err)
+	}
+	return resp, nil
+}

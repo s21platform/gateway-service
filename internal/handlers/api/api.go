@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"reflect"
 
+	"github.com/s21platform/gateway-service/internal/model"
+
 	society_proto "github.com/s21platform/society-proto/society-proto"
 
 	logger_lib "github.com/s21platform/logger-lib"
@@ -417,7 +419,10 @@ func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	jsn, err := json.Marshal(result)
+	tmp := model.JoinStatus{
+		Success: result.Success,
+	}
+	jsn, err := json.Marshal(tmp)
 	logger.Info(string(jsn))
 	if err != nil {
 		log.Printf("json marshal error: %v", err)

@@ -360,13 +360,13 @@ func (h *Handler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) CreateSociety(w http.ResponseWriter, r *http.Request) {
 	result, err := h.sS.CreateSociety(r)
 	if err != nil {
-		log.Printf("create society error: %v", err)
+		log.Printf("failed to create society error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	jsn, err := json.Marshal(result)
 	if err != nil {
-		log.Printf("json marshal error: %v", err)
+		log.Printf("failed to json marshal error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -378,13 +378,13 @@ func (h *Handler) CreateSociety(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) GetAccessLevel(w http.ResponseWriter, r *http.Request) {
 	result, err := h.sS.GetAccessLevel(r)
 	if err != nil {
-		log.Printf("get access level error: %v", err)
+		log.Printf("failed to get access level error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	jsn, err := json.Marshal(result)
 	if err != nil {
-		log.Printf("json marshal error: %v", err)
+		log.Printf("failed to json marshal error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -396,13 +396,13 @@ func (h *Handler) GetAccessLevel(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) GetSocietyInfo(w http.ResponseWriter, r *http.Request) {
 	result, err := h.sS.GetSocietyInfo(r)
 	if err != nil {
-		log.Printf("get society info error: %v", err)
+		log.Printf("failed to get society info error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	jsn, err := json.Marshal(result)
 	if err != nil {
-		log.Printf("json marshal error: %v", err)
+		log.Printf("failed to json marshal error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -436,7 +436,7 @@ func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
 	logger.AddFuncName("SubscribeToSociety")
 	result, err := h.sS.SubscribeToSociety(r)
 	if err != nil {
-		log.Printf("get society info error: %v", err)
+		log.Printf("failed to get society info error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -446,7 +446,7 @@ func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
 	jsn, err := json.Marshal(tmp)
 	logger.Info(string(jsn))
 	if err != nil {
-		log.Printf("json marshal error: %v", err)
+		log.Printf("failed to json marshal error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

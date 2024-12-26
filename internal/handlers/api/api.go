@@ -3,9 +3,10 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/s21platform/gateway-service/internal/model"
 	"log"
 	"net/http"
+
+	"github.com/s21platform/gateway-service/internal/model"
 
 	logger_lib "github.com/s21platform/logger-lib"
 

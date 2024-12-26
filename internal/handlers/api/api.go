@@ -3,13 +3,9 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/s21platform/gateway-service/internal/model"
 	"log"
 	"net/http"
-	"reflect"
-
-	"github.com/s21platform/gateway-service/internal/model"
-
-	society_proto "github.com/s21platform/society-proto/society-proto"
 
 	logger_lib "github.com/s21platform/logger-lib"
 
@@ -454,15 +450,6 @@ func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-
-	if result == nil {
-		w.WriteHeader(http.StatusNoContent) // Если указатель `result` равен nil
-	}
-
-	if reflect.DeepEqual(result, society_proto.SubscribeToSocietyOut{}) {
-		w.WriteHeader(http.StatusAccepted) // Если структура пустая
-		return
-	}
 
 	if result.Success {
 		w.WriteHeader(http.StatusOK)

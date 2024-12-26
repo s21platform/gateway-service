@@ -22,13 +22,13 @@ type Handler struct {
 	uS UserService
 	aS AvatarService
 	nS NotificationService
-	fs FriendsService
+	fS FriendsService
 	oS OptionService
 	sS SocietyService
 }
 
 func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsService, oS OptionService, sS SocietyService) *Handler {
-	return &Handler{uS: uS, aS: aS, nS: nS, fs: fS, oS: oS, sS: sS}
+	return &Handler{uS: uS, aS: aS, nS: nS, fS: fS, oS: oS, sS: sS}
 }
 
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
@@ -157,7 +157,7 @@ func (h *Handler) GetNotifications(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetCountFriends(w http.ResponseWriter, r *http.Request) {
-	result, err := h.fs.GetCountFriends(r)
+	result, err := h.fS.GetCountFriends(r)
 	if err != nil {
 		log.Printf("failed to get friends error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -175,15 +175,17 @@ func (h *Handler) GetCountFriends(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) SetFriends(w http.ResponseWriter, r *http.Request) {
-	result, err := h.fs.SetFriends(r)
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("SetFriends")
+	result, err := h.fS.SetFriends(r)
 	if err != nil {
-		log.Printf("failed to set friends error: %v", err)
+		logger.Error(fmt.Sprintf("failed to set friends error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	jsn, err := json.Marshal(result)
 	if err != nil {
-		log.Printf("failed to json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -192,15 +194,17 @@ func (h *Handler) SetFriends(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) RemoveFriends(w http.ResponseWriter, r *http.Request) {
-	result, err := h.fs.RemoveFriends(r)
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("RemoveFriends")
+	result, err := h.fS.RemoveFriends(r)
 	if err != nil {
-		log.Printf("failed to remove friends error: %v", err)
+		logger.Error(fmt.Sprintf("failed to remove friends error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	jsn, err := json.Marshal(result)
 	if err != nil {
-		log.Printf("failed to json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -410,6 +414,26 @@ func (h *Handler) GetSocietyInfo(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) CheckSubscriptionToPeer(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("CheckSubscriptionToPeer")
+	result, err := h.fS.CheckSubscribe(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("check subscribe error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		logger.Error(fmt.Sprintf("json marshal error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 	logger.AddFuncName("SubscribeToSociety")
@@ -472,8 +496,9 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/society", handler.CreateSociety)
 		apiRouter.Get("/society/access", handler.GetAccessLevel)
 		apiRouter.Get("/society", handler.GetSocietyInfo)
-		apiRouter.Post("/user", handler.SetFriends)
-		apiRouter.Delete("/user", handler.RemoveFriends)
+		apiRouter.Post("/friends", handler.SetFriends)
+		apiRouter.Delete("/friends", handler.RemoveFriends)
+		apiRouter.Get("/friends/check", handler.CheckSubscriptionToPeer)
 		apiRouter.Get("/peer/{uuid}", handler.PeerInfo)
 		apiRouter.Post("/society/member", handler.SubscribeToSociety)
 	})

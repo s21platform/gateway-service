@@ -407,6 +407,24 @@ func (h *Handler) GetSocietyInfo(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) GetUsersWithLimit(w http.ResponseWriter, r *http.Request) {
+	result, err := h.srS.GetUsersWithLimit(r)
+	if err != nil {
+		log.Printf("failed to get users with limit error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		log.Printf("failed to json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(func(next http.Handler) http.Handler {
@@ -434,5 +452,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/user", handler.SetFriends)
 		apiRouter.Delete("/user", handler.RemoveFriends)
 		apiRouter.Get("/peer/{uuid}", handler.PeerInfo)
+		apiRouter.Get("/search", handler.GetUsersWithLimit)
 	})
 }

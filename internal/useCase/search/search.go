@@ -23,6 +23,7 @@ func (u *UseCase) GetUsersWithLimit(r *http.Request) (*search.GetUserWithLimitOu
 		Offset   int64  `json:"offset"`
 		Nickname string `json:"nickname"`
 	}
+	readType := r.URL.Query().Get("type")
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return nil, err

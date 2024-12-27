@@ -3,6 +3,8 @@ package api
 import (
 	"net/http"
 
+	"github.com/s21platform/search-proto/search"
+
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
 	friends "github.com/s21platform/friends-proto/friends-proto"
 	notificationproto "github.com/s21platform/notification-proto/notification-proto"
@@ -53,4 +55,8 @@ type SocietyService interface {
 	GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error)
 	SubscribeToSociety(r *http.Request) (*societyproto.SubscribeToSocietyOut, error)
 	GetPermission(r *http.Request) (*societyproto.GetPermissionsOut, error)
+}
+
+type SearchService interface {
+	GetUsersWithLimit(r *http.Request) (*search.GetUserWithLimitOut, error)
 }

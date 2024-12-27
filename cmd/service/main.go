@@ -7,6 +7,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/s21platform/gateway-service/internal/rpc/search"
+	searchusecase "github.com/s21platform/gateway-service/internal/useCase/search"
+
 	logger_lib "github.com/s21platform/logger-lib"
 
 	"github.com/go-chi/chi/v5"
@@ -52,6 +55,7 @@ func main() {
 	friendsClient := friends.NewService(cfg)
 	optionClient := option.New(cfg)
 	societyClient := society.NewService(cfg)
+	searchClient := search.NewService(cfg)
 
 	// usecases declaration
 	authUseCase := authusecase.New(authClient)
@@ -61,10 +65,11 @@ func main() {
 	friendsUseCase := friendsusecase.New(friendsClient)
 	optionUsecase := optionusecase.New(optionClient)
 	societyUseCase := societyusecase.New(societyClient)
+	searchUseCase := searchusecase.New(searchClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(authUseCase)
-	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase)
+	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase, searchUseCase)
 
 	r := chi.NewRouter()
 

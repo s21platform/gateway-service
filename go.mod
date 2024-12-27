@@ -13,6 +13,7 @@ require (
 	github.com/s21platform/metrics-lib v0.0.6
 	github.com/s21platform/notification-proto v0.0.2
 	github.com/s21platform/optionhub-proto v1.0.6
+	github.com/s21platform/search-proto v0.0.8
 	github.com/s21platform/society-proto v0.0.13
 	github.com/s21platform/user-proto v0.0.11
 	google.golang.org/grpc v1.68.0
@@ -24,7 +25,6 @@ require (
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/marpaia/graphite-golang v0.0.0-20190519024811-caf161d2c2b1 // indirect
 	github.com/rogpeppe/go-internal v1.10.0 // indirect
-	github.com/s21platform/search-proto v0.0.8 // indirect
 	golang.org/x/net v0.31.0 // indirect
 	golang.org/x/sys v0.27.0 // indirect
 	golang.org/x/text v0.20.0 // indirect

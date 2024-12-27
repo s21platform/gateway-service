@@ -68,3 +68,25 @@ func (s *Service) GetSocietyInfo(ctx context.Context, id int64) (*societyproto.G
 	}
 	return resp, nil
 }
+
+func (s *Service) SubscribeToSociety(ctx context.Context, id int64) (*societyproto.SubscribeToSocietyOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	request := &societyproto.SubscribeToSocietyIn{
+		SocietyId: id,
+	}
+
+	resp, err := s.client.SubscribeToSociety(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed subscribe to society: %v", err)
+	}
+	return resp, nil
+}
+
+func (s *Service) GetPermission(ctx context.Context) (*societyproto.GetPermissionsOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	resp, err := s.client.GetPermissions(ctx, &societyproto.EmptySociety{})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get permissions: %v", err)
+	}
+	return resp, nil
+}

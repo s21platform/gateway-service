@@ -53,6 +53,8 @@ type SocietyService interface {
 	CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error)
 	GetAccessLevel(r *http.Request) (*societyproto.GetAccessLevelOut, error)
 	GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error)
+	SubscribeToSociety(r *http.Request) (*societyproto.SubscribeToSocietyOut, error)
+	GetPermission(r *http.Request) (*societyproto.GetPermissionsOut, error)
 }
 
 type SearchService interface {

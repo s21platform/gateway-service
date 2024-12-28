@@ -6,6 +6,7 @@ type SearchUser struct {
 	AvatarLink string `json:"avatar_link"`
 	Name       string `json:"name"`
 	Surname    string `json:"surname"`
+	IsFriend   bool   `json:"is_friend"`
 }
 
 type SearchUsersOut struct {

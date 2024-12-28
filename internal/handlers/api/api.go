@@ -499,6 +499,7 @@ func (h *Handler) GetUsersWithLimit(w http.ResponseWriter, r *http.Request) {
 			AvatarLink: user.AvatarLink,
 			Name:       user.Name,
 			Surname:    user.Surname,
+			IsFriend:   user.IsFriend,
 		}
 		tmp.Users = append(tmp.Users, users)
 	}

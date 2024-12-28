@@ -490,6 +490,7 @@ func (h *Handler) GetUsersWithLimit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	tmp := model.SearchUsersOut{
+		Users: make([]model.SearchUser, 0),
 		Total: result.Total,
 	}
 	for _, user := range result.Users {

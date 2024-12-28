@@ -489,7 +489,20 @@ func (h *Handler) GetUsersWithLimit(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	jsn, err := json.Marshal(result)
+	tmp := model.SearchUsersOut{
+		Total: result.Total,
+	}
+	for _, user := range result.Users {
+		users := model.SearchUser{
+			Nickname:   user.Nickname,
+			Uuid:       user.Uuid,
+			AvatarLink: user.AvatarLink,
+			Name:       user.Name,
+			Surname:    user.Surname,
+		}
+		tmp.Users = append(tmp.Users, users)
+	}
+	jsn, err := json.Marshal(tmp)
 	if err != nil {
 		logger.Error(fmt.Sprintf("json marshal error: %v", err))
 		log.Printf("failed to json marshal error: %v", err)

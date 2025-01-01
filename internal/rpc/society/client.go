@@ -90,3 +90,16 @@ func (s *Service) GetPermission(ctx context.Context) (*societyproto.GetPermissio
 	}
 	return resp, nil
 }
+
+func (s *Service) UnsubscribeFromSociety(ctx context.Context, id int64) (*societyproto.UnsubscribeFromSocietyOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	request := &societyproto.UnsubscribeFromSocietyIn{
+		SocietyId: id,
+	}
+
+	resp, err := s.client.UnsubscribeFromSociety(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unsubscribe from society error: %v", err)
+	}
+	return resp, nil
+}

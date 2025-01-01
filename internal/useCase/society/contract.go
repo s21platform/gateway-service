@@ -12,4 +12,5 @@ type SocietyClient interface {
 	GetSocietyInfo(ctx context.Context, id int64) (*societyproto.GetSocietyInfoOut, error)
 	SubscribeToSociety(ctx context.Context, id int64) (*societyproto.SubscribeToSocietyOut, error)
 	GetPermission(ctx context.Context) (*societyproto.GetPermissionsOut, error)
+	UnsubscribeFromSociety(ctx context.Context, id int64) (*societyproto.UnsubscribeFromSocietyOut, error)
 }

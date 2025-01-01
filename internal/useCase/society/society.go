@@ -105,3 +105,22 @@ func (u *UseCase) GetPermission(r *http.Request) (*societyproto.GetPermissionsOu
 	}
 	return resp, nil
 }
+
+func (u *UseCase) UnsubscribeFromSociety(r *http.Request) (*societyproto.UnsubscribeFromSocietyOut, error) {
+	id := SocietyId{}
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read request body: %w", err)
+	}
+
+	if err := json.Unmarshal(body, &id); err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %w", err)
+	}
+
+	resp, err := u.sC.UnsubscribeFromSociety(r.Context(), id.Id)
+	if err != nil {
+		return nil, fmt.Errorf("failed subscribe to society: %v", err)
+	}
+
+	return resp, nil
+}

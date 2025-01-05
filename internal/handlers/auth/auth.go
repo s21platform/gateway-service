@@ -170,6 +170,6 @@ func prepareResponse(message string, isAuth bool) ([]byte, error) {
 func AttachAuthRoutes(r chi.Router, handler *Handler) {
 	r.Route("/auth", func(authRouter chi.Router) {
 		authRouter.Post("/login", handler.Login)
-		authRouter.Get("/check-auth", handler.Login)
+		authRouter.Get("/check-auth", handler.CheckAuth)
 	})
 }

@@ -2,23 +2,29 @@ package auth
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"time"
 
-	"github.com/s21platform/gateway-service/internal/config"
+	"github.com/go-chi/chi/v5"
+	"github.com/golang-jwt/jwt/v4"
+	"google.golang.org/grpc/status"
+
 	logger_lib "github.com/s21platform/logger-lib"
 
-	"github.com/go-chi/chi/v5"
-	"google.golang.org/grpc/status"
+	"github.com/s21platform/gateway-service/internal/config"
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Handler struct {
-	aucSrv Usecase
+	secretToken string
+	aucSrv      Usecase
 }
 
-func New(aucSrv Usecase) *Handler {
-	return &Handler{aucSrv: aucSrv}
+func New(cfg *config.Config, aucSrv Usecase) *Handler {
+	return &Handler{aucSrv: aucSrv, secretToken: cfg.Platform.Secret}
 }
 
 func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
@@ -68,8 +74,102 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	logger.Info("OK")
 }
 
+func (h *Handler) CheckAuth(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("CheckAuth")
+
+	cookie, err := r.Cookie("S21SPACE_AUTH_TOKEN")
+	if err != nil {
+		logger.Error("failed to get cookie value")
+		log.Println("failed to get cookie value")
+		http.SetCookie(w, &http.Cookie{
+			Name:     "S21SPACE_AUTH_TOKEN",
+			Value:    "",
+			MaxAge:   -1,
+			HttpOnly: true,
+		})
+		w.WriteHeader(http.StatusUnauthorized)
+		msg, err := prepareResponse("failed to get cookie value", false)
+		if err != nil {
+			logger.Error(fmt.Sprintf("failed make response: %s", err.Error()))
+			w.WriteHeader(http.StatusInternalServerError)
+			_, _ = w.Write([]byte("failed make response"))
+			return
+		}
+		_, _ = w.Write(msg)
+		return
+	}
+
+	token, err := jwt.ParseWithClaims(cookie.Value, &model.Claims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(h.secretToken), nil
+	})
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to parse token: %v", err))
+		log.Printf("failed to parse token: %v", err)
+		http.SetCookie(w, &http.Cookie{
+			Name:     "S21SPACE_AUTH_TOKEN",
+			Value:    "",
+			MaxAge:   -1,
+			HttpOnly: true,
+		})
+		w.WriteHeader(http.StatusUnauthorized)
+		msg, err := prepareResponse("failed to parse token", false)
+		if err != nil {
+			logger.Error(fmt.Sprintf("failed make response: %s", err.Error()))
+			w.WriteHeader(http.StatusInternalServerError)
+			_, _ = w.Write([]byte("failed make response"))
+			return
+		}
+		_, _ = w.Write(msg)
+		return
+	}
+	if !token.Valid {
+		http.SetCookie(w, &http.Cookie{
+			Name:     "S21SPACE_AUTH_TOKEN",
+			Value:    "",
+			MaxAge:   -1,
+			HttpOnly: true,
+		})
+		w.WriteHeader(http.StatusUnauthorized)
+		msg, err := prepareResponse("token not valid", true)
+		if err != nil {
+			logger.Error(fmt.Sprintf("failed make response: %s", err.Error()))
+			w.WriteHeader(http.StatusInternalServerError)
+			_, _ = w.Write([]byte("failed make response"))
+			return
+		}
+		_, _ = w.Write(msg)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	msg, err := prepareResponse("", true)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed make response: %s", err.Error()))
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte("failed make response"))
+		return
+	}
+	_, _ = w.Write(msg)
+}
+
+func prepareResponse(message string, isAuth bool) ([]byte, error) {
+	resp := model.CheckAuth{
+		IsAuth: isAuth,
+		Error:  message,
+	}
+	msg, err := json.Marshal(resp)
+	if err != nil {
+		return nil, err
+	}
+	return msg, nil
+}
+
 func AttachAuthRoutes(r chi.Router, handler *Handler) {
 	r.Route("/auth", func(authRouter chi.Router) {
 		authRouter.Post("/login", handler.Login)
+		authRouter.Get("/check-auth", handler.Login)
 	})
 }

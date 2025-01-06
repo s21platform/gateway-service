@@ -68,7 +68,7 @@ func main() {
 	searchUseCase := searchusecase.New(searchClient)
 
 	// handlers declaration
-	authHandlers := authhandler.New(authUseCase)
+	authHandlers := authhandler.New(cfg, authUseCase)
 	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase, searchUseCase)
 
 	r := chi.NewRouter()

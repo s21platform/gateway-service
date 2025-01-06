@@ -7,17 +7,10 @@ import (
 	"net/http"
 
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/s21platform/gateway-service/internal/config"
-)
 
-type Claims struct {
-	UUID        string `json:"uid"`
-	Username    string `json:"username"`
-	Role        string `json:"role"`
-	AccessToken string `json:"accessToken"`
-	Exp         int64  `json:"exp"`
-	jwt.RegisteredClaims
-}
+	"github.com/s21platform/gateway-service/internal/config"
+	"github.com/s21platform/gateway-service/internal/model"
+)
 
 func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -35,7 +28,7 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 			return
 		}
 
-		token, err := jwt.ParseWithClaims(cookie.Value, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.ParseWithClaims(cookie.Value, &model.Claims{}, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 			}
@@ -52,7 +45,7 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
-		claims, ok := token.Claims.(*Claims)
+		claims, ok := token.Claims.(*model.Claims)
 		if !ok || !token.Valid {
 			http.SetCookie(w, &http.Cookie{
 				Name:     "S21SPACE_AUTH_TOKEN",

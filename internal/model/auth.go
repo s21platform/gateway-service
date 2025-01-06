@@ -13,5 +13,5 @@ type Claims struct {
 
 type CheckAuth struct {
 	IsAuth bool   `json:"isAuthenticated"`
-	Error  string `json:"error"`
+	Error  string `json:"error,omitempty"`
 }

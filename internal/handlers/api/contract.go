@@ -20,9 +20,13 @@ type UserService interface {
 }
 
 type AvatarService interface {
-	UploadAvatar(r *http.Request) (*avatar.SetAvatarOut, error)
-	GetAvatarsList(r *http.Request) (*avatar.GetAllAvatarsOut, error)
-	RemoveAvatar(r *http.Request) (*avatar.Avatar, error)
+	UploadUserAvatar(r *http.Request) (*avatar.SetUserAvatarOut, error)
+	GetUserAvatarsList(r *http.Request) (*avatar.GetAllUserAvatarsOut, error)
+	RemoveUserAvatar(r *http.Request) (*avatar.Avatar, error)
+
+	UploadSocietyAvatar(r *http.Request) (*avatar.SetSocietyAvatarOut, error)
+	GetSocietyAvatarsList(r *http.Request) (*avatar.GetAllSocietyAvatarsOut, error)
+	RemoveSocietyAvatar(r *http.Request) (*avatar.Avatar, error)
 }
 
 type NotificationService interface {

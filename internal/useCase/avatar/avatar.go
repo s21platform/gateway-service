@@ -19,7 +19,7 @@ func New(aC AvatarClient) *Usecase {
 	return &Usecase{aC: aC}
 }
 
-func (uc *Usecase) UploadAvatar(r *http.Request) (*avatar.SetAvatarOut, error) {
+func (uc *Usecase) UploadUserAvatar(r *http.Request) (*avatar.SetUserAvatarOut, error) {
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse multipart form: %w", err)
@@ -33,17 +33,17 @@ func (uc *Usecase) UploadAvatar(r *http.Request) (*avatar.SetAvatarOut, error) {
 	uuid := r.Context().Value(config.KeyUUID).(string)
 	filename := r.FormValue("filename")
 
-	resp, err := uc.aC.SetAvatar(r.Context(), filename, file, uuid)
+	resp, err := uc.aC.SetUserAvatar(r.Context(), filename, file, uuid)
 	if err != nil {
 		return nil, fmt.Errorf("failed to set avatar: %w", err)
 	}
 	return resp, nil
 }
 
-func (uc *Usecase) GetAvatarsList(r *http.Request) (*avatar.GetAllAvatarsOut, error) {
+func (uc *Usecase) GetUserAvatarsList(r *http.Request) (*avatar.GetAllUserAvatarsOut, error) {
 	uuid := r.Context().Value(config.KeyUUID).(string)
 
-	resp, err := uc.aC.GetAllAvatars(r.Context(), uuid)
+	resp, err := uc.aC.GetAllUserAvatars(r.Context(), uuid)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get avatars: %w", err)
 	}
@@ -51,13 +51,59 @@ func (uc *Usecase) GetAvatarsList(r *http.Request) (*avatar.GetAllAvatarsOut, er
 	return resp, nil
 }
 
-func (uc *Usecase) RemoveAvatar(r *http.Request) (*avatar.Avatar, error) {
+func (uc *Usecase) RemoveUserAvatar(r *http.Request) (*avatar.Avatar, error) {
 	id, err := getAvatarId(r)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get avatar id: %w", err)
 	}
 
-	resp, err := uc.aC.DeleteAvatar(r.Context(), id)
+	resp, err := uc.aC.DeleteUserAvatar(r.Context(), id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to delete avatar: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (uc *Usecase) UploadSocietyAvatar(r *http.Request) (*avatar.SetSocietyAvatarOut, error) {
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse multipart form: %w", err)
+	}
+	file, _, err := r.FormFile("avatar")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get file from form: %w", err)
+	}
+	defer file.Close()
+
+	uuid := r.Context().Value(config.KeyUUID).(string)
+	filename := r.FormValue("filename")
+
+	resp, err := uc.aC.SetSocietyAvatar(r.Context(), filename, file, uuid)
+	if err != nil {
+		return nil, fmt.Errorf("failed to set avatar: %w", err)
+	}
+	return resp, nil
+}
+
+func (uc *Usecase) GetSocietyAvatarsList(r *http.Request) (*avatar.GetAllSocietyAvatarsOut, error) {
+	uuid := r.Context().Value(config.KeyUUID).(string)
+
+	resp, err := uc.aC.GetAllSocietyAvatars(r.Context(), uuid)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get avatars: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (uc *Usecase) RemoveSocietyAvatar(r *http.Request) (*avatar.Avatar, error) {
+	id, err := getAvatarId(r)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get avatar id: %w", err)
+	}
+
+	resp, err := uc.aC.DeleteSocietyAvatar(r.Context(), id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to delete avatar: %w", err)
 	}
@@ -80,7 +126,7 @@ func getAvatarId(r *http.Request) (int32, error) {
 		return 0, fmt.Errorf("request body is empty")
 	}
 
-	if err := json.Unmarshal(body, &requestData); err != nil {
+	if err = json.Unmarshal(body, &requestData); err != nil {
 		return 0, fmt.Errorf("failed to decode request body: %w", err)
 	}
 

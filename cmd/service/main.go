@@ -68,7 +68,7 @@ func main() {
 	searchUseCase := searchusecase.New(searchClient)
 
 	// handlers declaration
-	authHandlers := authhandler.New(authUseCase)
+	authHandlers := authhandler.New(cfg, authUseCase)
 	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase, searchUseCase)
 
 	r := chi.NewRouter()
@@ -85,7 +85,7 @@ func main() {
 
 	log.Println("Server starting...")
 
-	if err := http.ListenAndServe(fmt.Sprintf(":%s", cfg.Service.Port), r); err != nil {
+	if err = http.ListenAndServe(fmt.Sprintf(":%s", cfg.Service.Port), r); err != nil {
 		log.Fatalf("failed to start server: %v", err)
 	}
 }

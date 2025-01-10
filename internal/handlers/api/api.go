@@ -63,8 +63,8 @@ func (h *Handler) PeerInfo(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
-func (h *Handler) SetAvatar(w http.ResponseWriter, r *http.Request) {
-	resp, err := h.aS.UploadAvatar(r)
+func (h *Handler) SetUserAvatar(w http.ResponseWriter, r *http.Request) {
+	resp, err := h.aS.UploadUserAvatar(r)
 	if err != nil {
 		log.Printf("upload avatar error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -78,8 +78,8 @@ func (h *Handler) SetAvatar(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
-func (h *Handler) GetAllAvatars(w http.ResponseWriter, r *http.Request) {
-	avatars, err := h.aS.GetAvatarsList(r)
+func (h *Handler) GetAllUserAvatars(w http.ResponseWriter, r *http.Request) {
+	avatars, err := h.aS.GetUserAvatarsList(r)
 	if err != nil {
 		log.Printf("get all avatars error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -96,8 +96,61 @@ func (h *Handler) GetAllAvatars(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
-func (h *Handler) DeleteAvatar(w http.ResponseWriter, r *http.Request) {
-	deletedAvatar, err := h.aS.RemoveAvatar(r)
+func (h *Handler) DeleteUserAvatar(w http.ResponseWriter, r *http.Request) {
+	deletedAvatar, err := h.aS.RemoveUserAvatar(r)
+	if err != nil {
+		log.Printf("delete avatar error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(deletedAvatar)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) SetSocietyAvatar(w http.ResponseWriter, r *http.Request) {
+	resp, err := h.aS.UploadSocietyAvatar(r)
+	if err != nil {
+		log.Printf("upload avatar error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(resp)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+	}
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) GetAllSocietyAvatars(w http.ResponseWriter, r *http.Request) {
+	avatars, err := h.aS.GetSocietyAvatarsList(r)
+	if err != nil {
+		log.Printf("get all avatars error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(avatars)
+	if err != nil {
+		log.Printf("json marshal error: %v", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) DeleteSocietyAvatar(w http.ResponseWriter, r *http.Request) {
+	deletedAvatar, err := h.aS.RemoveSocietyAvatar(r)
 	if err != nil {
 		log.Printf("delete avatar error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -537,9 +590,15 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 
 		apiRouter.Get("/profile", handler.MyProfile)
 		apiRouter.Put("/profile", handler.UpdateProfile)
-		apiRouter.Post("/avatar", handler.SetAvatar)
-		apiRouter.Get("/avatar", handler.GetAllAvatars)
-		apiRouter.Delete("/avatar", handler.DeleteAvatar)
+		apiRouter.Post("/avatar", handler.SetUserAvatar)
+		apiRouter.Get("/avatar", handler.GetAllUserAvatars)
+		apiRouter.Delete("/avatar", handler.DeleteUserAvatar)
+		apiRouter.Post("/avatar/user", handler.SetUserAvatar)
+		apiRouter.Get("/avatar/user", handler.GetAllUserAvatars)
+		apiRouter.Delete("/avatar/user", handler.DeleteUserAvatar)
+		apiRouter.Post("/avatar/society", handler.SetSocietyAvatar)
+		apiRouter.Get("/avatar/society", handler.GetAllSocietyAvatars)
+		apiRouter.Delete("/avatar/society", handler.DeleteSocietyAvatar)
 		apiRouter.Get("/notification/count", handler.CountNotifications)
 		apiRouter.Get("/notification", handler.GetNotifications)
 		apiRouter.Get("/friends/counts", handler.GetCountFriends)

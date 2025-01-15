@@ -37,12 +37,12 @@ github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5 h1:5K6f9rK5
 github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5/go.mod h1:t4KCcKAupFeksP0yEVOjgfl32xgBTOSGZ++AkbshfqU=
 github.com/s21platform/avatar-proto v0.0.10 h1:y/0HBZlYbt2Zyu64ggcgQ1HW8P+GotW9enKt7G/r6Ao=
 github.com/s21platform/avatar-proto v0.0.10/go.mod h1:jX+yDX1SPHVrRjiQN1zuNTR2e00grbXv554yOhpQZCo=
+github.com/s21platform/chat-proto v0.0.2 h1:WUWsqL9AZLaaY9LGLnL/GnlIlbe74e5/vpFnViqS0cU=
+github.com/s21platform/chat-proto v0.0.2/go.mod h1:CeEtQiKpmGWom1FPgUAOWUpuPBeiXTVi2D261XSTdHo=
 github.com/s21platform/friends-proto v0.0.12 h1:EjIwyEs7cq0aTj66mD8cvi74O2AxwvBOFv65nmIeutI=
 github.com/s21platform/friends-proto v0.0.12/go.mod h1:2T40nq/qCJzNd7B7FrmaFqN9i2dte+cMcrZS248XwQI=
 github.com/s21platform/logger-lib v0.0.3 h1:FSrPaJCW+fodzX3Mkce85WsB0/03ZZHtSEXaHqHlJFo=
 github.com/s21platform/logger-lib v0.0.3/go.mod h1:DpD0CWM17ApEwayEZXhQqb3gos1TpumQfU+uRrpaSCI=
-github.com/s21platform/metrics-lib v0.0.7 h1:0mycj6uj4JEhbxlLY3o0GnQL4ST0YwfJDG/NX2I4AJo=
-github.com/s21platform/metrics-lib v0.0.7/go.mod h1:Z1Aiy5uuyEmM//rQmhqkVh0JR8l5sVwe83TQegdNFxQ=
 github.com/s21platform/metrics-lib v0.0.8 h1:w2AzbTcN8d9GYScUQrQL1D2bThUqRbsJTzkU8pD3APo=
 github.com/s21platform/metrics-lib v0.0.8/go.mod h1:Z1Aiy5uuyEmM//rQmhqkVh0JR8l5sVwe83TQegdNFxQ=
 github.com/s21platform/notification-proto v0.0.2 h1:BKw6BdpXTt+1TKpUIIHrYpcQ/AATyPjbrQBernGMrHY=

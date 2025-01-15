@@ -3,6 +3,7 @@ package chat
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/s21platform/gateway-service/internal/config"
 	"io"
 	"net/http"
 
@@ -18,23 +19,7 @@ func New(cC ChatClient) *Usecase {
 }
 
 func (u *Usecase) GetRecentMessages(r *http.Request) (*chat.GetRecentMessagesOut, error) {
-	var requestData struct {
-		Uuid string `json:"uuid"`
-	}
-
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read request body: %v", err)
-	}
-	defer r.Body.Close()
-
-	if len(body) == 0 {
-		return nil, fmt.Errorf("request body is empty")
-	}
-
-	if err = json.Unmarshal(body, &requestData); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal request body: %v", err)
-	}
+	uuid := r.Context().Value(config.KeyUUID).(string)
 
 	resp, err := u.cC.GetRecentMessages(r.Context(), &chat.GetRecentMessagesIn{Uuid: requestData.Uuid})
 	if err != nil {

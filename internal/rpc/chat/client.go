@@ -26,11 +26,14 @@ func NewService(cfg *config.Config) *Service {
 	return &Service{client: client}
 }
 
-func (s *Service) GetRecentMessages(ctx context.Context, in *chat_proto.GetRecentMessagesIn) (*chat_proto.GetRecentMessagesOut, error) {
+func (s *Service) GetRecentMessages(ctx context.Context, uuid string) (*chat_proto.GetRecentMessagesOut, error) {
+	req := chat_proto.GetRecentMessagesIn{
+		Uuid: uuid,
+	}
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
-	resp, err := s.client.GetRecentMessages(ctx, in)
+	resp, err := s.client.GetRecentMessages(ctx, &req)
 	if err != nil {
-		return nil, fmt.Errorf("failed to s.client.GetRecentMessages: %v", err)
+		return nil, fmt.Errorf("failed to GetRecentMessages in rpc: %v", err)
 	}
 	return resp, nil
 }

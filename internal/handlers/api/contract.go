@@ -1,8 +1,9 @@
 package api
 
 import (
-	chat "github.com/s21platform/chat-proto/chat-proto"
 	"net/http"
+
+	chat "github.com/s21platform/chat-proto/chat-proto"
 
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
 	friends "github.com/s21platform/friends-proto/friends-proto"

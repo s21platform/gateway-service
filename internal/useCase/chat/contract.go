@@ -2,7 +2,7 @@ package chat
 
 import (
 	"context"
-	
+
 	chat "github.com/s21platform/chat-proto/chat-proto"
 )
 

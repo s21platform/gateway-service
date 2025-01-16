@@ -2,10 +2,7 @@ package chat
 
 import (
 	"context"
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 	chat "github.com/s21platform/chat-proto/chat-proto"
 )
 

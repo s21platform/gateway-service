@@ -78,6 +78,7 @@ func (h *Handler) Logout(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "S21SPACE_AUTH_TOKEN",
 		Value:    "",
+		Path:     "/",
 		MaxAge:   -1,
 		HttpOnly: true,
 	})

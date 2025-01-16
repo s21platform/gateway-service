@@ -74,6 +74,15 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	logger.Info("OK")
 }
 
+func (h *Handler) Logout(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "S21SPACE_AUTH_TOKEN",
+		Value:    "",
+		MaxAge:   -1,
+		HttpOnly: true,
+	})
+}
+
 func (h *Handler) CheckAuth(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 	logger.AddFuncName("CheckAuth")
@@ -171,5 +180,6 @@ func AttachAuthRoutes(r chi.Router, handler *Handler) {
 	r.Route("/auth", func(authRouter chi.Router) {
 		authRouter.Post("/login", handler.Login)
 		authRouter.Get("/check-auth", handler.CheckAuth)
+		authRouter.Get("/logout", handler.Logout)
 	})
 }

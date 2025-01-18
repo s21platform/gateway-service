@@ -2,10 +2,10 @@ package chat
 
 import (
 	"fmt"
-	"github.com/s21platform/gateway-service/internal/config"
 	"net/http"
 
 	chat "github.com/s21platform/chat-proto/chat-proto"
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 type Usecase struct {

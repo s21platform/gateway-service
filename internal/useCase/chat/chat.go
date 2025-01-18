@@ -1,10 +1,8 @@
 package chat
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/s21platform/gateway-service/internal/config"
-	"io"
 	"net/http"
 
 	chat "github.com/s21platform/chat-proto/chat-proto"
@@ -21,7 +19,7 @@ func New(cC ChatClient) *Usecase {
 func (u *Usecase) GetRecentMessages(r *http.Request) (*chat.GetRecentMessagesOut, error) {
 	uuid := r.Context().Value(config.KeyUUID).(string)
 
-	resp, err := u.cC.GetRecentMessages(r.Context(), &chat.GetRecentMessagesIn{Uuid: requestData.Uuid})
+	resp, err := u.cC.GetRecentMessages(r.Context(), uuid)
 	if err != nil {
 		return nil, fmt.Errorf("failed to u.cC.GetRecentMessages: %v", err)
 	}

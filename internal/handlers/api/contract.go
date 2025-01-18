@@ -3,6 +3,8 @@ package api
 import (
 	"net/http"
 
+	chat "github.com/s21platform/chat-proto/chat-proto"
+
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
 	friends "github.com/s21platform/friends-proto/friends-proto"
 	notificationproto "github.com/s21platform/notification-proto/notification-proto"
@@ -62,4 +64,8 @@ type SocietyService interface {
 
 type SearchService interface {
 	GetUsersWithLimit(r *http.Request) (model.SearchUsersOut, error)
+}
+
+type ChatService interface {
+	GetRecentMessages(r *http.Request) (*chat.GetRecentMessagesOut, error)
 }

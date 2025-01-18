@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/s21platform/gateway-service/internal/rpc/chat"
+
 	"github.com/s21platform/gateway-service/internal/rpc/search"
 	searchusecase "github.com/s21platform/gateway-service/internal/useCase/search"
 
@@ -29,6 +31,7 @@ import (
 	"github.com/s21platform/gateway-service/internal/rpc/user"
 	authusecase "github.com/s21platform/gateway-service/internal/useCase/auth"
 	avatarusecase "github.com/s21platform/gateway-service/internal/useCase/avatar"
+	chatusecase "github.com/s21platform/gateway-service/internal/useCase/chat"
 	friendsusecase "github.com/s21platform/gateway-service/internal/useCase/friends"
 	notificationusecase "github.com/s21platform/gateway-service/internal/useCase/notification"
 	optionusecase "github.com/s21platform/gateway-service/internal/useCase/option"
@@ -56,6 +59,7 @@ func main() {
 	optionClient := option.New(cfg)
 	societyClient := society.NewService(cfg)
 	searchClient := search.NewService(cfg)
+	chatClient := chat.NewService(cfg)
 
 	// usecases declaration
 	authUseCase := authusecase.New(authClient)
@@ -66,10 +70,11 @@ func main() {
 	optionUsecase := optionusecase.New(optionClient)
 	societyUseCase := societyusecase.New(societyClient)
 	searchUseCase := searchusecase.New(searchClient)
+	chatUseCase := chatusecase.New(chatClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(cfg, authUseCase)
-	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase, searchUseCase)
+	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase, searchUseCase, chatUseCase)
 
 	r := chi.NewRouter()
 

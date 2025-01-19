@@ -136,7 +136,7 @@ func (u *UseCase) GetSocietiesForUser(r *http.Request) (*societyproto.GetSocieti
 		return nil, fmt.Errorf("failed to read request body: %w", err)
 	}
 
-	if err := json.Unmarshal(body, &id); err != nil {
+	if err := json.Unmarshal(body, &uuid); err != nil {
 		return nil, fmt.Errorf("failed to decode request body: %w", err)
 	}
 

@@ -29,6 +29,10 @@ type SocietyId struct {
 	Id int64 `json:"id"`
 }
 
+type Uuid struct {
+	Uuid string `json:"uuid"`
+}
+
 func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error) {
 	requestData := RequestData{}
 	body, err := io.ReadAll(r.Body)
@@ -120,6 +124,25 @@ func (u *UseCase) UnsubscribeFromSociety(r *http.Request) (*societyproto.Unsubsc
 	resp, err := u.sC.UnsubscribeFromSociety(r.Context(), id.Id)
 	if err != nil {
 		return nil, fmt.Errorf("failed subscribe to society: %v", err)
+	}
+
+	return resp, nil
+}
+
+func (u *UseCase) GetSocietiesForUser(r *http.Request) (*societyproto.GetSocietiesForUserOut, error) {
+	uuid := Uuid{}
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read request body: %w", err)
+	}
+
+	if err := json.Unmarshal(body, &id); err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %w", err)
+	}
+
+	resp, err := u.sC.GetSocietiesForUser(r.Context(), uuid.Uuid)
+	if err != nil {
+		return nil, fmt.Errorf("failed get society for user: %v", err)
 	}
 
 	return resp, nil

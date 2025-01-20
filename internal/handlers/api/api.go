@@ -491,7 +491,7 @@ func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
 	logger.AddFuncName("SubscribeToSociety")
 	result, err := h.sS.SubscribeToSociety(r)
 	if err != nil {
-		log.Printf("failed to get society info error: %v", err)
+		logger.Error(fmt.Sprintf("failed to get society info error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -500,7 +500,7 @@ func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
 	}
 	jsn, err := json.Marshal(tmp)
 	if err != nil {
-		log.Printf("failed to json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -525,7 +525,7 @@ func (h *Handler) GetPermission(w http.ResponseWriter, r *http.Request) {
 	}
 	jsn, err := json.Marshal(result)
 	if err != nil {
-		log.Printf("failed to json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -560,7 +560,7 @@ func (h *Handler) UnsubscribeFromSociety(w http.ResponseWriter, r *http.Request)
 	logger.AddFuncName("UnsubscribeFromSociety")
 	result, err := h.sS.UnsubscribeFromSociety(r)
 	if err != nil {
-		log.Printf("failed to unsubscribe from society error: %v", err)
+		logger.Error(fmt.Sprintf("failed to unsubscribe from society error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -569,7 +569,7 @@ func (h *Handler) UnsubscribeFromSociety(w http.ResponseWriter, r *http.Request)
 	}
 	jsn, err := json.Marshal(tmp)
 	if err != nil {
-		log.Printf("failed to json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -606,13 +606,13 @@ func (h *Handler) GetSocietiesForUser(w http.ResponseWriter, r *http.Request) {
 	logger.AddFuncName("GetSocietiesForUser")
 	result, err := h.sS.GetSocietiesForUser(r)
 	if err != nil {
-		log.Printf("failed to get societies for user error: %v", err)
+		logger.Error(fmt.Sprintf("failed to get societies for user error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	jsn, err := json.Marshal(result)
 	if err != nil {
-		log.Printf("failed to json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

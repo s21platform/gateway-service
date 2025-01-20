@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 
 	societyproto "github.com/s21platform/society-proto/society-proto"
 )
@@ -65,17 +66,13 @@ func (u *UseCase) GetAccessLevel(r *http.Request) (*societyproto.GetAccessLevelO
 }
 
 func (u *UseCase) GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error) {
-	id := SocietyId{}
-	body, err := io.ReadAll(r.Body)
+	strId := r.URL.Query().Get("id")
+	id, err := strconv.Atoi(strId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read request body: %w", err)
+		return nil, fmt.Errorf("failed to convert id to int: %v", err)
 	}
 
-	if err := json.Unmarshal(body, &id); err != nil {
-		return nil, fmt.Errorf("failed to decode request body: %w", err)
-	}
-
-	resp, err := u.sC.GetSocietyInfo(r.Context(), id.Id)
+	resp, err := u.sC.GetSocietyInfo(r.Context(), int64(id))
 	if err != nil {
 		return nil, fmt.Errorf("failed to get access level: %v", err)
 	}
@@ -84,17 +81,12 @@ func (u *UseCase) GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoO
 }
 
 func (u *UseCase) SubscribeToSociety(r *http.Request) (*societyproto.SubscribeToSocietyOut, error) {
-	id := SocietyId{}
-	body, err := io.ReadAll(r.Body)
+	strId := r.URL.Query().Get("id")
+	id, err := strconv.Atoi(strId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read request body: %w", err)
+		return nil, fmt.Errorf("failed to convert id to int: %v", err)
 	}
-
-	if err := json.Unmarshal(body, &id); err != nil {
-		return nil, fmt.Errorf("failed to decode request body: %w", err)
-	}
-
-	resp, err := u.sC.SubscribeToSociety(r.Context(), id.Id)
+	resp, err := u.sC.SubscribeToSociety(r.Context(), int64(id))
 	if err != nil {
 		return nil, fmt.Errorf("failed subscribe to society: %v", err)
 	}
@@ -130,17 +122,9 @@ func (u *UseCase) UnsubscribeFromSociety(r *http.Request) (*societyproto.Unsubsc
 }
 
 func (u *UseCase) GetSocietiesForUser(r *http.Request) (*societyproto.GetSocietiesForUserOut, error) {
-	uuid := Uuid{}
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read request body: %w", err)
-	}
+	uuid := r.URL.Query().Get("uuid")
 
-	if err := json.Unmarshal(body, &uuid); err != nil {
-		return nil, fmt.Errorf("failed to decode request body: %w", err)
-	}
-
-	resp, err := u.sC.GetSocietiesForUser(r.Context(), uuid.Uuid)
+	resp, err := u.sC.GetSocietiesForUser(r.Context(), uuid)
 	if err != nil {
 		return nil, fmt.Errorf("failed get society for user: %v", err)
 	}

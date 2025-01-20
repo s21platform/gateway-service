@@ -3,14 +3,15 @@ package api
 import (
 	"context"
 	"errors"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+
 	"github.com/golang/mock/gomock"
 	"github.com/s21platform/gateway-service/internal/config"
 	logger_lib "github.com/s21platform/logger-lib"
 	userproto "github.com/s21platform/user-proto/user-proto"
 	"github.com/stretchr/testify/assert"
-	"net/http"
-	"net/http/httptest"
-	"testing"
 )
 
 func TestApi_GetProfile(t *testing.T) {
@@ -81,6 +82,5 @@ func TestApi_GetProfile(t *testing.T) {
 		s.MyProfile(w, r)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
-
 	})
 }

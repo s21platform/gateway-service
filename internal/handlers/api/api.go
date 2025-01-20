@@ -538,23 +538,28 @@ func (h *Handler) Search(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 	readType := r.URL.Query().Get("type")
 	var jsn []byte
+	var res interface{}
+	var err error
 	if readType == "peer" {
-		result, err := h.srS.GetUsersWithLimit(r)
+		res, err = h.srS.GetUsersWithLimit(r)
 		if err != nil {
-			logger.Error(fmt.Sprintf("check subscribe error: %v", err))
-			log.Printf("failed to get users with limit error: %v", err)
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-		jsn, err = json.Marshal(result)
-		if err != nil {
-			logger.Error(fmt.Sprintf("json marshal error: %v", err))
-			log.Printf("failed to json marshal error: %v", err)
+			logger.Error(fmt.Sprintf("failed to get users with limit error: %v", err))
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 	} else if readType == "society" {
-		logger.Info("search_society")
+		res, err = h.srS.GetSocietyWithLimit(r)
+		if err != nil {
+			logger.Error(fmt.Sprintf("check subscribe error: %v", err))
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	}
+	jsn, err = json.Marshal(res)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)

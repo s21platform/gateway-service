@@ -103,3 +103,16 @@ func (s *Service) UnsubscribeFromSociety(ctx context.Context, id int64) (*societ
 	}
 	return resp, nil
 }
+
+func (s *Service) GetSocietiesForUser(ctx context.Context, uuid string) (*societyproto.GetSocietiesForUserOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
+	request := &societyproto.GetSocietiesForUserIn{
+		UserUuid: uuid,
+	}
+	resp, err := s.client.GetSocietiesForUser(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get society for user error: %v", err)
+	}
+	return resp, err
+}

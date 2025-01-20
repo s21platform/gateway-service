@@ -62,6 +62,7 @@ type SocietyService interface {
 	SubscribeToSociety(r *http.Request) (*societyproto.SubscribeToSocietyOut, error)
 	GetPermission(r *http.Request) (*societyproto.GetPermissionsOut, error)
 	UnsubscribeFromSociety(r *http.Request) (*societyproto.UnsubscribeFromSocietyOut, error)
+	GetSocietiesForUser(r *http.Request) (*societyproto.GetSocietiesForUserOut, error)
 }
 
 type SearchService interface {

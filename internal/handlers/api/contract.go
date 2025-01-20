@@ -66,6 +66,7 @@ type SocietyService interface {
 
 type SearchService interface {
 	GetUsersWithLimit(r *http.Request) (model.SearchUsersOut, error)
+	GetSocietyWithLimit(r *http.Request) (model.SearchSocietyOut, error)
 }
 
 type ChatService interface {

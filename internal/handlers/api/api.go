@@ -534,19 +534,30 @@ func (h *Handler) GetPermission(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
-func (h *Handler) GetUsersWithLimit(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Search(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
-	result, err := h.srS.GetUsersWithLimit(r)
-	if err != nil {
-		logger.Error(fmt.Sprintf("check subscribe error: %v", err))
-		log.Printf("failed to get users with limit error: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+	readType := r.URL.Query().Get("type")
+	var jsn []byte
+	var res interface{}
+	var err error
+	if readType == "peer" {
+		res, err = h.srS.GetUsersWithLimit(r)
+		if err != nil {
+			logger.Error(fmt.Sprintf("failed to get users with limit error: %v", err))
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	} else if readType == "society" {
+		res, err = h.srS.GetSocietyWithLimit(r)
+		if err != nil {
+			logger.Error(fmt.Sprintf("check subscribe error: %v", err))
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 	}
-	jsn, err := json.Marshal(result)
+	jsn, err = json.Marshal(res)
 	if err != nil {
-		logger.Error(fmt.Sprintf("json marshal error: %v", err))
-		log.Printf("failed to json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -635,7 +646,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Delete("/friends", handler.RemoveFriends)
 		apiRouter.Get("/friends/check", handler.CheckSubscriptionToPeer)
 		apiRouter.Get("/peer/{uuid}", handler.PeerInfo)
-		apiRouter.Get("/search", handler.GetUsersWithLimit)
+		apiRouter.Get("/search", handler.Search)
 		apiRouter.Post("/society/member", handler.SubscribeToSociety)
 		apiRouter.Get("/society/permission", handler.GetPermission)
 		apiRouter.Delete("/society/member", handler.UnsubscribeFromSociety)

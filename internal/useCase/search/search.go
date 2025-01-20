@@ -19,11 +19,7 @@ func New(sS SearchClient) *UseCase {
 }
 
 func (u *UseCase) GetUsersWithLimit(r *http.Request) (model.SearchUsersOut, error) {
-	readType := r.URL.Query().Get("type")
 	var tmp model.SearchUsersOut
-	if readType != "peer" {
-		return tmp, nil
-	}
 	limitStr := r.URL.Query().Get("limit")
 	offsetStr := r.URL.Query().Get("offset")
 	nickname := r.URL.Query().Get("nickname")
@@ -57,6 +53,44 @@ func (u *UseCase) GetUsersWithLimit(r *http.Request) (model.SearchUsersOut, erro
 			IsFriend:   user.IsFriend,
 		}
 		tmp.Users = append(tmp.Users, users)
+	}
+	return tmp, nil
+}
+
+func (u *UseCase) GetSocietyWithLimit(r *http.Request) (model.SearchSocietyOut, error) {
+	var tmp model.SearchSocietyOut
+	limitStr := r.URL.Query().Get("limit")
+	offsetStr := r.URL.Query().Get("offset")
+	name := r.URL.Query().Get("name")
+	limit, err := strconv.ParseInt(limitStr, 10, 64)
+	if err != nil {
+		return tmp, fmt.Errorf("invalid limit: %v", err)
+	}
+	offset, err := strconv.ParseInt(offsetStr, 10, 64)
+	if err != nil {
+		return tmp, fmt.Errorf("invalid offset: %v", err)
+	}
+	res, err := u.sS.GetSocietyWithLimit(r.Context(), &search.GetSocietyWithLimitIn{
+		Limit:  limit,
+		Offset: offset,
+		Name:   name,
+	})
+	if err != nil {
+		return tmp, fmt.Errorf("failed to get society from search: %v", err)
+	}
+	tmp = model.SearchSocietyOut{
+		Societies: make([]model.SearchSociety, 0),
+		Total:     res.Total,
+	}
+	for _, societys := range res.Societies {
+		society := model.SearchSociety{
+			Name:       societys.Name,
+			AvatarLink: societys.AvatarLink,
+			SocietyId:  societys.SocietyId,
+			IsMember:   societys.IsMember,
+			IsPrivate:  societys.IsPrivate,
+		}
+		tmp.Societies = append(tmp.Societies, society)
 	}
 	return tmp, nil
 }

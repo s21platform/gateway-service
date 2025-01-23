@@ -74,7 +74,7 @@ func (u *UseCase) GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoO
 
 	resp, err := u.sC.GetSocietyInfo(r.Context(), int64(id))
 	if err != nil {
-		return nil, fmt.Errorf("failed to get access level: %v", err)
+		return nil, fmt.Errorf("failed to get society info: %v", err)
 	}
 
 	return resp, nil

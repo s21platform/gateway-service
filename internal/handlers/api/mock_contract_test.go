@@ -532,6 +532,21 @@ func (mr *MockSocietyServiceMockRecorder) GetPermission(r interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPermission", reflect.TypeOf((*MockSocietyService)(nil).GetPermission), r)
 }
 
+// GetSocietiesForUser mocks base method.
+func (m *MockSocietyService) GetSocietiesForUser(r *http.Request) (*society_proto.GetSocietiesForUserOut, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSocietiesForUser", r)
+	ret0, _ := ret[0].(*society_proto.GetSocietiesForUserOut)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSocietiesForUser indicates an expected call of GetSocietiesForUser.
+func (mr *MockSocietyServiceMockRecorder) GetSocietiesForUser(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSocietiesForUser", reflect.TypeOf((*MockSocietyService)(nil).GetSocietiesForUser), r)
+}
+
 // GetSocietyInfo mocks base method.
 func (m *MockSocietyService) GetSocietyInfo(r *http.Request) (*society_proto.GetSocietyInfoOut, error) {
 	m.ctrl.T.Helper()
@@ -598,6 +613,21 @@ func NewMockSearchService(ctrl *gomock.Controller) *MockSearchService {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockSearchService) EXPECT() *MockSearchServiceMockRecorder {
 	return m.recorder
+}
+
+// GetSocietyWithLimit mocks base method.
+func (m *MockSearchService) GetSocietyWithLimit(r *http.Request) (model.SearchSocietyOut, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSocietyWithLimit", r)
+	ret0, _ := ret[0].(model.SearchSocietyOut)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSocietyWithLimit indicates an expected call of GetSocietyWithLimit.
+func (mr *MockSearchServiceMockRecorder) GetSocietyWithLimit(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSocietyWithLimit", reflect.TypeOf((*MockSearchService)(nil).GetSocietyWithLimit), r)
 }
 
 // GetUsersWithLimit mocks base method.

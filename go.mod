@@ -15,7 +15,7 @@ require (
 	github.com/s21platform/notification-proto v0.0.2
 	github.com/s21platform/optionhub-proto v1.0.6
 	github.com/s21platform/search-proto v0.0.10
-	github.com/s21platform/society-proto v0.0.15
+	github.com/s21platform/society-proto v0.0.16
 	github.com/s21platform/user-proto v0.0.11
 	google.golang.org/grpc v1.69.2
 )

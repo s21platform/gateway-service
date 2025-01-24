@@ -64,7 +64,7 @@ func (s *Service) GetSocietyInfo(ctx context.Context, id int64) (*societyproto.G
 
 	resp, err := s.client.GetSocietyInfo(ctx, request)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get access level: %v", err)
+		return nil, fmt.Errorf("failed to get society info: %v", err)
 	}
 	return resp, nil
 }

@@ -641,9 +641,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 
 		apiRouter.Get("/profile", handler.MyProfile)
 		apiRouter.Put("/profile", handler.UpdateProfile)
-		apiRouter.Post("/avatar", handler.SetUserAvatar)
-		apiRouter.Get("/avatar", handler.GetAllUserAvatars)
-		apiRouter.Delete("/avatar", handler.DeleteUserAvatar)
 		apiRouter.Post("/avatar/user", handler.SetUserAvatar)
 		apiRouter.Get("/avatar/user", handler.GetAllUserAvatars)
 		apiRouter.Delete("/avatar/user", handler.DeleteUserAvatar)

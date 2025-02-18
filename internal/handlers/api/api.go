@@ -450,15 +450,18 @@ func (h *Handler) GetAccessLevel(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetSocietyInfo(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("GetSocietyInfo")
+
 	result, err := h.sS.GetSocietyInfo(r)
 	if err != nil {
-		log.Printf("failed to get society info error: %v", err)
+		logger.Error(fmt.Sprintf("failed to get society info error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	jsn, err := json.Marshal(result)
 	if err != nil {
-		log.Printf("failed to json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

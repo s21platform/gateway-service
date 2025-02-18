@@ -101,8 +101,8 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
 
 	t.Run("should_ok", func(t *testing.T) {
-		MockSocietyService := NewMockSocietyService(ctrl)
-		mockLogger.EXPECT().AddFuncName("SocietyInfo")
+		mockSocietyService := NewMockSocietyService(ctrl)
+		mockLogger.EXPECT().AddFuncName("GetSocietyInfo")
 
 		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
 		r := &http.Request{}
@@ -118,7 +118,7 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 			CountSubscribers: 0,
 		}
 
-		MockSocietyService.EXPECT().GetSocietyInfo(r).Return(societyInfo, nil)
+		mockSocietyService.EXPECT().GetSocietyInfo(r).Return(societyInfo, nil)
 
 		s := New(
 			nil,
@@ -126,7 +126,7 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			MockSocietyService,
+			mockSocietyService,
 			nil,
 			nil,
 			nil,
@@ -138,8 +138,8 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 	})
 
 	t.Run("should_err_us_fail_response", func(t *testing.T) {
-		MockSocietyService := NewMockSocietyService(ctrl)
-		mockLogger.EXPECT().AddFuncName("SocietyInfo")
+		mockSocietyService := NewMockSocietyService(ctrl)
+		mockLogger.EXPECT().AddFuncName("GetSocietyInfo")
 		mockLogger.EXPECT().Error(gomock.Any())
 
 		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
@@ -149,7 +149,7 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 
 		mockErr := errors.New("some error")
 
-		MockSocietyService.EXPECT().GetSocietyInfo(r).Return(nil, mockErr)
+		mockSocietyService.EXPECT().GetSocietyInfo(r).Return(nil, mockErr)
 
 		s := New(
 			nil,
@@ -157,7 +157,7 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			MockSocietyService,
+			mockSocietyService,
 			nil,
 			nil,
 			nil,

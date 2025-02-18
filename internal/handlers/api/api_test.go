@@ -6,8 +6,11 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
+	advertproto "github.com/s21platform/advert-proto/advert-proto"
 	society_proto "github.com/s21platform/society-proto/society-proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/golang/mock/gomock"
 	"github.com/s21platform/gateway-service/internal/config"
@@ -49,6 +52,7 @@ func TestApi_GetProfile(t *testing.T) {
 			nil,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.MyProfile(w, r)
@@ -72,6 +76,7 @@ func TestApi_GetProfile(t *testing.T) {
 
 		s := New(
 			mockUserService,
+			nil,
 			nil,
 			nil,
 			nil,
@@ -124,6 +129,7 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 			MockSocietyService,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.GetSocietyInfo(w, r)
@@ -154,9 +160,87 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 			MockSocietyService,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.GetSocietyInfo(w, r)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
+func TestApi_GetAdverts(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("should_ok", func(t *testing.T) {
+		mockAdvertService := NewMockAdvertService(ctrl)
+		mockLogger.EXPECT().AddFuncName("GetAdverts")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		r := &http.Request{}
+		w := httptest.NewRecorder()
+		r = r.WithContext(ctx)
+
+		expectedAdverts := &advertproto.GetAdvertsOut{
+			Adverts: []*advertproto.AdvertText{
+				{
+					TextContent: "test",
+					ExpiredAt:   timestamppb.New(time.Now()),
+				},
+			},
+		}
+
+		mockAdvertService.EXPECT().GetAdverts(r).Return(expectedAdverts, nil)
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockAdvertService,
+		)
+
+		s.GetAdverts(w, r)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+	})
+
+	t.Run("should_err_us_fail_response", func(t *testing.T) {
+		mockAdvertService := NewMockAdvertService(ctrl)
+		mockLogger.EXPECT().AddFuncName("GetAdverts")
+		mockLogger.EXPECT().Error(gomock.Any())
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		r := &http.Request{}
+		w := httptest.NewRecorder()
+		r = r.WithContext(ctx)
+
+		mockErr := errors.New("some error")
+
+		mockAdvertService.EXPECT().GetAdverts(r).Return(nil, mockErr)
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockAdvertService,
+		)
+
+		s.GetAdverts(w, r)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})

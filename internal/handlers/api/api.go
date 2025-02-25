@@ -411,15 +411,17 @@ func (h *Handler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) CreateSociety(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("CreateSociety")
 	result, err := h.sS.CreateSociety(r)
 	if err != nil {
-		log.Printf("failed to create society error: %v", err)
+		logger.Error(fmt.Sprintf("failed to create society error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	jsn, err := json.Marshal(result)
 	if err != nil {
-		log.Printf("failed to json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -428,41 +430,25 @@ func (h *Handler) CreateSociety(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
-//func (h *Handler) GetAccessLevel(w http.ResponseWriter, r *http.Request) {
-//	result, err := h.sS.GetAccessLevel(r)
-//	if err != nil {
-//		log.Printf("failed to get access level error: %v", err)
-//		w.WriteHeader(http.StatusInternalServerError)
-//		return
-//	}
-//	jsn, err := json.Marshal(result)
-//	if err != nil {
-//		log.Printf("failed to json marshal error: %v", err)
-//		w.WriteHeader(http.StatusInternalServerError)
-//		return
-//	}
-//	w.Header().Set("Content-Type", "application/json")
-//	w.WriteHeader(http.StatusOK)
-//	_, _ = w.Write(jsn)
-//}
-
-//func (h *Handler) GetSocietyInfo(w http.ResponseWriter, r *http.Request) {
-//	result, err := h.sS.GetSocietyInfo(r)
-//	if err != nil {
-//		log.Printf("failed to get society info error: %v", err)
-//		w.WriteHeader(http.StatusInternalServerError)
-//		return
-//	}
-//	jsn, err := json.Marshal(result)
-//	if err != nil {
-//		log.Printf("failed to json marshal error: %v", err)
-//		w.WriteHeader(http.StatusInternalServerError)
-//		return
-//	}
-//	w.Header().Set("Content-Type", "application/json")
-//	w.WriteHeader(http.StatusOK)
-//	_, _ = w.Write(jsn)
-//}
+func (h *Handler) GetSocietyInfo(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("GetSocietyInfo")
+	result, err := h.sS.GetSocietyInfo(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to get society info error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
 
 func (h *Handler) CheckSubscriptionToPeer(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
@@ -483,54 +469,6 @@ func (h *Handler) CheckSubscriptionToPeer(w http.ResponseWriter, r *http.Request
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(jsn)
 }
-
-//func (h *Handler) SubscribeToSociety(w http.ResponseWriter, r *http.Request) {
-//	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
-//	logger.AddFuncName("SubscribeToSociety")
-//	result, err := h.sS.SubscribeToSociety(r)
-//	if err != nil {
-//		logger.Error(fmt.Sprintf("failed to get society info error: %v", err))
-//		w.WriteHeader(http.StatusInternalServerError)
-//		return
-//	}
-//	tmp := model.JoinStatus{
-//		Success: result.Success,
-//	}
-//	jsn, err := json.Marshal(tmp)
-//	if err != nil {
-//		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
-//		w.WriteHeader(http.StatusInternalServerError)
-//		return
-//	}
-//	w.Header().Set("Content-Type", "application/json")
-//
-//	if result.Success {
-//		w.WriteHeader(http.StatusOK)
-//	} else {
-//		w.WriteHeader(http.StatusCreated)
-//	}
-//	_, _ = w.Write(jsn)
-//}
-
-//func (h *Handler) GetPermission(w http.ResponseWriter, r *http.Request) {
-//	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
-//	logger.AddFuncName("GetPermission")
-//	result, err := h.sS.GetPermission(r)
-//	if err != nil {
-//		logger.Error(fmt.Sprintf("failed to get permission: %v", err))
-//		w.WriteHeader(http.StatusInternalServerError)
-//		return
-//	}
-//	jsn, err := json.Marshal(result)
-//	if err != nil {
-//		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
-//		w.WriteHeader(http.StatusInternalServerError)
-//		return
-//	}
-//	w.Header().Set("Content-Type", "application/json")
-//	w.WriteHeader(http.StatusOK)
-//	_, _ = w.Write(jsn)
-//}
 
 func (h *Handler) Search(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
@@ -564,34 +502,6 @@ func (h *Handler) Search(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
-//func (h *Handler) UnsubscribeFromSociety(w http.ResponseWriter, r *http.Request) {
-//	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
-//	logger.AddFuncName("UnsubscribeFromSociety")
-//	result, err := h.sS.UnsubscribeFromSociety(r)
-//	if err != nil {
-//		logger.Error(fmt.Sprintf("failed to unsubscribe from society error: %v", err))
-//		w.WriteHeader(http.StatusInternalServerError)
-//		return
-//	}
-//	tmp := model.JoinStatus{
-//		Success: result.Success,
-//	}
-//	jsn, err := json.Marshal(tmp)
-//	if err != nil {
-//		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
-//		w.WriteHeader(http.StatusInternalServerError)
-//		return
-//	}
-//	w.Header().Set("Content-Type", "application/json")
-//
-//	if result.Success {
-//		w.WriteHeader(http.StatusOK)
-//	} else {
-//		w.WriteHeader(http.StatusNotFound)
-//	}
-//	_, _ = w.Write(jsn)
-//}
-
 func (h *Handler) GetRecentMessages(w http.ResponseWriter, r *http.Request) {
 	result, err := h.cS.GetRecentMessages(r)
 	if err != nil {
@@ -609,27 +519,6 @@ func (h *Handler) GetRecentMessages(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(jsn)
 }
-
-//func (h *Handler) GetSocietiesForUser(w http.ResponseWriter, r *http.Request) {
-//	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
-//	logger.AddFuncName("GetSocietiesForUser")
-//	result, err := h.sS.GetSocietiesForUser(r)
-//	if err != nil {
-//		logger.Error(fmt.Sprintf("failed to get societies for user error: %v", err))
-//		w.WriteHeader(http.StatusInternalServerError)
-//		return
-//	}
-//	jsn, err := json.Marshal(result)
-//	if err != nil {
-//		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
-//		w.WriteHeader(http.StatusInternalServerError)
-//		return
-//	}
-//	w.Header().Set("Content-Type", "application/json")
-//
-//	w.WriteHeader(http.StatusOK)
-//	_, _ = w.Write(jsn)
-//}
 
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Route("/api", func(apiRouter chi.Router) {
@@ -657,7 +546,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Get("/option/society-direction", handler.GetSocietyDirectionBySearchName)
 		apiRouter.Post("/society", handler.CreateSociety)
 		//apiRouter.Get("/society/access", handler.GetAccessLevel)
-		//apiRouter.Get("/society", handler.GetSocietyInfo)
+		apiRouter.Get("/society", handler.GetSocietyInfo)
 		apiRouter.Post("/friends", handler.SetFriends)
 		apiRouter.Delete("/friends", handler.RemoveFriends)
 		apiRouter.Get("/friends/check", handler.CheckSubscriptionToPeer)

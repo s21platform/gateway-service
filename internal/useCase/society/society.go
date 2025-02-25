@@ -24,14 +24,6 @@ type RequestData struct {
 	IsSearch         bool   `json:"is_search"`
 }
 
-//type SocietyId struct {
-//	Id int64 `json:"id"`
-//}
-//
-//type Uuid struct {
-//	Uuid string `json:"uuid"`
-//}
-
 func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error) {
 	requestData := RequestData{}
 	body, err := io.ReadAll(r.Body)
@@ -55,28 +47,16 @@ func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, e
 	return resp, nil
 }
 
-//func (u *UseCase) GetAccessLevel(r *http.Request) (*societyproto.GetAccessLevelOut, error) {
-//	resp, err := u.sC.GetAccessLevel(r.Context())
-//	if err != nil {
-//		return nil, fmt.Errorf("failed to get access level: %v", err)
-//	}
-//	return resp, nil
-//}
-//
-//func (u *UseCase) GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error) {
-//	strId := r.URL.Query().Get("id")
-//	id, err := strconv.Atoi(strId)
-//	if err != nil {
-//		return nil, fmt.Errorf("failed to convert id to int: %v", err)
-//	}
-//
-//	resp, err := u.sC.GetSocietyInfo(r.Context(), int64(id))
-//	if err != nil {
-//		return nil, fmt.Errorf("failed to get society info: %v", err)
-//	}
-//
-//	return resp, nil
-//}
+func (u *UseCase) GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error) {
+	societyUUID := r.URL.Query().Get("society_id")
+
+	res, err := u.sC.GetSocietyInfo(r.Context(), societyUUID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get society: %v", err)
+	}
+	return res, nil
+}
+
 //
 //func (u *UseCase) SubscribeToSociety(r *http.Request) (*societyproto.SubscribeToSocietyOut, error) {
 //	strId := r.URL.Query().Get("id")
@@ -89,14 +69,6 @@ func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, e
 //		return nil, fmt.Errorf("failed subscribe to society: %v", err)
 //	}
 //
-//	return resp, nil
-//}
-//
-//func (u *UseCase) GetPermission(r *http.Request) (*societyproto.GetPermissionsOut, error) {
-//	resp, err := u.sC.GetPermission(r.Context())
-//	if err != nil {
-//		return nil, fmt.Errorf("failed to get permission: %v", err)
-//	}
 //	return resp, nil
 //}
 //

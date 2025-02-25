@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/s21platform/gateway-service/internal/config"
-	notificationproto "github.com/s21platform/notification-proto/notification-proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
+
+	notificationproto "github.com/s21platform/notification-proto/notification-proto"
+
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 type Client struct {

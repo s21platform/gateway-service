@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"log"
 
-	advert "github.com/s21platform/advert-proto/advert-proto"
-	"github.com/s21platform/gateway-service/internal/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
+
+	advert "github.com/s21platform/advert-proto/advert-proto"
+
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 type Service struct {

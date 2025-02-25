@@ -6,11 +6,10 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/s21platform/gateway-service/internal/model"
+	userproto "github.com/s21platform/user-proto/user-proto"
 
 	"github.com/s21platform/gateway-service/internal/config"
-
-	userproto "github.com/s21platform/user-proto/user-proto"
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Usecase struct {

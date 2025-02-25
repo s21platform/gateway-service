@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"log"
 
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 
 	friends_proto "github.com/s21platform/friends-proto/friends-proto"
+
 	"github.com/s21platform/gateway-service/internal/config"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 type Service struct {

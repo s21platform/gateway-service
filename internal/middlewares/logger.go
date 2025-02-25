@@ -4,8 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/s21platform/gateway-service/internal/config"
 	logger_lib "github.com/s21platform/logger-lib"
+
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 func LoggerMiddleware(next http.Handler, logger *logger_lib.Logger) http.Handler {

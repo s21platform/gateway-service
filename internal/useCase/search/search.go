@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/s21platform/gateway-service/internal/model"
-
 	"github.com/s21platform/search-proto/search"
+
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type UseCase struct {

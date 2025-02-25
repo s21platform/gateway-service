@@ -6,13 +6,12 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/s21platform/gateway-service/internal/model"
+	"github.com/go-chi/chi/v5"
 
 	logger_lib "github.com/s21platform/logger-lib"
 
-	"github.com/go-chi/chi/v5"
-
 	"github.com/s21platform/gateway-service/internal/config"
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Handler struct {

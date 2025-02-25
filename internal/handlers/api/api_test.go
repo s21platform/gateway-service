@@ -8,15 +8,16 @@ import (
 	"testing"
 	"time"
 
-	advertproto "github.com/s21platform/advert-proto/advert-proto"
-	society_proto "github.com/s21platform/society-proto/society-proto"
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	"github.com/golang/mock/gomock"
-	"github.com/s21platform/gateway-service/internal/config"
+	advertproto "github.com/s21platform/advert-proto/advert-proto"
 	logger_lib "github.com/s21platform/logger-lib"
+	society_proto "github.com/s21platform/society-proto/society-proto"
 	userproto "github.com/s21platform/user-proto/user-proto"
-	"github.com/stretchr/testify/assert"
+
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 func TestApi_GetProfile(t *testing.T) {

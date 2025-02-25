@@ -11,7 +11,6 @@ import (
 	logger_lib "github.com/s21platform/logger-lib"
 
 	"github.com/s21platform/gateway-service/internal/config"
-	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Handler struct {

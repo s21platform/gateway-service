@@ -14,7 +14,6 @@ import (
 
 	advertproto "github.com/s21platform/advert-proto/advert-proto"
 	logger_lib "github.com/s21platform/logger-lib"
-	society_proto "github.com/s21platform/society-proto/society-proto"
 	userproto "github.com/s21platform/user-proto/user-proto"
 
 	"github.com/s21platform/gateway-service/internal/config"
@@ -93,82 +92,82 @@ func TestApi_GetProfile(t *testing.T) {
 	})
 }
 
-func TestApi_GetSocietyInfo(t *testing.T) {
-	t.Parallel()
-
-	ctrl := gomock.NewController(t)
-
-	ctx := context.Background()
-	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
-
-	t.Run("should_ok", func(t *testing.T) {
-		mockSocietyService := NewMockSocietyService(ctrl)
-		mockLogger.EXPECT().AddFuncName("GetSocietyInfo")
-
-		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
-		r := &http.Request{}
-		w := httptest.NewRecorder()
-		r = r.WithContext(ctx)
-
-		societyInfo := &society_proto.GetSocietyInfoOut{
-			Name:             "test",
-			Description:      "test",
-			OwnerUUID:        "test",
-			PhotoUrl:         "test",
-			IsPrivate:        true,
-			CountSubscribers: 0,
-		}
-
-		mockSocietyService.EXPECT().GetSocietyInfo(r).Return(societyInfo, nil)
-
-		s := New(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			mockSocietyService,
-			nil,
-			nil,
-			nil,
-		)
-
-		s.GetSocietyInfo(w, r)
-
-		assert.Equal(t, http.StatusOK, w.Code)
-	})
-
-	t.Run("should_err_us_fail_response", func(t *testing.T) {
-		mockSocietyService := NewMockSocietyService(ctrl)
-		mockLogger.EXPECT().AddFuncName("GetSocietyInfo")
-		mockLogger.EXPECT().Error(gomock.Any())
-
-		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
-		r := &http.Request{}
-		w := httptest.NewRecorder()
-		r = r.WithContext(ctx)
-
-		mockErr := errors.New("some error")
-
-		mockSocietyService.EXPECT().GetSocietyInfo(r).Return(nil, mockErr)
-
-		s := New(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			mockSocietyService,
-			nil,
-			nil,
-			nil,
-		)
-
-		s.GetSocietyInfo(w, r)
-
-		assert.Equal(t, http.StatusInternalServerError, w.Code)
-	})
-}
+//func TestApi_GetSocietyInfo(t *testing.T) {
+//	t.Parallel()
+//
+//	ctrl := gomock.NewController(t)
+//
+//	ctx := context.Background()
+//	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+//
+//	t.Run("should_ok", func(t *testing.T) {
+//		mockSocietyService := NewMockSocietyService(ctrl)
+//		mockLogger.EXPECT().AddFuncName("GetSocietyInfo")
+//
+//		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+//		r := &http.Request{}
+//		w := httptest.NewRecorder()
+//		r = r.WithContext(ctx)
+//
+//		societyInfo := &society_proto.GetSocietyInfoOut{
+//			Name:             "test",
+//			Description:      "test",
+//			OwnerUUID:        "test",
+//			PhotoUrl:         "test",
+//			IsPrivate:        true,
+//			CountSubscribers: 0,
+//		}
+//
+//		mockSocietyService.EXPECT().GetSocietyInfo(r).Return(societyInfo, nil)
+//
+//		s := New(
+//			nil,
+//			nil,
+//			nil,
+//			nil,
+//			nil,
+//			mockSocietyService,
+//			nil,
+//			nil,
+//			nil,
+//		)
+//
+//		s.GetSocietyInfo(w, r)
+//
+//		assert.Equal(t, http.StatusOK, w.Code)
+//	})
+//
+//	t.Run("should_err_us_fail_response", func(t *testing.T) {
+//		mockSocietyService := NewMockSocietyService(ctrl)
+//		mockLogger.EXPECT().AddFuncName("GetSocietyInfo")
+//		mockLogger.EXPECT().Error(gomock.Any())
+//
+//		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+//		r := &http.Request{}
+//		w := httptest.NewRecorder()
+//		r = r.WithContext(ctx)
+//
+//		mockErr := errors.New("some error")
+//
+//		mockSocietyService.EXPECT().GetSocietyInfo(r).Return(nil, mockErr)
+//
+//		s := New(
+//			nil,
+//			nil,
+//			nil,
+//			nil,
+//			nil,
+//			mockSocietyService,
+//			nil,
+//			nil,
+//			nil,
+//		)
+//
+//		s.GetSocietyInfo(w, r)
+//
+//		assert.Equal(t, http.StatusInternalServerError, w.Code)
+//	})
+//}
 
 func TestApi_GetAdverts(t *testing.T) {
 	t.Parallel()

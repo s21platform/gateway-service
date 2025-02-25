@@ -6,9 +6,9 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/s21platform/gateway-service/internal/model"
-
 	friends "github.com/s21platform/friends-proto/friends-proto"
+
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Usecase struct {

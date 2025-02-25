@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
-	logger_lib "github.com/s21platform/logger-lib"
-
 	"github.com/go-chi/chi/v5"
+
+	logger_lib "github.com/s21platform/logger-lib"
 
 	"github.com/s21platform/gateway-service/internal/config"
 )
@@ -22,10 +22,11 @@ type Handler struct {
 	sS  SocietyService
 	srS SearchService
 	cS  ChatService
+	adS AdvertService
 }
 
-func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsService, oS OptionService, sS SocietyService, srS SearchService, cS ChatService) *Handler {
-	return &Handler{uS: uS, aS: aS, nS: nS, fS: fS, oS: oS, sS: sS, srS: srS, cS: cS}
+func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsService, oS OptionService, sS SocietyService, srS SearchService, cS ChatService, adS AdvertService) *Handler {
+	return &Handler{uS: uS, aS: aS, nS: nS, fS: fS, oS: oS, sS: sS, srS: srS, cS: cS, adS: adS}
 }
 
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
@@ -447,15 +448,17 @@ func (h *Handler) CreateSociety(w http.ResponseWriter, r *http.Request) {
 //}
 
 //func (h *Handler) GetSocietyInfo(w http.ResponseWriter, r *http.Request) {
+//	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+//	logger.AddFuncName("GetSocietyInfo")
 //	result, err := h.sS.GetSocietyInfo(r)
 //	if err != nil {
-//		log.Printf("failed to get society info error: %v", err)
+//		logger.Error(fmt.Sprintf("failed to get society info error: %v", err))
 //		w.WriteHeader(http.StatusInternalServerError)
 //		return
 //	}
 //	jsn, err := json.Marshal(result)
 //	if err != nil {
-//		log.Printf("failed to json marshal error: %v", err)
+//		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 //		w.WriteHeader(http.StatusInternalServerError)
 //		return
 //	}
@@ -631,6 +634,29 @@ func (h *Handler) GetRecentMessages(w http.ResponseWriter, r *http.Request) {
 //	_, _ = w.Write(jsn)
 //}
 
+func (h *Handler) GetAdverts(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("GetAdverts")
+
+	result, err := h.adS.GetAdverts(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to get adverts: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(func(next http.Handler) http.Handler {
@@ -668,5 +694,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		//apiRouter.Delete("/society/member", handler.UnsubscribeFromSociety)
 		apiRouter.Get("/chat/messages", handler.GetRecentMessages)
 		//apiRouter.Get("/society/list", handler.GetSocietiesForUser)
+		apiRouter.Get("/advert", handler.GetAdverts)
 	})
 }

@@ -6,9 +6,9 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/s21platform/gateway-service/internal/config"
-
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
+
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 type Usecase struct {

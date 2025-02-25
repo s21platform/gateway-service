@@ -9,6 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
+	advert_proto "github.com/s21platform/advert-proto/advert-proto"
 	avatar_proto "github.com/s21platform/avatar-proto/avatar-proto"
 	chat_proto "github.com/s21platform/chat-proto/chat-proto"
 	friends_proto "github.com/s21platform/friends-proto/friends-proto"
@@ -591,4 +592,42 @@ func (m *MockChatService) GetRecentMessages(r *http.Request) (*chat_proto.GetRec
 func (mr *MockChatServiceMockRecorder) GetRecentMessages(r interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRecentMessages", reflect.TypeOf((*MockChatService)(nil).GetRecentMessages), r)
+}
+
+// MockAdvertService is a mock of AdvertService interface.
+type MockAdvertService struct {
+	ctrl     *gomock.Controller
+	recorder *MockAdvertServiceMockRecorder
+}
+
+// MockAdvertServiceMockRecorder is the mock recorder for MockAdvertService.
+type MockAdvertServiceMockRecorder struct {
+	mock *MockAdvertService
+}
+
+// NewMockAdvertService creates a new mock instance.
+func NewMockAdvertService(ctrl *gomock.Controller) *MockAdvertService {
+	mock := &MockAdvertService{ctrl: ctrl}
+	mock.recorder = &MockAdvertServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockAdvertService) EXPECT() *MockAdvertServiceMockRecorder {
+	return m.recorder
+}
+
+// GetAdverts mocks base method.
+func (m *MockAdvertService) GetAdverts(r *http.Request) (*advert_proto.GetAdvertsOut, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAdverts", r)
+	ret0, _ := ret[0].(*advert_proto.GetAdvertsOut)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAdverts indicates an expected call of GetAdverts.
+func (mr *MockAdvertServiceMockRecorder) GetAdverts(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAdverts", reflect.TypeOf((*MockAdvertService)(nil).GetAdverts), r)
 }

@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/s21platform/gateway-service/internal/config"
-
 	"github.com/s21platform/metrics-lib/pkg"
+
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 type statusRecorder struct {

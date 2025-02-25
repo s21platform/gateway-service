@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"log"
 
-	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
+
+	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 
 	"github.com/s21platform/gateway-service/internal/config"
 )

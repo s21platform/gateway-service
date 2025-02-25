@@ -5,9 +5,9 @@ package api
 import (
 	"net/http"
 
-	chat "github.com/s21platform/chat-proto/chat-proto"
-
+	advert "github.com/s21platform/advert-proto/advert-proto"
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
+	chat "github.com/s21platform/chat-proto/chat-proto"
 	friends "github.com/s21platform/friends-proto/friends-proto"
 	notificationproto "github.com/s21platform/notification-proto/notification-proto"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
@@ -72,4 +72,8 @@ type SearchService interface {
 
 type ChatService interface {
 	GetRecentMessages(r *http.Request) (*chat.GetRecentMessagesOut, error)
+}
+
+type AdvertService interface {
+	GetAdverts(r *http.Request) (*advert.GetAdvertsOut, error)
 }

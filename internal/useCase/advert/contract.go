@@ -8,4 +8,5 @@ import (
 
 type AdvertClient interface {
 	GetAdverts(ctx context.Context, uuid string) (*advert.GetAdvertsOut, error)
+	CreateAdvert(ctx context.Context, req *RequestData) (*advert.AdvertEmpty, error)
 }

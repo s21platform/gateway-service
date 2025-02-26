@@ -7,11 +7,13 @@ import (
 	"log"
 	"mime/multipart"
 
-	avatar "github.com/s21platform/avatar-proto/avatar-proto"
-	"github.com/s21platform/gateway-service/internal/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
+
+	avatar "github.com/s21platform/avatar-proto/avatar-proto"
+
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 type Service struct {

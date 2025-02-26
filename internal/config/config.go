@@ -32,6 +32,7 @@ type Config struct {
 	Logger       Logger
 	Search       Search
 	Chat         Chat
+	Advert       Advert
 }
 
 // Service struct for storage this server config variables
@@ -99,6 +100,11 @@ type Search struct {
 type Chat struct {
 	Host string `env:"CHAT_SERVICE_HOST"`
 	Port string `env:"CHAT_SERVICE_PORT"`
+}
+
+type Advert struct {
+	Host string `env:"ADVERT_SERVICE_HOST"`
+	Port string `env:"ADVERT_SERVICE_PORT"`
 }
 
 func MustLoad() *Config {

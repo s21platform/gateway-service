@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"log"
 
-	"google.golang.org/grpc/metadata"
-
-	"github.com/s21platform/gateway-service/internal/config"
-	"github.com/s21platform/search-proto/search"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
+
+	"github.com/s21platform/search-proto/search"
+
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 type Service struct {

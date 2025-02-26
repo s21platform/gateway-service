@@ -3,17 +3,17 @@ package advert
 import (
 	"context"
 	"fmt"
-	"github.com/s21platform/gateway-service/internal/useCase/advert"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	advertproto "github.com/s21platform/advert-proto/advert-proto"
 
 	"github.com/s21platform/gateway-service/internal/config"
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Service struct {
@@ -41,7 +41,7 @@ func (s *Service) GetAdverts(ctx context.Context, uuid string) (*advertproto.Get
 	return resp, nil
 }
 
-func (s *Service) CreateAdvrt(ctx context.Context, req *advert.RequestData) (*advertproto.AdvertEmpty, error) {
+func (s *Service) CreateAdvert(ctx context.Context, req *model.AdvertRequestData) (*advertproto.AdvertEmpty, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	request := &advertproto.CreateAdvertIn{
 		Text: req.TextContent,

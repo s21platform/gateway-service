@@ -1,4 +1,4 @@
-//go:generate go run github.com/golang/mock/mockgen@v1.6.0 -destination=mock_contract_test.go -source=contract.go -package=api
+//go:generate mockgen -destination=mock_contract_test.go -package=${GOPACKAGE} -source=contract.go
 
 package api
 

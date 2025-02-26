@@ -5,24 +5,13 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"time"
 
 	advert "github.com/s21platform/advert-proto/advert-proto"
+	model "github.com/s21platform/gateway-service/internal/model"
 )
 
 type Usecase struct {
 	aC AdvertClient
-}
-
-type RequestData struct {
-	OwnerUUID   string     `json:"uuid"`
-	TextContent string     `json:"text"`
-	UserFilter  UserFilter `json:"user"`
-	ExpiredAt   time.Time  `json:"expires_at"`
-}
-
-type UserFilter struct {
-	Os []int64 `json:"os,omitempty"`
 }
 
 func New(aC AdvertClient) *Usecase {
@@ -41,7 +30,7 @@ func (u *Usecase) GetAdverts(r *http.Request) (*advert.GetAdvertsOut, error) {
 }
 
 func (u *Usecase) CreateAdvert(r *http.Request) (*advert.AdvertEmpty, error) {
-	requestData := RequestData{}
+	requestData := model.AdvertRequestData{}
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read request body: %v", err)

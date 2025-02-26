@@ -503,6 +503,21 @@ func (mr *MockSocietyServiceMockRecorder) CreateSociety(r interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateSociety", reflect.TypeOf((*MockSocietyService)(nil).CreateSociety), r)
 }
 
+// GetSocietyInfo mocks base method.
+func (m *MockSocietyService) GetSocietyInfo(r *http.Request) (*society_proto.GetSocietyInfoOut, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSocietyInfo", r)
+	ret0, _ := ret[0].(*society_proto.GetSocietyInfoOut)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSocietyInfo indicates an expected call of GetSocietyInfo.
+func (mr *MockSocietyServiceMockRecorder) GetSocietyInfo(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSocietyInfo", reflect.TypeOf((*MockSocietyService)(nil).GetSocietyInfo), r)
+}
+
 // MockSearchService is a mock of SearchService interface.
 type MockSearchService struct {
 	ctrl     *gomock.Controller

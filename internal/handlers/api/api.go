@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
-	logger_lib "github.com/s21platform/logger-lib"
-
 	"github.com/go-chi/chi/v5"
+
+	logger_lib "github.com/s21platform/logger-lib"
 
 	"github.com/s21platform/gateway-service/internal/config"
 )
@@ -604,10 +604,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		//apiRouter.Delete("/society/member", handler.UnsubscribeFromSociety)
 		apiRouter.Get("/chat/messages", handler.GetRecentMessages)
 		//apiRouter.Get("/society/list", handler.GetSocietiesForUser)
-<<<<<<< HEAD
 		apiRouter.Get("/advert", handler.GetAdverts)
 		apiRouter.Put("/advert", handler.CreateAdvert)
-=======
->>>>>>> refs/remotes/origin/main
 	})
 }

@@ -362,7 +362,7 @@ func TestApi_GetAdverts(t *testing.T) {
 	})
 }
 
-func TestApi_CreateAdverts(t *testing.T) {
+func TestApi_CreateAdvert(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -379,9 +379,9 @@ func TestApi_CreateAdverts(t *testing.T) {
 		w := httptest.NewRecorder()
 		r = r.WithContext(ctx)
 
-		expectedAdverts := &advertproto.AdvertEmpty{}
+		expected := &advertproto.AdvertEmpty{}
 
-		mockAdvertService.EXPECT().CreateAdvert(r).Return(expectedAdverts, nil)
+		mockAdvertService.EXPECT().CreateAdvert(r).Return(expected, nil)
 
 		s := New(
 			nil,

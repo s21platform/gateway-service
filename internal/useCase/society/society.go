@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/s21platform/gateway-service/internal/model"
+
 	societyproto "github.com/s21platform/society-proto/society-proto"
 )
 
@@ -17,15 +19,8 @@ func New(sC SocietyClient) *UseCase {
 	return &UseCase{sC: sC}
 }
 
-type RequestData struct {
-	Name             string `json:"name"`
-	FormatID         int64  `json:"format_id"`
-	PostPermissionID int64  `json:"post_permission_id"`
-	IsSearch         bool   `json:"is_search"`
-}
-
 func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error) {
-	requestData := RequestData{}
+	requestData := model.RequestData{}
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read request body: %w", err)
@@ -55,6 +50,23 @@ func (u *UseCase) GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoO
 		return nil, fmt.Errorf("failed to get society: %v", err)
 	}
 	return res, nil
+}
+
+func (u *UseCase) UpdateSociety(r *http.Request) error {
+	var updateSociety model.SocietyUpdate
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return fmt.Errorf("failed to read request body: %w", err)
+	}
+	defer r.Body.Close()
+	if err = json.Unmarshal(body, &updateSociety); err != nil {
+		return fmt.Errorf("failed to decode request body: %w", err)
+	}
+	err = u.sC.UpdateSociety(r.Context(), &updateSociety)
+	if err != nil {
+		return fmt.Errorf("failed to update society: %v", err)
+	}
+	return nil
 }
 
 //

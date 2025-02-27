@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/s21platform/gateway-service/internal/model"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
@@ -12,7 +14,6 @@ import (
 	societyproto "github.com/s21platform/society-proto/society-proto"
 
 	"github.com/s21platform/gateway-service/internal/config"
-	"github.com/s21platform/gateway-service/internal/useCase/society"
 )
 
 type Service struct {
@@ -29,7 +30,7 @@ func NewService(cfg *config.Config) *Service {
 	return &Service{client: client}
 }
 
-func (s *Service) CreateSociety(ctx context.Context, req *society.RequestData) (*societyproto.SetSocietyOut, error) {
+func (s *Service) CreateSociety(ctx context.Context, req *model.RequestData) (*societyproto.SetSocietyOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	request := &societyproto.SetSocietyIn{
 		Name:             req.Name,
@@ -56,6 +57,41 @@ func (s *Service) GetSocietyInfo(ctx context.Context, societyUUID string) (*soci
 	}
 	return resp, nil
 }
+
+func (s *Service) UpdateSociety(ctx context.Context, req *model.SocietyUpdate) error {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
+	var tags []*societyproto.TagsID
+	if len(req.Tags) != 0 {
+		for _, tag := range req.Tags {
+			tags = append(tags, &societyproto.TagsID{TagID: tag})
+		}
+	}
+	request := &societyproto.UpdateSocietyIn{
+		SocietyUUID:    req.SocietyUUID,
+		Name:           req.Name,
+		Description:    req.Description,
+		PhotoURL:       req.PhotoURL,
+		FormatID:       req.FormatID,
+		PostPermission: req.PostPermissionID,
+		IsSearch:       req.IsSearch,
+		TagsID:         tags,
+	}
+	_, err := s.client.UpdateSociety(ctx, request)
+	if err != nil {
+		return fmt.Errorf("failed to update society: %v", err)
+	}
+	return nil
+}
+
+//SocietyUUID      string  `json:"society_id"`
+//Name             string  `json:"name"`
+//Description      string  `json:"description"`
+//PhotoURL         string  `json:"photo_url"`
+//FormatID         int64   `json:"format_id"`
+//PostPermissionID int64   `json:"post_permission_id"`
+//IsSearch         bool    `json:"is_search"`
+//Tags             []int64 `json:"tags"`
 
 //func (s *Service) SubscribeToSociety(ctx context.Context, id int64) (*societyproto.SubscribeToSocietyOut, error) {
 //	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))

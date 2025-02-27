@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -357,6 +358,66 @@ func TestApi_GetAdverts(t *testing.T) {
 		)
 
 		s.GetAdverts(w, r)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
+func TestHandler_UpdateSociety(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("should_update_society_successfully", func(t *testing.T) {
+		mockSocietyService := NewMockSocietyService(ctrl)
+
+		req := httptest.NewRequest(http.MethodPatch, "/society", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		mockLogger.EXPECT().AddFuncName("UpdateSociety")
+
+		mockSocietyService.EXPECT().UpdateSociety(req).Return(nil)
+
+		h := &Handler{
+			sS: mockSocietyService,
+		}
+
+		w := httptest.NewRecorder()
+
+		h.UpdateSociety(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+	})
+
+	t.Run("should_return_internal_server_error_if_UpdateSociety_fails", func(t *testing.T) {
+		mockSocietyService := NewMockSocietyService(ctrl)
+
+		req := httptest.NewRequest(http.MethodPatch, "/society", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		mockLogger.EXPECT().AddFuncName("UpdateSociety")
+		expectedError := errors.New("database error")
+		mockLogger.EXPECT().Error(fmt.Sprintf("failed to update society error: %v", expectedError))
+
+		mockSocietyService.EXPECT().UpdateSociety(req).Return(expectedError)
+
+		h := &Handler{
+			sS: mockSocietyService,
+		}
+
+		w := httptest.NewRecorder()
+
+		h.UpdateSociety(w, req)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})

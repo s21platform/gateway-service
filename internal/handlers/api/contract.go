@@ -58,6 +58,7 @@ type OptionService interface {
 type SocietyService interface {
 	CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error)
 	GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error)
+	UpdateSociety(r *http.Request) error
 }
 
 type SearchService interface {

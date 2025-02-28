@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"log"
 
-	chat "github.com/s21platform/chat-proto/chat-proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
+
+	chat "github.com/s21platform/chat-proto/chat-proto"
 
 	"github.com/s21platform/gateway-service/internal/config"
 )

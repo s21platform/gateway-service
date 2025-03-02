@@ -365,6 +365,76 @@ func TestApi_GetAdverts(t *testing.T) {
 	})
 }
 
+func TestApi_CreateAdvert(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("should_ok", func(t *testing.T) {
+		mockAdvertService := NewMockAdvertService(ctrl)
+		mockLogger.EXPECT().AddFuncName("CreateAdvert")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		r := &http.Request{}
+		w := httptest.NewRecorder()
+		r = r.WithContext(ctx)
+
+		expected := &advertproto.AdvertEmpty{}
+
+		mockAdvertService.EXPECT().CreateAdvert(r).Return(expected, nil)
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockAdvertService,
+		)
+
+		s.CreateAdvert(w, r)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+	})
+
+	t.Run("should_err_us_fail_response", func(t *testing.T) {
+		mockAdvertService := NewMockAdvertService(ctrl)
+		mockLogger.EXPECT().AddFuncName("CreateAdvert")
+		mockLogger.EXPECT().Error(gomock.Any())
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		r := &http.Request{}
+		w := httptest.NewRecorder()
+		r = r.WithContext(ctx)
+
+		mockErr := errors.New("some error")
+
+		mockAdvertService.EXPECT().CreateAdvert(r).Return(nil, mockErr)
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockAdvertService,
+		)
+
+		s.CreateAdvert(w, r)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
 func TestApi_CreatePrivateChat(t *testing.T) {
 	t.Parallel()
 

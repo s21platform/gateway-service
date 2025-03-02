@@ -73,4 +73,5 @@ type ChatService interface {
 
 type AdvertService interface {
 	GetAdverts(r *http.Request) (*advert.GetAdvertsOut, error)
+	CreateAdvert(r *http.Request) (*advert.AdvertEmpty, error)
 }

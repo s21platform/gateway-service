@@ -58,6 +58,7 @@ type OptionService interface {
 type SocietyService interface {
 	CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error)
 	GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error)
+	UpdateSociety(r *http.Request) error
 }
 
 type SearchService interface {
@@ -66,7 +67,8 @@ type SearchService interface {
 }
 
 type ChatService interface {
-	GetRecentMessages(r *http.Request) (*chat.GetRecentMessagesOut, error)
+	CreatePrivateChat(r *http.Request) (*chat.CreatePrivateChatOut, error)
+	//GetRecentMessages(r *http.Request) (*chat.GetRecentMessagesOut, error)
 }
 
 type AdvertService interface {

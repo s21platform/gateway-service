@@ -3,10 +3,11 @@ package chat
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 
 	chat "github.com/s21platform/chat-proto/chat-proto"
+
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Usecase struct {
@@ -17,28 +18,45 @@ func New(cC ChatClient) *Usecase {
 	return &Usecase{cC: cC}
 }
 
-func (u *Usecase) GetRecentMessages(r *http.Request) (*chat.GetRecentMessagesOut, error) {
-	var requestData struct {
-		Uuid string `json:"uuid"`
-	}
+func (u *Usecase) CreatePrivateChat(r *http.Request) (*chat.CreatePrivateChatOut, error) {
+	var requestData model.PrivateChatRequest
 
-	body, err := io.ReadAll(r.Body)
+	err := json.NewDecoder(r.Body).Decode(&requestData)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read request body: %v", err)
+		return nil, fmt.Errorf("failed to decode request body: %v", err)
 	}
 	defer r.Body.Close()
 
-	if len(body) == 0 {
-		return nil, fmt.Errorf("request body is empty")
-	}
-
-	if err = json.Unmarshal(body, &requestData); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal request body: %v", err)
-	}
-
-	resp, err := u.cC.GetRecentMessages(r.Context(), requestData.Uuid)
+	resp, err := u.cC.CreatePrivateChat(r.Context(), requestData.CompanionUUID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to u.cC.GetRecentMessages: %v", err)
 	}
+
 	return resp, nil
 }
+
+//func (u *Usecase) GetRecentMessages(r *http.Request) (*chat.GetRecentMessagesOut, error) {
+//	var requestData struct {
+//		Uuid string `json:"uuid"`
+//	}
+//
+//	body, err := io.ReadAll(r.Body)
+//	if err != nil {
+//		return nil, fmt.Errorf("failed to read request body: %v", err)
+//	}
+//	defer r.Body.Close()
+//
+//	if len(body) == 0 {
+//		return nil, fmt.Errorf("request body is empty")
+//	}
+//
+//	if err = json.Unmarshal(body, &requestData); err != nil {
+//		return nil, fmt.Errorf("failed to unmarshal request body: %v", err)
+//	}
+//
+//	resp, err := u.cC.GetRecentMessages(r.Context(), requestData.Uuid)
+//	if err != nil {
+//		return nil, fmt.Errorf("failed to u.cC.GetRecentMessages: %v", err)
+//	}
+//	return resp, nil
+//}

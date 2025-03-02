@@ -451,6 +451,18 @@ func (h *Handler) GetSocietyInfo(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) UpdateSociety(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("UpdateSociety")
+	err := h.sS.UpdateSociety(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to update society error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
 func (h *Handler) CheckSubscriptionToPeer(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 	logger.AddFuncName("CheckSubscriptionToPeer")
@@ -503,23 +515,46 @@ func (h *Handler) Search(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
-func (h *Handler) GetRecentMessages(w http.ResponseWriter, r *http.Request) {
-	result, err := h.cS.GetRecentMessages(r)
+func (h *Handler) CreatePrivateChat(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("CreatePrivateChat")
+
+	result, err := h.cS.CreatePrivateChat(r)
 	if err != nil {
-		log.Printf("failed to get recent messages info error: %v", err)
+		logger.Error(fmt.Sprintf("failed to create private chat: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
 	jsn, err := json.Marshal(result)
 	if err != nil {
-		log.Printf("failed to json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(jsn)
 }
+
+//func (h *Handler) GetRecentMessages(w http.ResponseWriter, r *http.Request) {
+//	result, err := h.cS.GetRecentMessages(r)
+//	if err != nil {
+//		log.Printf("failed to get recent messages info error: %v", err)
+//		w.WriteHeader(http.StatusInternalServerError)
+//		return
+//	}
+//	jsn, err := json.Marshal(result)
+//	if err != nil {
+//		log.Printf("failed to json marshal error: %v", err)
+//		w.WriteHeader(http.StatusInternalServerError)
+//		return
+//	}
+//	w.Header().Set("Content-Type", "application/json")
+//	w.WriteHeader(http.StatusOK)
+//	_, _ = w.Write(jsn)
+//}
 
 func (h *Handler) GetAdverts(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
@@ -592,17 +627,17 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Get("/option/city", handler.GetCityBySearchName)
 		apiRouter.Get("/option/society-direction", handler.GetSocietyDirectionBySearchName)
 		apiRouter.Post("/society", handler.CreateSociety)
-		//apiRouter.Get("/society/access", handler.GetAccessLevel)
 		apiRouter.Get("/society", handler.GetSocietyInfo)
+		apiRouter.Put("/society", handler.UpdateSociety)
 		apiRouter.Post("/friends", handler.SetFriends)
 		apiRouter.Delete("/friends", handler.RemoveFriends)
 		apiRouter.Get("/friends/check", handler.CheckSubscriptionToPeer)
 		apiRouter.Get("/peer/{uuid}", handler.PeerInfo)
 		apiRouter.Get("/search", handler.Search)
 		//apiRouter.Post("/society/member", handler.SubscribeToSociety)
-		//apiRouter.Get("/society/permission", handler.GetPermission)
 		//apiRouter.Delete("/society/member", handler.UnsubscribeFromSociety)
-		apiRouter.Get("/chat/messages", handler.GetRecentMessages)
+		apiRouter.Post("/chat", handler.CreatePrivateChat)
+		//apiRouter.Get("/chat/messages", handler.GetRecentMessages)
 		//apiRouter.Get("/society/list", handler.GetSocietiesForUser)
 		apiRouter.Get("/advert", handler.GetAdverts)
 		apiRouter.Put("/advert", handler.CreateAdvert)

@@ -5,16 +5,19 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 
 	"github.com/golang/mock/gomock"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	advertproto "github.com/s21platform/advert-proto/advert-proto"
+	chatproto "github.com/s21platform/chat-proto/chat-proto"
 	logger_lib "github.com/s21platform/logger-lib"
 	societyproto "github.com/s21platform/society-proto/society-proto"
 	userproto "github.com/s21platform/user-proto/user-proto"
@@ -427,6 +430,138 @@ func TestApi_CreateAdvert(t *testing.T) {
 		)
 
 		s.CreateAdvert(w, r)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
+func TestApi_CreatePrivateChat(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("should_ok", func(t *testing.T) {
+		mockChatService := NewMockChatService(ctrl)
+		mockLogger.EXPECT().AddFuncName("CreatePrivateChat")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		r := &http.Request{}
+		w := httptest.NewRecorder()
+		r = r.WithContext(ctx)
+
+		expectedChat := &chatproto.CreatePrivateChatOut{
+			NewChatUuid: uuid.New().String(),
+		}
+
+		mockChatService.EXPECT().CreatePrivateChat(r).Return(expectedChat, nil)
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockChatService,
+			nil,
+		)
+
+		s.CreatePrivateChat(w, r)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+	})
+
+	t.Run("should_err_us_fail_response", func(t *testing.T) {
+		mockChatService := NewMockChatService(ctrl)
+		mockLogger.EXPECT().AddFuncName("CreatePrivateChat")
+		mockLogger.EXPECT().Error(gomock.Any())
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		r := &http.Request{}
+		w := httptest.NewRecorder()
+		r = r.WithContext(ctx)
+
+		mockErr := errors.New("some error")
+
+		mockChatService.EXPECT().CreatePrivateChat(r).Return(nil, mockErr)
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockChatService,
+			nil,
+		)
+
+		s.CreatePrivateChat(w, r)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
+func TestHandler_UpdateSociety(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("should_update_society_successfully", func(t *testing.T) {
+		mockSocietyService := NewMockSocietyService(ctrl)
+
+		req := httptest.NewRequest(http.MethodPatch, "/society", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		mockLogger.EXPECT().AddFuncName("UpdateSociety")
+
+		mockSocietyService.EXPECT().UpdateSociety(req).Return(nil)
+
+		h := &Handler{
+			sS: mockSocietyService,
+		}
+
+		w := httptest.NewRecorder()
+
+		h.UpdateSociety(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+	})
+
+	t.Run("should_return_internal_server_error_if_UpdateSociety_fails", func(t *testing.T) {
+		mockSocietyService := NewMockSocietyService(ctrl)
+
+		req := httptest.NewRequest(http.MethodPatch, "/society", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		mockLogger.EXPECT().AddFuncName("UpdateSociety")
+		expectedError := errors.New("database error")
+		mockLogger.EXPECT().Error(fmt.Sprintf("failed to update society error: %v", expectedError))
+
+		mockSocietyService.EXPECT().UpdateSociety(req).Return(expectedError)
+
+		h := &Handler{
+			sS: mockSocietyService,
+		}
+
+		w := httptest.NewRecorder()
+
+		h.UpdateSociety(w, req)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})

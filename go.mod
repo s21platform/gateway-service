@@ -6,11 +6,12 @@ require (
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/golang-jwt/jwt/v4 v4.5.1
 	github.com/golang/mock v1.6.0
+	github.com/google/uuid v1.6.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/s21platform/advert-proto v0.0.3
 	github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5
 	github.com/s21platform/avatar-proto v0.0.10
-	github.com/s21platform/chat-proto v0.0.2
+	github.com/s21platform/chat-proto v0.0.10
 	github.com/s21platform/friends-proto v0.0.12
 	github.com/s21platform/logger-lib v0.0.6
 	github.com/s21platform/metrics-lib v0.0.8

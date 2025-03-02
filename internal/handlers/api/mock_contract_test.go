@@ -518,6 +518,20 @@ func (mr *MockSocietyServiceMockRecorder) GetSocietyInfo(r interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSocietyInfo", reflect.TypeOf((*MockSocietyService)(nil).GetSocietyInfo), r)
 }
 
+// UpdateSociety mocks base method.
+func (m *MockSocietyService) UpdateSociety(r *http.Request) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateSociety", r)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateSociety indicates an expected call of UpdateSociety.
+func (mr *MockSocietyServiceMockRecorder) UpdateSociety(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateSociety", reflect.TypeOf((*MockSocietyService)(nil).UpdateSociety), r)
+}
+
 // MockSearchService is a mock of SearchService interface.
 type MockSearchService struct {
 	ctrl     *gomock.Controller
@@ -594,19 +608,19 @@ func (m *MockChatService) EXPECT() *MockChatServiceMockRecorder {
 	return m.recorder
 }
 
-// GetRecentMessages mocks base method.
-func (m *MockChatService) GetRecentMessages(r *http.Request) (*chat_proto.GetRecentMessagesOut, error) {
+// CreatePrivateChat mocks base method.
+func (m *MockChatService) CreatePrivateChat(r *http.Request) (*chat_proto.CreatePrivateChatOut, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetRecentMessages", r)
-	ret0, _ := ret[0].(*chat_proto.GetRecentMessagesOut)
+	ret := m.ctrl.Call(m, "CreatePrivateChat", r)
+	ret0, _ := ret[0].(*chat_proto.CreatePrivateChatOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetRecentMessages indicates an expected call of GetRecentMessages.
-func (mr *MockChatServiceMockRecorder) GetRecentMessages(r interface{}) *gomock.Call {
+// CreatePrivateChat indicates an expected call of CreatePrivateChat.
+func (mr *MockChatServiceMockRecorder) CreatePrivateChat(r interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRecentMessages", reflect.TypeOf((*MockChatService)(nil).GetRecentMessages), r)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePrivateChat", reflect.TypeOf((*MockChatService)(nil).CreatePrivateChat), r)
 }
 
 // MockAdvertService is a mock of AdvertService interface.

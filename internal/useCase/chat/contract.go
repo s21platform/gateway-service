@@ -7,5 +7,6 @@ import (
 )
 
 type ChatClient interface {
-	GetRecentMessages(ctx context.Context, uuid string) (*chat.GetRecentMessagesOut, error)
+	CreatePrivateChat(ctx context.Context, uuid string) (*chat.CreatePrivateChatOut, error)
+	//GetRecentMessages(ctx context.Context, uuid string) (*chat.GetRecentMessagesOut, error)
 }

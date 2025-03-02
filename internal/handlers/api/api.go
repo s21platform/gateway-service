@@ -640,6 +640,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		//apiRouter.Get("/chat/messages", handler.GetRecentMessages)
 		//apiRouter.Get("/society/list", handler.GetSocietiesForUser)
 		apiRouter.Get("/advert", handler.GetAdverts)
-		apiRouter.Put("/advert", handler.CreateAdvert)
+		apiRouter.Post("/advert", handler.CreateAdvert)
 	})
 }

@@ -661,6 +661,21 @@ func (m *MockAdvertService) EXPECT() *MockAdvertServiceMockRecorder {
 	return m.recorder
 }
 
+// CreateAdvert mocks base method.
+func (m *MockAdvertService) CreateAdvert(r *http.Request) (*advert_proto.AdvertEmpty, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateAdvert", r)
+	ret0, _ := ret[0].(*advert_proto.AdvertEmpty)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateAdvert indicates an expected call of CreateAdvert.
+func (mr *MockAdvertServiceMockRecorder) CreateAdvert(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateAdvert", reflect.TypeOf((*MockAdvertService)(nil).CreateAdvert), r)
+}
+
 // GetAdverts mocks base method.
 func (m *MockAdvertService) GetAdverts(r *http.Request) (*advert_proto.GetAdvertsOut, error) {
 	m.ctrl.T.Helper()

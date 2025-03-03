@@ -1,10 +1,13 @@
 package advert
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	advert "github.com/s21platform/advert-proto/advert-proto"
+	model "github.com/s21platform/gateway-service/internal/model"
 )
 
 type Usecase struct {
@@ -23,5 +26,29 @@ func (u *Usecase) GetAdverts(r *http.Request) (*advert.GetAdvertsOut, error) {
 		return nil, fmt.Errorf("failed get adverts in usecase: %v", err)
 	}
 
+	return resp, nil
+}
+
+func (u *Usecase) CreateAdvert(r *http.Request) (*advert.AdvertEmpty, error) {
+	requestData := model.AdvertRequestData{}
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read request body: %v", err)
+	}
+	defer r.Body.Close()
+
+	if len(body) == 0 {
+		return nil, fmt.Errorf("request body is empty")
+	}
+
+	err = json.Unmarshal(body, &requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %v", err)
+	}
+
+	resp, err := u.aC.CreateAdvert(r.Context(), &requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create advert in usecase: %v", err)
+	}
 	return resp, nil
 }

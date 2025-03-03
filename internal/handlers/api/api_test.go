@@ -491,7 +491,7 @@ func TestApi_GetPrivateRecentMessages(t *testing.T) {
 			nil,
 		)
 
-		s.CreatePrivateChat(w, r)
+		s.GetPrivateRecentMessages(w, r)
 
 		assert.Equal(t, http.StatusOK, w.Code)
 	})
@@ -524,7 +524,7 @@ func TestApi_GetPrivateRecentMessages(t *testing.T) {
 			nil,
 		)
 
-		s.CreatePrivateChat(w, r)
+		s.GetPrivateRecentMessages(w, r)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})

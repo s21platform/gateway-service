@@ -540,7 +540,7 @@ func (h *Handler) CreatePrivateChat(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) GetPrivateRecentMessages(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
-	logger.AddFuncName("GetRecentMessages")
+	logger.AddFuncName("GetPrivateRecentMessages")
 
 	result, err := h.cS.GetPrivateRecentMessages(r)
 	if err != nil {

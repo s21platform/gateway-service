@@ -49,7 +49,7 @@ func (s *Service) GetPrivateRecentMessages(ctx context.Context, uuid string) (*c
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 
 	req := chat.GetPrivateRecentMessagesIn{
-		Uuid: uuid,
+		ChatUuid: uuid,
 	}
 
 	resp, err := s.client.GetPrivateRecentMessages(ctx, &req)

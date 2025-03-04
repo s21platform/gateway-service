@@ -45,14 +45,17 @@ func (s *Service) CreatePrivateChat(ctx context.Context, uuid string) (*chat.Cre
 	return resp, nil
 }
 
-//func (s *Service) GetRecentMessages(ctx context.Context, uuid string) (*chat.GetRecentMessagesOut, error) {
-//	req := chat.GetRecentMessagesIn{
-//		Uuid: uuid,
-//	}
-//	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
-//	resp, err := s.client.GetRecentMessages(ctx, &req)
-//	if err != nil {
-//		return nil, fmt.Errorf("failed to GetRecentMessages in rpc: %v", err)
-//	}
-//	return resp, nil
-//}
+func (s *Service) GetPrivateRecentMessages(ctx context.Context, uuid string) (*chat.GetPrivateRecentMessagesOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
+	req := chat.GetPrivateRecentMessagesIn{
+		ChatUuid: uuid,
+	}
+
+	resp, err := s.client.GetPrivateRecentMessages(ctx, &req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get private recent messages in rpc: %v", err)
+	}
+
+	return resp, nil
+}

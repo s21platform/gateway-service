@@ -507,6 +507,99 @@ func TestApi_CreatePrivateChat(t *testing.T) {
 	})
 }
 
+func TestApi_GetPrivateRecentMessages(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("should_ok", func(t *testing.T) {
+		mockChatService := NewMockChatService(ctrl)
+		mockLogger.EXPECT().AddFuncName("GetPrivateRecentMessages")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		ctx = context.WithValue(ctx, config.KeyUUID, "test-uuid")
+
+		r := &http.Request{}
+		w := httptest.NewRecorder()
+		r = r.WithContext(ctx)
+
+		expectedMessages := &chatproto.GetPrivateRecentMessagesOut{
+			Messages: []*chatproto.Message{
+				{
+					Uuid:       uuid.New().String(),
+					Content:    "test",
+					SentAt:     time.Now().String(),
+					UpdatedAt:  "",
+					RootUuid:   uuid.New().String(),
+					ParentUuid: uuid.New().String(),
+				},
+				{
+					Uuid:       uuid.New().String(),
+					Content:    "testing",
+					SentAt:     time.Now().String(),
+					UpdatedAt:  time.Now().Add(1 * time.Hour).String(),
+					RootUuid:   "",
+					ParentUuid: "",
+				},
+			},
+		}
+
+		mockChatService.EXPECT().GetPrivateRecentMessages(r).Return(expectedMessages, nil)
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockChatService,
+			nil,
+		)
+
+		s.GetPrivateRecentMessages(w, r)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+	})
+
+	t.Run("should_err_us_fail_response", func(t *testing.T) {
+		mockChatService := NewMockChatService(ctrl)
+		mockLogger.EXPECT().AddFuncName("GetPrivateRecentMessages")
+		mockLogger.EXPECT().Error(gomock.Any())
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		ctx = context.WithValue(ctx, config.KeyUUID, "test-uuid")
+
+		r := &http.Request{}
+		w := httptest.NewRecorder()
+		r = r.WithContext(ctx)
+
+		mockErr := errors.New("some error")
+
+		mockChatService.EXPECT().GetPrivateRecentMessages(r).Return(nil, mockErr)
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockChatService,
+			nil,
+		)
+
+		s.GetPrivateRecentMessages(w, r)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
 func TestHandler_UpdateSociety(t *testing.T) {
 	t.Parallel()
 

@@ -623,6 +623,21 @@ func (mr *MockChatServiceMockRecorder) CreatePrivateChat(r interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePrivateChat", reflect.TypeOf((*MockChatService)(nil).CreatePrivateChat), r)
 }
 
+// GetPrivateRecentMessages mocks base method.
+func (m *MockChatService) GetPrivateRecentMessages(r *http.Request) (*chat_proto.GetPrivateRecentMessagesOut, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPrivateRecentMessages", r)
+	ret0, _ := ret[0].(*chat_proto.GetPrivateRecentMessagesOut)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetPrivateRecentMessages indicates an expected call of GetPrivateRecentMessages.
+func (mr *MockChatServiceMockRecorder) GetPrivateRecentMessages(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPrivateRecentMessages", reflect.TypeOf((*MockChatService)(nil).GetPrivateRecentMessages), r)
+}
+
 // MockAdvertService is a mock of AdvertService interface.
 type MockAdvertService struct {
 	ctrl     *gomock.Controller

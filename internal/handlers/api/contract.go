@@ -68,7 +68,7 @@ type SearchService interface {
 
 type ChatService interface {
 	CreatePrivateChat(r *http.Request) (*chat.CreatePrivateChatOut, error)
-	//GetRecentMessages(r *http.Request) (*chat.GetRecentMessagesOut, error)
+	GetPrivateRecentMessages(r *http.Request) (*chat.GetPrivateRecentMessagesOut, error)
 }
 
 type AdvertService interface {

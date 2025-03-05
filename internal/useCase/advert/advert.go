@@ -30,7 +30,7 @@ func (u *Usecase) GetAdverts(r *http.Request) (*advert.GetAdvertsOut, error) {
 }
 
 func (u *Usecase) CreateAdvert(r *http.Request) (*advert.AdvertEmpty, error) {
-	requestData := model.AdvertRequestData{}
+	requestData := model.CreateAdvertRequestData{}
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read request body: %v", err)
@@ -49,6 +49,30 @@ func (u *Usecase) CreateAdvert(r *http.Request) (*advert.AdvertEmpty, error) {
 	resp, err := u.aC.CreateAdvert(r.Context(), &requestData)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create advert in usecase: %v", err)
+	}
+	return resp, nil
+}
+
+func (u *Usecase) CancelAdvert(r *http.Request) (*advert.AdvertEmpty, error) {
+	requestData := model.CancelAdvertRequestData{}
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read request body: %v", err)
+	}
+	defer r.Body.Close()
+
+	if len(body) == 0 {
+		return nil, fmt.Errorf("request body is empty")
+	}
+
+	err = json.Unmarshal(body, &requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %v", err)
+	}
+
+	resp, err := u.aC.CancelAdvert(r.Context(), &requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to cancel advert in usecase: %v", err)
 	}
 	return resp, nil
 }

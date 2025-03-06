@@ -669,6 +669,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		//apiRouter.Get("/society/list", handler.GetSocietiesForUser)
 		apiRouter.Get("/advert", handler.GetAdverts)
 		apiRouter.Post("/advert", handler.CreateAdvert)
-		apiRouter.Put("/advert", handler.CancelAdvert)
+		apiRouter.Put("/advert/cancel", handler.CancelAdvert)
 	})
 }

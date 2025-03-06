@@ -6,7 +6,8 @@ import (
 	"net/http"
 
 	advert "github.com/s21platform/advert-proto/advert-proto"
-	model "github.com/s21platform/gateway-service/internal/model"
+
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Usecase struct {

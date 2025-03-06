@@ -435,6 +435,93 @@ func TestApi_CreateAdvert(t *testing.T) {
 	})
 }
 
+func TestApi_GetChats(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("should_ok", func(t *testing.T) {
+		mockChatService := NewMockChatService(ctrl)
+		mockLogger.EXPECT().AddFuncName("GetChats")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		r := &http.Request{}
+		w := httptest.NewRecorder()
+		r = r.WithContext(ctx)
+
+		expected := &chatproto.GetChatsOut{
+			Chats: []*chatproto.Chat{
+				{
+					LastMessage:          "last message",
+					ChatName:             "name",
+					AvatarUrl:            "url",
+					LastMessageTimestamp: "23.01.25",
+					ChatUuid:             "test-uuid",
+				},
+				{
+					LastMessage:          "second last message",
+					ChatName:             "other name",
+					AvatarUrl:            "url_2",
+					LastMessageTimestamp: "03.05.25",
+					ChatUuid:             "test-uuid-2",
+				},
+			},
+		}
+
+		mockChatService.EXPECT().GetChats(r).Return(expected, nil)
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockChatService,
+			nil,
+		)
+
+		s.GetChats(w, r)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+	})
+
+	t.Run("should_err_us_fail_response", func(t *testing.T) {
+		mockChatService := NewMockChatService(ctrl)
+		mockLogger.EXPECT().AddFuncName("GetChats")
+		mockLogger.EXPECT().Error(gomock.Any())
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		r := &http.Request{}
+		w := httptest.NewRecorder()
+		r = r.WithContext(ctx)
+
+		mockErr := errors.New("some error")
+
+		mockChatService.EXPECT().GetChats(r).Return(nil, mockErr)
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockChatService,
+			nil,
+		)
+
+		s.GetChats(w, r)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
 func TestApi_CreatePrivateChat(t *testing.T) {
 	t.Parallel()
 

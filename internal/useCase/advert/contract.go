@@ -11,4 +11,5 @@ import (
 type AdvertClient interface {
 	GetAdverts(ctx context.Context, uuid string) (*advert.GetAdvertsOut, error)
 	CreateAdvert(ctx context.Context, req *model.AdvertRequestData) (*advert.AdvertEmpty, error)
+	RestoreAdvert(ctx context.Context, req *model.RestoreAdvertRequestData) (*advert.AdvertEmpty, error)
 }

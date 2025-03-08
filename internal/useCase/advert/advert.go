@@ -7,7 +7,8 @@ import (
 	"net/http"
 
 	advert "github.com/s21platform/advert-proto/advert-proto"
-	model "github.com/s21platform/gateway-service/internal/model"
+
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Usecase struct {
@@ -50,5 +51,22 @@ func (u *Usecase) CreateAdvert(r *http.Request) (*advert.AdvertEmpty, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to create advert in usecase: %v", err)
 	}
+	return resp, nil
+}
+
+func (u *Usecase) RestoreAdvert(r *http.Request) (*advert.AdvertEmpty, error) {
+	requestData := model.RestoreAdvertRequestData{}
+
+	err := json.NewDecoder(r.Body).Decode(&requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %v", err)
+	}
+	defer r.Body.Close()
+
+	resp, err := u.aC.RestoreAdvert(r.Context(), &requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to restore advert in usecase: %v", err)
+	}
+
 	return resp, nil
 }

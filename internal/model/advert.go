@@ -12,3 +12,7 @@ type AdvertRequestData struct {
 type UserFilter struct {
 	Os []int64 `json:"os,omitempty"`
 }
+
+type RestoreAdvertRequestData struct {
+	AdvertId int64 `json:"id"`
+}

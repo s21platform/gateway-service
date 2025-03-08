@@ -659,3 +659,73 @@ func TestHandler_UpdateSociety(t *testing.T) {
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})
 }
+
+func TestApi_RestoreAdvert(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("should_restore_advert_successfully", func(t *testing.T) {
+		mockAdvertService := NewMockAdvertService(ctrl)
+		mockLogger.EXPECT().AddFuncName("RestoreAdvert")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		r := &http.Request{}
+		w := httptest.NewRecorder()
+		r = r.WithContext(ctx)
+
+		expected := &advertproto.AdvertEmpty{}
+
+		mockAdvertService.EXPECT().RestoreAdvert(r).Return(expected, nil)
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockAdvertService,
+		)
+
+		s.RestoreAdvert(w, r)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+	})
+
+	t.Run("should_return_internal_server_error_if_RestoreAdvert_fails", func(t *testing.T) {
+		mockAdvertService := NewMockAdvertService(ctrl)
+		mockLogger.EXPECT().AddFuncName("RestoreAdvert")
+		mockLogger.EXPECT().Error(gomock.Any())
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		r := &http.Request{}
+		w := httptest.NewRecorder()
+		r = r.WithContext(ctx)
+
+		mockErr := errors.New("some error")
+
+		mockAdvertService.EXPECT().RestoreAdvert(r).Return(nil, mockErr)
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockAdvertService,
+		)
+
+		s.RestoreAdvert(w, r)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}

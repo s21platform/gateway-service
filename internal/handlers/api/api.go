@@ -618,7 +618,7 @@ func (h *Handler) RestoreAdvert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jsn, err := json.Marshal(result)
+	jsn, err := json.Marshal(&result)
 	if err != nil {
 		logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)

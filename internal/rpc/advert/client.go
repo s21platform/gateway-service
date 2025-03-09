@@ -41,7 +41,7 @@ func (s *Service) GetAdverts(ctx context.Context, uuid string) (*advertproto.Get
 	return resp, nil
 }
 
-func (s *Service) CreateAdvert(ctx context.Context, req *model.AdvertRequestData) (*advertproto.AdvertEmpty, error) {
+func (s *Service) CreateAdvert(ctx context.Context, req *model.CreateAdvertRequestData) (*advertproto.AdvertEmpty, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	request := &advertproto.CreateAdvertIn{
 		Text: req.TextContent,
@@ -54,6 +54,20 @@ func (s *Service) CreateAdvert(ctx context.Context, req *model.AdvertRequestData
 	resp, err := s.client.CreateAdvert(ctx, request)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create advert in grpc: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (s *Service) CancelAdvert(ctx context.Context, req *model.CancelAdvertRequestData) (*advertproto.AdvertEmpty, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	request := &advertproto.CancelAdvertIn{
+		Id: req.AdvertId,
+	}
+
+	resp, err := s.client.CancelAdvert(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to cancel advert in grpc: %w", err)
 	}
 
 	return resp, nil

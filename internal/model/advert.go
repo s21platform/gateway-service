@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type AdvertRequestData struct {
+type CreateAdvertRequestData struct {
 	OwnerUUID   string     `json:"uuid"`
 	TextContent string     `json:"text"`
 	UserFilter  UserFilter `json:"user"`
@@ -11,4 +11,8 @@ type AdvertRequestData struct {
 
 type UserFilter struct {
 	Os []int64 `json:"os,omitempty"`
+}
+
+type CancelAdvertRequestData struct {
+	AdvertId int64 `json:"id"`
 }

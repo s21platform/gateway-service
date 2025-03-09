@@ -661,6 +661,21 @@ func (m *MockAdvertService) EXPECT() *MockAdvertServiceMockRecorder {
 	return m.recorder
 }
 
+// CancelAdvert mocks base method.
+func (m *MockAdvertService) CancelAdvert(r *http.Request) (*advert_proto.AdvertEmpty, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CancelAdvert", r)
+	ret0, _ := ret[0].(*advert_proto.AdvertEmpty)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CancelAdvert indicates an expected call of CancelAdvert.
+func (mr *MockAdvertServiceMockRecorder) CancelAdvert(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CancelAdvert", reflect.TypeOf((*MockAdvertService)(nil).CancelAdvert), r)
+}
+
 // CreateAdvert mocks base method.
 func (m *MockAdvertService) CreateAdvert(r *http.Request) (*advert_proto.AdvertEmpty, error) {
 	m.ctrl.T.Helper()

@@ -60,3 +60,20 @@ func (u *Usecase) CancelAdvert(r *http.Request) (*advert.AdvertEmpty, error) {
 	}
 	return resp, nil
 }
+
+func (u *Usecase) RestoreAdvert(r *http.Request) (*advert.AdvertEmpty, error) {
+	requestData := model.RestoreAdvertRequestData{}
+
+	err := json.NewDecoder(r.Body).Decode(&requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %v", err)
+	}
+	defer r.Body.Close()
+
+	resp, err := u.aC.RestoreAdvert(r.Context(), &requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to restore advert in usecase: %v", err)
+	}
+
+	return resp, nil
+}

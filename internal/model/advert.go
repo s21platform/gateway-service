@@ -16,3 +16,7 @@ type UserFilter struct {
 type CancelAdvertRequestData struct {
 	AdvertId int64 `json:"id"`
 }
+
+type RestoreAdvertRequestData struct {
+	AdvertId int64 `json:"id"`
+}

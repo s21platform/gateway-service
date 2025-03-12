@@ -72,3 +72,17 @@ func (s *Service) CancelAdvert(ctx context.Context, req *model.CancelAdvertReque
 
 	return resp, nil
 }
+
+func (s *Service) RestoreAdvert(ctx context.Context, req *model.RestoreAdvertRequestData) (*advertproto.AdvertEmpty, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	request := &advertproto.RestoreAdvertIn{
+		Id: req.AdvertId,
+	}
+
+	resp, err := s.client.RestoreAdvert(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to restore advert in grpc: %w", err)
+	}
+
+	return resp, nil
+}

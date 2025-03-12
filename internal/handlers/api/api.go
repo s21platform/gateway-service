@@ -630,6 +630,29 @@ func (h *Handler) CancelAdvert(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) RestoreAdvert(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("RestoreAdvert")
+
+	result, err := h.adS.RestoreAdvert(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to restore advert: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(&result)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(func(next http.Handler) http.Handler {
@@ -670,5 +693,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Get("/advert", handler.GetAdverts)
 		apiRouter.Post("/advert", handler.CreateAdvert)
 		apiRouter.Put("/advert/cancel", handler.CancelAdvert)
+		apiRouter.Patch("/advert/restore", handler.RestoreAdvert)
 	})
 }

@@ -5,17 +5,21 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/s21platform/gateway-service/internal/model"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
+	optionhubv1 "github.com/s21platform/optionhub-proto/optionhub/v1"
 
 	"github.com/s21platform/gateway-service/internal/config"
 )
 
 type Service struct {
-	client optionhub.OptionhubServiceClient
+	client   optionhub.OptionhubServiceClient
+	clientV1 optionhubv1.OptionhubServiceV1Client
 }
 
 func New(cfg *config.Config) *Service {
@@ -27,8 +31,9 @@ func New(cfg *config.Config) *Service {
 	}
 
 	client := optionhub.NewOptionhubServiceClient(conn)
+	clientV1 := optionhubv1.NewOptionhubServiceV1Client(conn)
 
-	return &Service{client: client}
+	return &Service{client: client, clientV1: clientV1}
 }
 
 func (s *Service) GetOsBySearchName(ctx context.Context, searchName *optionhub.GetByNameIn) (*optionhub.GetByNameOut, error) {
@@ -106,4 +111,17 @@ func (s *Service) GetSocietyDirectionBySearchName(ctx context.Context, searchNam
 	}
 
 	return resp, nil
+}
+
+func (s *Service) GetOptionRequests(ctx context.Context) (model.OptionRequestsList, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
+	response := model.OptionRequestsList{}
+	resp, err := s.clientV1.GetOptionRequests(ctx, nil)
+	if err != nil {
+		return model.OptionRequestsList{}, nil
+	}
+	response.FromDTO(resp)
+
+	return response, nil
 }

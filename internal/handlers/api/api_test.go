@@ -23,6 +23,7 @@ import (
 	userproto "github.com/s21platform/user-proto/user-proto"
 
 	"github.com/s21platform/gateway-service/internal/config"
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 func TestApi_GetProfile(t *testing.T) {
@@ -795,6 +796,100 @@ func TestApi_RestoreAdvert(t *testing.T) {
 		)
 
 		s.RestoreAdvert(w, r)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
+func TestHandler_GetOptionRequests(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("should_get_option_requests_successfully", func(t *testing.T) {
+		mockOptionService := NewMockOptionService(ctrl)
+
+		req := httptest.NewRequest(http.MethodGet, "/api/option_requests", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		expectedResult := model.OptionRequestsList{
+			{
+				ID:             1,
+				AttributeID:    2,
+				AttributeValue: "city",
+				Value:          "Москва",
+				UserUuid:       uuid.New().String(),
+				CreatedAt:      time.Now(),
+			},
+		}
+
+		mockLogger.EXPECT().AddFuncName("GetOptionRequests")
+		mockOptionService.EXPECT().GetOptionRequests(req).Return(expectedResult, nil)
+
+		w := httptest.NewRecorder()
+
+		h := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			mockOptionService,
+			nil,
+			nil,
+			nil,
+			nil,
+		)
+
+		h.GetOptionRequests(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
+
+		var responseBody model.OptionRequestsList
+		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
+		assert.NoError(t, err)
+		assert.Equal(t, len(expectedResult), len(responseBody))
+		assert.Equal(t, expectedResult[0].AttributeValue, responseBody[0].AttributeValue)
+		assert.Equal(t, expectedResult[0].Value, responseBody[0].Value)
+		assert.Equal(t, expectedResult[0].UserUuid, responseBody[0].UserUuid)
+	})
+
+	t.Run("should_return_internal_server_error_if_GetOptionRequests_fails", func(t *testing.T) {
+		mockOptionService := NewMockOptionService(ctrl)
+
+		req := httptest.NewRequest(http.MethodGet, "/api/option_requests", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		expectedError := errors.New("database error")
+		mockLogger.EXPECT().AddFuncName("GetOptionRequests")
+		mockLogger.EXPECT().Error("failed to get option requests: database error")
+		mockOptionService.EXPECT().GetOptionRequests(req).Return(nil, expectedError)
+
+		w := httptest.NewRecorder()
+
+		h := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			mockOptionService,
+			nil,
+			nil,
+			nil,
+			nil,
+		)
+
+		h.GetOptionRequests(w, req)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})

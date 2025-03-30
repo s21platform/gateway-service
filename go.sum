@@ -57,6 +57,8 @@ github.com/s21platform/notification-proto v0.0.2 h1:BKw6BdpXTt+1TKpUIIHrYpcQ/AAT
 github.com/s21platform/notification-proto v0.0.2/go.mod h1:4K7d3RmGB4tYHkvZ6sU0UePgnBMo5ARq52lzJitp5as=
 github.com/s21platform/optionhub-proto v1.0.6 h1:PSZvk4keCZy2CWIawBYVeMS9w60Ds/QVZOHDVuyMI3Q=
 github.com/s21platform/optionhub-proto v1.0.6/go.mod h1:XcEajWv9RbE5INy10s4QWpXTXcoa4FWrN80oeKffYew=
+github.com/s21platform/optionhub-proto v1.0.13 h1:EsV0LwFn63H+oxYAsyjrnq5KBy07j3ZFtpGSIWSSTUQ=
+github.com/s21platform/optionhub-proto v1.0.13/go.mod h1:drAGej/ZykdMnAOs4xljgKo6KZrNCZzrCslQ6noBqhM=
 github.com/s21platform/search-proto v0.0.10 h1:BbYUDgVaGbWuvxdQefg9exiN06xdMhXROPBkdioKJ/Q=
 github.com/s21platform/search-proto v0.0.10/go.mod h1:mL1Jf2eqvWHPCefKdb/cjoXRI2Wg6hbHRLNeyw14SGk=
 github.com/s21platform/society-proto v0.0.21 h1:fACND/s0z33Y0EhNTm7Slzmd4i1/WZptgIB+bucV/Yc=

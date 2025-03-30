@@ -53,6 +53,7 @@ type OptionService interface {
 	GetSkillList(r *http.Request) (*optionhub.GetByNameOut, error)
 	GetCityList(r *http.Request) (*optionhub.GetByNameOut, error)
 	GetSocietyDirectionList(r *http.Request) (*optionhub.GetByNameOut, error)
+	GetOptionRequests(r *http.Request) (model.OptionRequestsList, error)
 }
 
 type SocietyService interface {

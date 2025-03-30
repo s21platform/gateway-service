@@ -24,10 +24,12 @@ type OptionRequest struct {
 	CreatedAt      time.Time `json:"created_at"`
 }
 
-type OptionRequestsList []OptionRequest
+type OptionRequestsList struct {
+	Items []OptionRequest `json:"option_requests_list"`
+}
 
 func (o *OptionRequestsList) FromDTO(obj *v1.GetOptionRequestsOut) {
-	tmp := OptionRequestsList{}
+	tmp := []OptionRequest{}
 	for _, or := range obj.OptionRequestItem {
 		tmp = append(tmp, OptionRequest{
 			ID:             or.OptionRequestId,
@@ -38,5 +40,5 @@ func (o *OptionRequestsList) FromDTO(obj *v1.GetOptionRequestsOut) {
 			CreatedAt:      or.CreatedAt.AsTime(),
 		})
 	}
-	*o = tmp
+	o.Items = tmp
 }

@@ -820,13 +820,15 @@ func TestHandler_GetOptionRequests(t *testing.T) {
 		req = req.WithContext(ctx)
 
 		expectedResult := model.OptionRequestsList{
-			{
-				ID:             1,
-				AttributeID:    2,
-				AttributeValue: "city",
-				Value:          "Москва",
-				UserUuid:       uuid.New().String(),
-				CreatedAt:      time.Now(),
+			Items: []model.OptionRequest{
+				{
+					ID:             1,
+					AttributeID:    2,
+					AttributeValue: "city",
+					Value:          "Москва",
+					UserUuid:       uuid.New().String(),
+					CreatedAt:      time.Now(),
+				},
 			},
 		}
 
@@ -855,10 +857,10 @@ func TestHandler_GetOptionRequests(t *testing.T) {
 		var responseBody model.OptionRequestsList
 		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
 		assert.NoError(t, err)
-		assert.Equal(t, len(expectedResult), len(responseBody))
-		assert.Equal(t, expectedResult[0].AttributeValue, responseBody[0].AttributeValue)
-		assert.Equal(t, expectedResult[0].Value, responseBody[0].Value)
-		assert.Equal(t, expectedResult[0].UserUuid, responseBody[0].UserUuid)
+		assert.Equal(t, len(expectedResult.Items), len(responseBody.Items))
+		assert.Equal(t, expectedResult.Items[0].AttributeValue, responseBody.Items[0].AttributeValue)
+		assert.Equal(t, expectedResult.Items[0].Value, responseBody.Items[0].Value)
+		assert.Equal(t, expectedResult.Items[0].UserUuid, responseBody.Items[0].UserUuid)
 	})
 
 	t.Run("should_return_internal_server_error_if_GetOptionRequests_fails", func(t *testing.T) {
@@ -873,7 +875,7 @@ func TestHandler_GetOptionRequests(t *testing.T) {
 		expectedError := errors.New("database error")
 		mockLogger.EXPECT().AddFuncName("GetOptionRequests")
 		mockLogger.EXPECT().Error("failed to get option requests: database error")
-		mockOptionService.EXPECT().GetOptionRequests(req).Return(nil, expectedError)
+		mockOptionService.EXPECT().GetOptionRequests(req).Return(model.OptionRequestsList{}, expectedError)
 
 		w := httptest.NewRecorder()
 

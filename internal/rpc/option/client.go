@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/s21platform/gateway-service/internal/model"
-
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
@@ -15,6 +13,7 @@ import (
 	optionhubv1 "github.com/s21platform/optionhub-proto/optionhub/v1"
 
 	"github.com/s21platform/gateway-service/internal/config"
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Service struct {
@@ -119,7 +118,7 @@ func (s *Service) GetOptionRequests(ctx context.Context) (model.OptionRequestsLi
 	response := model.OptionRequestsList{}
 	resp, err := s.clientV1.GetOptionRequests(ctx, nil)
 	if err != nil {
-		return model.OptionRequestsList{}, nil
+		return model.OptionRequestsList{}, fmt.Errorf("failed to get option requests in grpc: %w", err)
 	}
 	response.FromDTO(resp)
 

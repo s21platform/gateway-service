@@ -390,6 +390,21 @@ func (mr *MockOptionServiceMockRecorder) GetHobbyList(r interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetHobbyList", reflect.TypeOf((*MockOptionService)(nil).GetHobbyList), r)
 }
 
+// GetOptionRequests mocks base method.
+func (m *MockOptionService) GetOptionRequests(r *http.Request) (model.OptionRequestsList, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetOptionRequests", r)
+	ret0, _ := ret[0].(model.OptionRequestsList)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetOptionRequests indicates an expected call of GetOptionRequests.
+func (mr *MockOptionServiceMockRecorder) GetOptionRequests(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOptionRequests", reflect.TypeOf((*MockOptionService)(nil).GetOptionRequests), r)
+}
+
 // GetOsList mocks base method.
 func (m *MockOptionService) GetOsList(r *http.Request) (*model.OptionsStruct, error) {
 	m.ctrl.T.Helper()

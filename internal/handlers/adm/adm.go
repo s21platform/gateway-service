@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	api "github.com/s21platform/staff-service/pkg/staff/v0"
@@ -61,13 +62,69 @@ func (h *Handler) CreateStaff(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func AttachAdmRoutes(r chi.Router, handler *Handler) {
-	r.Route("/adm", func(apiRouter chi.Router) {
-		apiRouter.Use(func(next http.Handler) http.Handler {
-			return CheckJWT(next)
-		})
+func (h *Handler) ListStaff(w http.ResponseWriter, r *http.Request) {
+	req := &api.ListStaffRequest{
+		Page:     1,  // значение по умолчанию
+		PageSize: 10, // значение по умолчанию
+	}
 
-		apiRouter.Post("/auth/login", handler.StaffLogin)
-		apiRouter.Post("/staff", handler.CreateStaff)
+	// Обработка page
+	if page := r.URL.Query().Get("page"); page != "" {
+		pageInt, err := strconv.ParseInt(page, 10, 32)
+		if err != nil {
+			http.Error(w, "invalid page parameter", http.StatusBadRequest)
+			return
+		}
+		req.Page = int32(pageInt)
+	}
+
+	// Обработка page_size
+	if pageSize := r.URL.Query().Get("page_size"); pageSize != "" {
+		pageSizeInt, err := strconv.ParseInt(pageSize, 10, 32)
+		if err != nil {
+			http.Error(w, "invalid page_size parameter", http.StatusBadRequest)
+			return
+		}
+		req.PageSize = int32(pageSizeInt)
+	}
+
+	// Обработка search_term
+	if searchTerm := r.URL.Query().Get("search_term"); searchTerm != "" {
+		req.SearchTerm = &searchTerm
+	}
+
+	// Обработка role_id
+	if roleID := r.URL.Query().Get("role_id"); roleID != "" {
+		roleIDInt, err := strconv.ParseInt(roleID, 10, 32)
+		if err != nil {
+			http.Error(w, "invalid role_id parameter", http.StatusBadRequest)
+			return
+		}
+		roleIDInt32 := int32(roleIDInt)
+		req.RoleId = &roleIDInt32
+	}
+
+	staffList, err := h.sC.ListStaff(r.Context(), req)
+	if err != nil {
+		http.Error(w, "failed to list staff", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(staffList); err != nil {
+		http.Error(w, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
+}
+
+func AttachAdmRoutes(r chi.Router, handler *Handler) {
+	r.Route("/adm", func(r chi.Router) {
+		r.Route("/auth", func(r chi.Router) {
+			r.Post("/login", handler.StaffLogin)
+		})
+		r.With(CheckJWT).Route("/staff", func(r chi.Router) {
+			r.Post("/", handler.CreateStaff)
+			r.Get("/list", handler.ListStaff)
+		})
 	})
 }

@@ -282,25 +282,177 @@ func TestHandler_CreateStaff(t *testing.T) {
 	}
 }
 
-func TestAttachAdmRoutes(t *testing.T) {
+func TestHandler_ListStaff(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockClient := NewMockStaffClient(ctrl)
-	handler := New(mockClient)
+	searchTerm := "test"
+	roleID := int32(1)
 
-	r := chi.NewRouter()
-	AttachAdmRoutes(r, handler)
+	tests := []struct {
+		name           string
+		setupRequest   func(*http.Request)
+		setupMock      func(mock *MockStaffClient)
+		expectedStatus int
+		expectedBody   string
+	}{
+		{
+			name: "successful_list_without_params",
+			setupRequest: func(r *http.Request) {
+				// Не добавляем query-параметры
+			},
+			setupMock: func(mock *MockStaffClient) {
+				response := &api.ListStaffResponse{
+					Staff: []*api.Staff{
+						{
+							Id:        "staff-1",
+							Login:     "staff1@example.com",
+							RoleId:    1,
+							RoleName:  "admin",
+							CreatedAt: 1743524411,
+							UpdatedAt: 1743524411,
+						},
+					},
+				}
+				mock.EXPECT().
+					ListStaff(gomock.Any(), &api.ListStaffRequest{
+						Page:     1,
+						PageSize: 10,
+					}).
+					Return(response, nil)
+			},
+			expectedStatus: http.StatusOK,
+			expectedBody: `{"staff":[{"id":"staff-1","login":"staff1@example.com",` +
+				`"role_id":1,"role_name":"admin","created_at":1743524411,"updated_at":1743524411}]}`,
+		},
+		{
+			name: "successful_list_with_all_params",
+			setupRequest: func(r *http.Request) {
+				q := r.URL.Query()
+				q.Set("page", "2")
+				q.Set("page_size", "20")
+				q.Set("search_term", searchTerm)
+				q.Set("role_id", "1")
+				r.URL.RawQuery = q.Encode()
+			},
+			setupMock: func(mock *MockStaffClient) {
+				response := &api.ListStaffResponse{
+					Staff: []*api.Staff{
+						{
+							Id:        "staff-2",
+							Login:     "staff2@example.com",
+							RoleId:    1,
+							RoleName:  "admin",
+							CreatedAt: 1743524412,
+							UpdatedAt: 1743524412,
+						},
+					},
+				}
+				mock.EXPECT().
+					ListStaff(gomock.Any(), &api.ListStaffRequest{
+						Page:       2,
+						PageSize:   20,
+						SearchTerm: &searchTerm,
+						RoleId:     &roleID,
+					}).
+					Return(response, nil)
+			},
+			expectedStatus: http.StatusOK,
+			expectedBody: `{"staff":[{"id":"staff-2","login":"staff2@example.com",` +
+				`"role_id":1,"role_name":"admin","created_at":1743524412,"updated_at":1743524412}]}`,
+		},
+		{
+			name: "invalid_page_parameter",
+			setupRequest: func(r *http.Request) {
+				q := r.URL.Query()
+				q.Set("page", "invalid")
+				r.URL.RawQuery = q.Encode()
+			},
+			setupMock: func(mock *MockStaffClient) {
+				// Мок не нужен, так как ошибка произойдет при парсинге параметра
+			},
+			expectedStatus: http.StatusBadRequest,
+			expectedBody:   "invalid page parameter\n",
+		},
+		{
+			name: "invalid_page_size_parameter",
+			setupRequest: func(r *http.Request) {
+				q := r.URL.Query()
+				q.Set("page_size", "invalid")
+				r.URL.RawQuery = q.Encode()
+			},
+			setupMock: func(mock *MockStaffClient) {
+				// Мок не нужен, так как ошибка произойдет при парсинге параметра
+			},
+			expectedStatus: http.StatusBadRequest,
+			expectedBody:   "invalid page_size parameter\n",
+		},
+		{
+			name: "invalid_role_id_parameter",
+			setupRequest: func(r *http.Request) {
+				q := r.URL.Query()
+				q.Set("role_id", "invalid")
+				r.URL.RawQuery = q.Encode()
+			},
+			setupMock: func(mock *MockStaffClient) {
+				// Мок не нужен, так как ошибка произойдет при парсинге параметра
+			},
+			expectedStatus: http.StatusBadRequest,
+			expectedBody:   "invalid role_id parameter\n",
+		},
+		{
+			name: "list_staff_error",
+			setupRequest: func(r *http.Request) {
+				// Не добавляем query-параметры
+			},
+			setupMock: func(mock *MockStaffClient) {
+				mock.EXPECT().
+					ListStaff(gomock.Any(), gomock.Any()).
+					Return(nil, errors.New("service error"))
+			},
+			expectedStatus: http.StatusInternalServerError,
+			expectedBody:   "failed to list staff\n",
+		},
+	}
 
-	// Проверяем, что маршрут /adm/auth/login существует и использует правильный метод
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			mockClient := NewMockStaffClient(ctrl)
+			tt.setupMock(mockClient)
+
+			handler := New(mockClient)
+
+			req := httptest.NewRequest(http.MethodGet, "/adm/staff/list", nil)
+			tt.setupRequest(req)
+			rec := httptest.NewRecorder()
+
+			handler.ListStaff(rec, req)
+
+			assert.Equal(t, tt.expectedStatus, rec.Code)
+			if tt.expectedStatus == http.StatusOK {
+				assert.JSONEq(t, tt.expectedBody, rec.Body.String())
+			} else {
+				assert.Equal(t, tt.expectedBody, rec.Body.String())
+			}
+		})
+	}
+}
+
+func TestAttachAdmRoutes(t *testing.T) {
+	t.Parallel()
+
 	routes := []struct {
 		method string
 		path   string
 	}{
 		{http.MethodPost, "/adm/auth/login"},
 		{http.MethodPost, "/adm/staff"},
+		{http.MethodGet, "/adm/staff/list"},
 	}
 
 	for _, route := range routes {
@@ -308,18 +460,20 @@ func TestAttachAdmRoutes(t *testing.T) {
 		t.Run(route.path, func(t *testing.T) {
 			t.Parallel()
 
-			// Создаем тестовый запрос
+			handler := New(NewMockStaffClient(gomock.NewController(t)))
+			router := chi.NewRouter()
+			AttachAdmRoutes(router, handler)
+
 			req := httptest.NewRequest(route.method, route.path, nil)
 			rec := httptest.NewRecorder()
 
-			// Выполняем запрос через роутер
-			r.ServeHTTP(rec, req)
+			router.ServeHTTP(rec, req)
 
 			// Проверяем, что маршрут существует (не возвращает 404)
 			// Для /adm/auth/login ожидаем 400 Bad Request
-			// Для /adm/staff ожидаем 401 Unauthorized из-за middleware CheckJWT
+			// Для /adm/staff и /adm/staff/list ожидаем 401 Unauthorized из-за middleware CheckJWT
 			expectedStatus := http.StatusBadRequest
-			if route.path == "/adm/staff" {
+			if route.path == "/adm/staff" || route.path == "/adm/staff/list" {
 				expectedStatus = http.StatusUnauthorized
 			}
 			assert.Equal(t, expectedStatus, rec.Code)

@@ -38,3 +38,13 @@ func (c *Client) CreateStaff(ctx context.Context, in *api.CreateStaffRequest) (*
 	}
 	return resp.GetStaff(), nil
 }
+
+func (c *Client) ListStaff(ctx context.Context, in *api.ListStaffRequest) (*api.ListStaffResponse, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("authorization", ctx.Value(config.KeyStaffUUID).(string)))
+	resp, err := c.client.ListStaff(ctx, in)
+	if err != nil {
+		log.Printf("failed to list staff: %v", err)
+		return nil, err
+	}
+	return resp, nil
+}

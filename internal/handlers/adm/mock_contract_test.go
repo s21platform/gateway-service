@@ -35,6 +35,21 @@ func (m *MockStaffClient) EXPECT() *MockStaffClientMockRecorder {
 	return m.recorder
 }
 
+// CreateStaff mocks base method.
+func (m *MockStaffClient) CreateStaff(ctx context.Context, in *api.CreateStaffRequest) (*api.Staff, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateStaff", ctx, in)
+	ret0, _ := ret[0].(*api.Staff)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateStaff indicates an expected call of CreateStaff.
+func (mr *MockStaffClientMockRecorder) CreateStaff(ctx, in interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateStaff", reflect.TypeOf((*MockStaffClient)(nil).CreateStaff), ctx, in)
+}
+
 // StaffLogin mocks base method.
 func (m *MockStaffClient) StaffLogin(ctx context.Context, in *api.LoginRequest) (*api.LoginResponse, error) {
 	m.ctrl.T.Helper()

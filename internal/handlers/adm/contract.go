@@ -9,4 +9,5 @@ import (
 
 type StaffClient interface {
 	StaffLogin(ctx context.Context, in *api.LoginRequest) (*api.LoginResponse, error)
+	CreateStaff(ctx context.Context, in *api.CreateStaffRequest) (*api.Staff, error)
 }

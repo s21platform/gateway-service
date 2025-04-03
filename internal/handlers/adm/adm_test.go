@@ -185,6 +185,103 @@ func TestCheckJWT(t *testing.T) {
 	}
 }
 
+func TestHandler_CreateStaff(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	tests := []struct {
+		name           string
+		requestBody    interface{}
+		setupMock      func(mock *MockStaffClient)
+		expectedStatus int
+		expectedBody   string
+	}{
+		{
+			name: "successful_create",
+			requestBody: api.CreateStaffRequest{
+				Login:    "new@example.com",
+				Password: "newpassword123",
+				RoleId:   1,
+			},
+			setupMock: func(mock *MockStaffClient) {
+				response := &api.Staff{
+					Id:        "new-id",
+					Login:     "new@example.com",
+					RoleId:    1,
+					RoleName:  "admin",
+					CreatedAt: 1743524411,
+					UpdatedAt: 1743524411,
+				}
+				mock.EXPECT().
+					CreateStaff(gomock.Any(), gomock.Any()).
+					Return(response, nil)
+			},
+			expectedStatus: http.StatusOK,
+			expectedBody: `{"id":"new-id","login":"new@example.com",` +
+				`"role_id":1,"role_name":"admin","created_at":1743524411,"updated_at":1743524411}`,
+		},
+		{
+			name:        "invalid_request_body",
+			requestBody: "invalid json",
+			setupMock: func(mock *MockStaffClient) {
+				// Мок не нужен, так как ошибка произойдет при декодировании
+			},
+			expectedStatus: http.StatusBadRequest,
+			expectedBody:   "failed to decode request body\n",
+		},
+		{
+			name: "create_staff_error",
+			requestBody: api.CreateStaffRequest{
+				Login:    "new@example.com",
+				Password: "newpassword123",
+				RoleId:   1,
+			},
+			setupMock: func(mock *MockStaffClient) {
+				mock.EXPECT().
+					CreateStaff(gomock.Any(), gomock.Any()).
+					Return(nil, errors.New("service error"))
+			},
+			expectedStatus: http.StatusInternalServerError,
+			expectedBody:   "failed to create staff\n",
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			mockClient := NewMockStaffClient(ctrl)
+			tt.setupMock(mockClient)
+
+			handler := New(mockClient)
+
+			var body []byte
+			var err error
+			if str, ok := tt.requestBody.(string); ok {
+				body = []byte(str)
+			} else {
+				body, err = json.Marshal(tt.requestBody)
+				require.NoError(t, err)
+			}
+
+			req := httptest.NewRequest(http.MethodPost, "/adm/staff", bytes.NewReader(body))
+			rec := httptest.NewRecorder()
+
+			handler.CreateStaff(rec, req)
+
+			assert.Equal(t, tt.expectedStatus, rec.Code)
+			if tt.expectedStatus == http.StatusOK {
+				assert.JSONEq(t, tt.expectedBody, rec.Body.String())
+			} else {
+				assert.Equal(t, tt.expectedBody, rec.Body.String())
+			}
+		})
+	}
+}
+
 func TestAttachAdmRoutes(t *testing.T) {
 	t.Parallel()
 
@@ -203,6 +300,7 @@ func TestAttachAdmRoutes(t *testing.T) {
 		path   string
 	}{
 		{http.MethodPost, "/adm/auth/login"},
+		{http.MethodPost, "/adm/staff"},
 	}
 
 	for _, route := range routes {
@@ -218,8 +316,13 @@ func TestAttachAdmRoutes(t *testing.T) {
 			r.ServeHTTP(rec, req)
 
 			// Проверяем, что маршрут существует (не возвращает 404)
-			// Мы ожидаем 400 Bad Request из-за middleware CheckJWT
-			assert.Equal(t, http.StatusBadRequest, rec.Code)
+			// Для /adm/auth/login ожидаем 400 Bad Request
+			// Для /adm/staff ожидаем 401 Unauthorized из-за middleware CheckJWT
+			expectedStatus := http.StatusBadRequest
+			if route.path == "/adm/staff" {
+				expectedStatus = http.StatusUnauthorized
+			}
+			assert.Equal(t, expectedStatus, rec.Code)
 		})
 	}
 }

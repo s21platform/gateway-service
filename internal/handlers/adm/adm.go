@@ -41,6 +41,26 @@ func (h *Handler) StaffLogin(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) CreateStaff(w http.ResponseWriter, r *http.Request) {
+	var req api.CreateStaffRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "failed to decode request body", http.StatusBadRequest)
+		return
+	}
+
+	staff, err := h.sC.CreateStaff(r.Context(), &req)
+	if err != nil {
+		http.Error(w, "failed to create staff", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(staff); err != nil {
+		http.Error(w, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
+}
+
 func AttachAdmRoutes(r chi.Router, handler *Handler) {
 	r.Route("/adm", func(apiRouter chi.Router) {
 		apiRouter.Use(func(next http.Handler) http.Handler {
@@ -48,5 +68,6 @@ func AttachAdmRoutes(r chi.Router, handler *Handler) {
 		})
 
 		apiRouter.Post("/auth/login", handler.StaffLogin)
+		apiRouter.Post("/staff", handler.CreateStaff)
 	})
 }

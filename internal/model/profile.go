@@ -32,11 +32,17 @@ func (pd *ProfileData) FromDTO() *userproto.UpdateProfileIn {
 		pd.Telegram = pd.Telegram[1:]
 	}
 
+	// Преобразование OS ID в nil, если значение равно 0
+	var osId *int64
+	if pd.Os.Id != 0 {
+		osId = &pd.Os.Id
+	}
+
 	return &userproto.UpdateProfileIn{
 		Name:     pd.Name,
 		Birthday: birthday,
 		Telegram: pd.Telegram,
 		Github:   pd.Git,
-		OsId:     pd.Os.Id,
+		OsId:     *osId,
 	}
 }

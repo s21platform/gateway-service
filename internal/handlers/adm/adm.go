@@ -117,6 +117,26 @@ func (h *Handler) ListStaff(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *Handler) GetStaff(w http.ResponseWriter, r *http.Request) {
+	staffID := chi.URLParam(r, "uuid")
+	if staffID == "" {
+		http.Error(w, "staff ID is required", http.StatusBadRequest)
+		return
+	}
+
+	staff, err := h.sC.GetStaff(r.Context(), &staff.GetIn{Id: staffID})
+	if err != nil {
+		http.Error(w, "failed to get staff", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(staff); err != nil {
+		http.Error(w, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
+}
+
 func AttachAdmRoutes(r chi.Router, handler *Handler) {
 	r.Route("/adm", func(r chi.Router) {
 		r.Route("/auth", func(r chi.Router) {
@@ -125,6 +145,7 @@ func AttachAdmRoutes(r chi.Router, handler *Handler) {
 		r.With(CheckJWT).Route("/staff", func(r chi.Router) {
 			r.Post("/", handler.CreateStaff)
 			r.Get("/list", handler.ListStaff)
+			r.Get("/{uuid}", handler.GetStaff)
 		})
 	})
 }

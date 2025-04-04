@@ -480,3 +480,87 @@ func TestAttachAdmRoutes(t *testing.T) {
 		})
 	}
 }
+
+func TestHandler_GetStaff(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	tests := []struct {
+		name           string
+		staffID        string
+		setupMock      func(mock *MockStaffClient)
+		expectedStatus int
+		expectedBody   string
+	}{
+		{
+			name:    "successful_get",
+			staffID: "test-uuid",
+			setupMock: func(mock *MockStaffClient) {
+				response := &staff.Staff{
+					Id:        "test-uuid",
+					Login:     "test@example.com",
+					RoleId:    1,
+					RoleName:  "admin",
+					CreatedAt: 1743524411,
+					UpdatedAt: 1743524411,
+				}
+				mock.EXPECT().
+					GetStaff(gomock.Any(), &staff.GetIn{Id: "test-uuid"}).
+					Return(response, nil)
+			},
+			expectedStatus: http.StatusOK,
+			expectedBody: `{"id":"test-uuid","login":"test@example.com",` +
+				`"role_id":1,"role_name":"admin","created_at":1743524411,"updated_at":1743524411}` + "\n",
+		},
+		{
+			name:    "empty_staff_id",
+			staffID: "",
+			setupMock: func(mock *MockStaffClient) {
+				// Мок не нужен, так как ошибка произойдет при проверке ID
+			},
+			expectedStatus: http.StatusBadRequest,
+			expectedBody:   "staff ID is required\n",
+		},
+		{
+			name:    "service_error",
+			staffID: "test-uuid",
+			setupMock: func(mock *MockStaffClient) {
+				mock.EXPECT().
+					GetStaff(gomock.Any(), &staff.GetIn{Id: "test-uuid"}).
+					Return(nil, errors.New("service error"))
+			},
+			expectedStatus: http.StatusInternalServerError,
+			expectedBody:   "failed to get staff\n",
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			mockClient := NewMockStaffClient(ctrl)
+			tt.setupMock(mockClient)
+
+			handler := New(mockClient)
+
+			req := httptest.NewRequest(http.MethodGet, "/staff/"+tt.staffID, nil)
+			rec := httptest.NewRecorder()
+
+			// Для теста с пустым ID используем прямой вызов обработчика
+			if tt.staffID == "" {
+				handler.GetStaff(rec, req)
+			} else {
+				// Для остальных тестов используем роутер
+				r := chi.NewRouter()
+				r.Get("/staff/{uuid}", handler.GetStaff)
+				r.ServeHTTP(rec, req)
+			}
+
+			assert.Equal(t, tt.expectedStatus, rec.Code)
+			assert.Equal(t, tt.expectedBody, rec.Body.String())
+		})
+	}
+}

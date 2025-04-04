@@ -48,3 +48,13 @@ func (c *Client) ListStaff(ctx context.Context, in *staff.ListIn) (*staff.ListOu
 	}
 	return resp, nil
 }
+
+func (c *Client) GetStaff(ctx context.Context, in *staff.GetIn) (*staff.Staff, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("authorization", ctx.Value(config.KeyStaffUUID).(string)))
+	resp, err := c.client.Get(ctx, in)
+	if err != nil {
+		log.Printf("failed to get staff: %v", err)
+		return nil, err
+	}
+	return resp.GetStaff(), nil
+}

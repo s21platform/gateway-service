@@ -42,14 +42,37 @@ func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, e
 	return resp, nil
 }
 
-func (u *UseCase) GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error) {
+func (u *UseCase) GetSocietyInfo(r *http.Request) (*model.SocietyInfo, error) {
 	societyUUID := r.URL.Query().Get("society_id")
+	if societyUUID == "" {
+		return nil, fmt.Errorf("society_id is required")
+	}
 
 	res, err := u.sC.GetSocietyInfo(r.Context(), societyUUID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get society: %v", err)
 	}
-	return res, nil
+
+	var tags []int64
+	for _, tag := range res.TagsID {
+		tags = append(tags, tag.TagID)
+	}
+
+	result := &model.SocietyInfo{
+		SocietyUUID:      societyUUID,
+		Name:             res.Name,
+		Description:      res.Description,
+		OwnerUUID:        res.OwnerUUID,
+		PhotoURL:         res.PhotoURL,
+		FormatID:         res.FormatID,
+		PostPermissionID: res.PostPermission,
+		IsSearch:         res.IsSearch,
+		CountSubscribe:   res.CountSubscribe,
+		Tags:             tags,
+		CanEditSociety:   res.CanEditSociety,
+	}
+
+	return result, nil
 }
 
 func (u *UseCase) UpdateSociety(r *http.Request) error {

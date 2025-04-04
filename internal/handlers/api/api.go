@@ -440,6 +440,7 @@ func (h *Handler) GetSocietyInfo(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
 	jsn, err := json.Marshal(result)
 	if err != nil {
 		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))

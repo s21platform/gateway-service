@@ -13,6 +13,7 @@ import (
 	"github.com/s21platform/metrics-lib/pkg"
 
 	"github.com/s21platform/gateway-service/internal/config"
+	"github.com/s21platform/gateway-service/internal/handlers/adm"
 	"github.com/s21platform/gateway-service/internal/handlers/api"
 	authhandler "github.com/s21platform/gateway-service/internal/handlers/auth"
 	"github.com/s21platform/gateway-service/internal/middlewares"
@@ -25,6 +26,7 @@ import (
 	"github.com/s21platform/gateway-service/internal/rpc/option"
 	"github.com/s21platform/gateway-service/internal/rpc/search"
 	"github.com/s21platform/gateway-service/internal/rpc/society"
+	"github.com/s21platform/gateway-service/internal/rpc/staff"
 	"github.com/s21platform/gateway-service/internal/rpc/user"
 	advertusecase "github.com/s21platform/gateway-service/internal/useCase/advert"
 	authusecase "github.com/s21platform/gateway-service/internal/useCase/auth"
@@ -60,6 +62,7 @@ func main() {
 	searchClient := search.NewService(cfg)
 	chatClient := chat.NewService(cfg)
 	advertClient := advert.New(cfg)
+	staffClient := staff.New(cfg)
 
 	// usecases declaration
 	authUseCase := authusecase.New(authClient)
@@ -76,6 +79,7 @@ func main() {
 	// handlers declaration
 	authHandlers := authhandler.New(cfg, authUseCase)
 	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase, searchUseCase, chatUseCase, advertUseCase)
+	admHandlers := adm.New(staffClient)
 
 	r := chi.NewRouter()
 
@@ -88,6 +92,7 @@ func main() {
 
 	authhandler.AttachAuthRoutes(r, authHandlers)
 	api.AttachApiRoutes(r, apiHandlers, cfg)
+	adm.AttachAdmRoutes(r, admHandlers)
 
 	log.Println("Server starting...")
 

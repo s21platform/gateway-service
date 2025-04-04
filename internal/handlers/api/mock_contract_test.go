@@ -519,10 +519,10 @@ func (mr *MockSocietyServiceMockRecorder) CreateSociety(r interface{}) *gomock.C
 }
 
 // GetSocietyInfo mocks base method.
-func (m *MockSocietyService) GetSocietyInfo(r *http.Request) (*society_proto.GetSocietyInfoOut, error) {
+func (m *MockSocietyService) GetSocietyInfo(r *http.Request) (*model.SocietyInfo, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetSocietyInfo", r)
-	ret0, _ := ret[0].(*society_proto.GetSocietyInfoOut)
+	ret0, _ := ret[0].(*model.SocietyInfo)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

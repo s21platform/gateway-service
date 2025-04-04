@@ -4,16 +4,16 @@ import (
 	"context"
 	"log"
 
+	"github.com/s21platform/staff-service/pkg/staff"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 
 	"github.com/s21platform/gateway-service/internal/config"
-	api "github.com/s21platform/staff-service/pkg/staff/v0"
 )
 
 type Client struct {
-	client api.StaffServiceClient
+	client staff.StaffServiceClient
 }
 
 func New(cfg *config.Config) *Client {
@@ -21,17 +21,17 @@ func New(cfg *config.Config) *Client {
 	if err != nil {
 		log.Fatalf("failed to connect to staff service: %v", err)
 	}
-	client := api.NewStaffServiceClient(conn)
+	client := staff.NewStaffServiceClient(conn)
 	return &Client{client: client}
 }
 
-func (c *Client) StaffLogin(ctx context.Context, in *api.LoginRequest) (*api.LoginResponse, error) {
+func (c *Client) StaffLogin(ctx context.Context, in *staff.LoginIn) (*staff.LoginOut, error) {
 	return c.client.Login(ctx, in)
 }
 
-func (c *Client) CreateStaff(ctx context.Context, in *api.CreateStaffRequest) (*api.Staff, error) {
+func (c *Client) CreateStaff(ctx context.Context, in *staff.CreateIn) (*staff.Staff, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("authorization", ctx.Value(config.KeyStaffUUID).(string)))
-	resp, err := c.client.CreateStaff(ctx, in)
+	resp, err := c.client.Create(ctx, in)
 	if err != nil {
 		log.Printf("failed to create staff: %v", err)
 		return nil, err
@@ -39,9 +39,9 @@ func (c *Client) CreateStaff(ctx context.Context, in *api.CreateStaffRequest) (*
 	return resp.GetStaff(), nil
 }
 
-func (c *Client) ListStaff(ctx context.Context, in *api.ListStaffRequest) (*api.ListStaffResponse, error) {
+func (c *Client) ListStaff(ctx context.Context, in *staff.ListIn) (*staff.ListOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("authorization", ctx.Value(config.KeyStaffUUID).(string)))
-	resp, err := c.client.ListStaff(ctx, in)
+	resp, err := c.client.List(ctx, in)
 	if err != nil {
 		log.Printf("failed to list staff: %v", err)
 		return nil, err

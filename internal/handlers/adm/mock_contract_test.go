@@ -9,7 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	api "github.com/s21platform/staff-service/pkg/staff/v0"
+	staff "github.com/s21platform/staff-service/pkg/staff"
 )
 
 // MockStaffClient is a mock of StaffClient interface.
@@ -36,10 +36,10 @@ func (m *MockStaffClient) EXPECT() *MockStaffClientMockRecorder {
 }
 
 // CreateStaff mocks base method.
-func (m *MockStaffClient) CreateStaff(ctx context.Context, in *api.CreateStaffRequest) (*api.Staff, error) {
+func (m *MockStaffClient) CreateStaff(ctx context.Context, in *staff.CreateIn) (*staff.Staff, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateStaff", ctx, in)
-	ret0, _ := ret[0].(*api.Staff)
+	ret0, _ := ret[0].(*staff.Staff)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -51,10 +51,10 @@ func (mr *MockStaffClientMockRecorder) CreateStaff(ctx, in interface{}) *gomock.
 }
 
 // ListStaff mocks base method.
-func (m *MockStaffClient) ListStaff(ctx context.Context, in *api.ListStaffRequest) (*api.ListStaffResponse, error) {
+func (m *MockStaffClient) ListStaff(ctx context.Context, in *staff.ListIn) (*staff.ListOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListStaff", ctx, in)
-	ret0, _ := ret[0].(*api.ListStaffResponse)
+	ret0, _ := ret[0].(*staff.ListOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -66,10 +66,10 @@ func (mr *MockStaffClientMockRecorder) ListStaff(ctx, in interface{}) *gomock.Ca
 }
 
 // StaffLogin mocks base method.
-func (m *MockStaffClient) StaffLogin(ctx context.Context, in *api.LoginRequest) (*api.LoginResponse, error) {
+func (m *MockStaffClient) StaffLogin(ctx context.Context, in *staff.LoginIn) (*staff.LoginOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "StaffLogin", ctx, in)
-	ret0, _ := ret[0].(*api.LoginResponse)
+	ret0, _ := ret[0].(*staff.LoginOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

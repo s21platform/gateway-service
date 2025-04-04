@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/golang/mock/gomock"
-	api "github.com/s21platform/staff-service/pkg/staff/v0"
+	"github.com/s21platform/staff-service/pkg/staff"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -30,16 +30,16 @@ func TestHandler_StaffLogin(t *testing.T) {
 	}{
 		{
 			name: "successful_login",
-			requestBody: api.LoginRequest{
+			requestBody: staff.LoginIn{
 				Login:    "test@example.com",
 				Password: "password123",
 			},
 			setupMock: func(mock *MockStaffClient) {
-				response := &api.LoginResponse{
+				response := &staff.LoginOut{
 					AccessToken:  "test-access-token",
 					RefreshToken: "test-refresh-token",
 					ExpiresAt:    1743536404,
-					Staff: &api.Staff{
+					Staff: &staff.Staff{
 						Id:        "test-id",
 						Login:     "test@example.com",
 						RoleId:    1,
@@ -68,7 +68,7 @@ func TestHandler_StaffLogin(t *testing.T) {
 		},
 		{
 			name: "login_service_error",
-			requestBody: api.LoginRequest{
+			requestBody: staff.LoginIn{
 				Login:    "test@example.com",
 				Password: "password123",
 			},
@@ -200,13 +200,13 @@ func TestHandler_CreateStaff(t *testing.T) {
 	}{
 		{
 			name: "successful_create",
-			requestBody: api.CreateStaffRequest{
+			requestBody: staff.CreateIn{
 				Login:    "new@example.com",
 				Password: "newpassword123",
 				RoleId:   1,
 			},
 			setupMock: func(mock *MockStaffClient) {
-				response := &api.Staff{
+				response := &staff.Staff{
 					Id:        "new-id",
 					Login:     "new@example.com",
 					RoleId:    1,
@@ -233,7 +233,7 @@ func TestHandler_CreateStaff(t *testing.T) {
 		},
 		{
 			name: "create_staff_error",
-			requestBody: api.CreateStaffRequest{
+			requestBody: staff.CreateIn{
 				Login:    "new@example.com",
 				Password: "newpassword123",
 				RoleId:   1,
@@ -304,8 +304,8 @@ func TestHandler_ListStaff(t *testing.T) {
 				// Не добавляем query-параметры
 			},
 			setupMock: func(mock *MockStaffClient) {
-				response := &api.ListStaffResponse{
-					Staff: []*api.Staff{
+				response := &staff.ListOut{
+					Staff: []*staff.Staff{
 						{
 							Id:        "staff-1",
 							Login:     "staff1@example.com",
@@ -317,7 +317,7 @@ func TestHandler_ListStaff(t *testing.T) {
 					},
 				}
 				mock.EXPECT().
-					ListStaff(gomock.Any(), &api.ListStaffRequest{
+					ListStaff(gomock.Any(), &staff.ListIn{
 						Page:     1,
 						PageSize: 10,
 					}).
@@ -338,8 +338,8 @@ func TestHandler_ListStaff(t *testing.T) {
 				r.URL.RawQuery = q.Encode()
 			},
 			setupMock: func(mock *MockStaffClient) {
-				response := &api.ListStaffResponse{
-					Staff: []*api.Staff{
+				response := &staff.ListOut{
+					Staff: []*staff.Staff{
 						{
 							Id:        "staff-2",
 							Login:     "staff2@example.com",
@@ -351,7 +351,7 @@ func TestHandler_ListStaff(t *testing.T) {
 					},
 				}
 				mock.EXPECT().
-					ListStaff(gomock.Any(), &api.ListStaffRequest{
+					ListStaff(gomock.Any(), &staff.ListIn{
 						Page:       2,
 						PageSize:   20,
 						SearchTerm: &searchTerm,

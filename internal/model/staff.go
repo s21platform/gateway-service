@@ -3,7 +3,7 @@ package model
 import (
 	"fmt"
 
-	api "github.com/s21platform/staff-service/pkg/staff/v0"
+	"github.com/s21platform/staff-service/pkg/staff"
 )
 
 type StaffAuth struct {
@@ -23,8 +23,8 @@ type Permissions struct {
 	Access []string `json:"access"`
 }
 
-// FromDTO преобразует данные из api.LoginResponse в модель StaffAuth
-func (s *StaffAuth) FromDTO(response *api.LoginResponse) error {
+// FromDTO преобразует данные из staff.LoginResponse в модель StaffAuth
+func (s *StaffAuth) FromDTO(response *staff.LoginOut) error {
 	if response == nil {
 		return fmt.Errorf("response is nil")
 	}

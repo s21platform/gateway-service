@@ -4,11 +4,11 @@ package adm
 import (
 	"context"
 
-	api "github.com/s21platform/staff-service/pkg/staff/v0"
+	"github.com/s21platform/staff-service/pkg/staff"
 )
 
 type StaffClient interface {
-	StaffLogin(ctx context.Context, in *api.LoginRequest) (*api.LoginResponse, error)
-	CreateStaff(ctx context.Context, in *api.CreateStaffRequest) (*api.Staff, error)
-	ListStaff(ctx context.Context, in *api.ListStaffRequest) (*api.ListStaffResponse, error)
+	StaffLogin(ctx context.Context, in *staff.LoginIn) (*staff.LoginOut, error)
+	CreateStaff(ctx context.Context, in *staff.CreateIn) (*staff.Staff, error)
+	ListStaff(ctx context.Context, in *staff.ListIn) (*staff.ListOut, error)
 }

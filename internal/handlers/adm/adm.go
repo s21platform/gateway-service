@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
-	api "github.com/s21platform/staff-service/pkg/staff/v0"
+	"github.com/s21platform/staff-service/pkg/staff"
 )
 
 type Handler struct {
@@ -19,7 +19,7 @@ func New(sC StaffClient) *Handler {
 }
 
 func (h *Handler) StaffLogin(w http.ResponseWriter, r *http.Request) {
-	var loginRequest api.LoginRequest
+	var loginRequest staff.LoginIn
 	if err := json.NewDecoder(r.Body).Decode(&loginRequest); err != nil {
 		http.Error(w, "failed to decode request body", http.StatusBadRequest)
 		return
@@ -43,7 +43,7 @@ func (h *Handler) StaffLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) CreateStaff(w http.ResponseWriter, r *http.Request) {
-	var req api.CreateStaffRequest
+	var req staff.CreateIn
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "failed to decode request body", http.StatusBadRequest)
 		return
@@ -63,7 +63,7 @@ func (h *Handler) CreateStaff(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) ListStaff(w http.ResponseWriter, r *http.Request) {
-	req := &api.ListStaffRequest{
+	req := &staff.ListIn{
 		Page:     1,  // значение по умолчанию
 		PageSize: 10, // значение по умолчанию
 	}

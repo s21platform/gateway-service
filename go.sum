@@ -39,8 +39,8 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
 github.com/rogpeppe/go-internal v1.10.0 h1:TMyTOH3F/DB16zRVcYyreMH6GnZZrwQVAoYjRBZyWFQ=
 github.com/rogpeppe/go-internal v1.10.0/go.mod h1:UQnix2H7Ngw/k4C5ijL5+65zddjncjaFoBhdsK/akog=
-github.com/s21platform/advert-proto v0.0.3 h1:5g77YLFL8ngtTTcqbA57oPoshsp3aOFrkCoqAukh41g=
-github.com/s21platform/advert-proto v0.0.3/go.mod h1:M5btJoM5jmTGjfsXlFVw3wKWFwCs7Oe9kQAjJ70XxiY=
+github.com/s21platform/advert-proto v0.0.5 h1:JvP3K63qyoUeWMofBN4kq0CkqRUlOkfg1ViuAyQJqI0=
+github.com/s21platform/advert-proto v0.0.5/go.mod h1:M5btJoM5jmTGjfsXlFVw3wKWFwCs7Oe9kQAjJ70XxiY=
 github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5 h1:5K6f9rK5I0GcGk1PYkwn1HX+Ru4NPQNnHZpOxMNRUKw=
 github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5/go.mod h1:t4KCcKAupFeksP0yEVOjgfl32xgBTOSGZ++AkbshfqU=
 github.com/s21platform/avatar-proto v0.0.10 h1:y/0HBZlYbt2Zyu64ggcgQ1HW8P+GotW9enKt7G/r6Ao=
@@ -55,12 +55,12 @@ github.com/s21platform/metrics-lib v0.0.8 h1:w2AzbTcN8d9GYScUQrQL1D2bThUqRbsJTzk
 github.com/s21platform/metrics-lib v0.0.8/go.mod h1:Z1Aiy5uuyEmM//rQmhqkVh0JR8l5sVwe83TQegdNFxQ=
 github.com/s21platform/notification-proto v0.0.2 h1:BKw6BdpXTt+1TKpUIIHrYpcQ/AATyPjbrQBernGMrHY=
 github.com/s21platform/notification-proto v0.0.2/go.mod h1:4K7d3RmGB4tYHkvZ6sU0UePgnBMo5ARq52lzJitp5as=
-github.com/s21platform/optionhub-proto v1.0.6 h1:PSZvk4keCZy2CWIawBYVeMS9w60Ds/QVZOHDVuyMI3Q=
-github.com/s21platform/optionhub-proto v1.0.6/go.mod h1:XcEajWv9RbE5INy10s4QWpXTXcoa4FWrN80oeKffYew=
+github.com/s21platform/optionhub-proto v1.0.13 h1:EsV0LwFn63H+oxYAsyjrnq5KBy07j3ZFtpGSIWSSTUQ=
+github.com/s21platform/optionhub-proto v1.0.13/go.mod h1:drAGej/ZykdMnAOs4xljgKo6KZrNCZzrCslQ6noBqhM=
 github.com/s21platform/search-proto v0.0.10 h1:BbYUDgVaGbWuvxdQefg9exiN06xdMhXROPBkdioKJ/Q=
 github.com/s21platform/search-proto v0.0.10/go.mod h1:mL1Jf2eqvWHPCefKdb/cjoXRI2Wg6hbHRLNeyw14SGk=
-github.com/s21platform/society-proto v0.0.21 h1:fACND/s0z33Y0EhNTm7Slzmd4i1/WZptgIB+bucV/Yc=
-github.com/s21platform/society-proto v0.0.21/go.mod h1:wLBVqLkJplzBeE0T25OUJGR2uV4I1Ut97K2Ouhc3sTQ=
+github.com/s21platform/society-proto v0.0.23 h1:WCKEpXwYkv0Ob6Uh4LUhhsQ3hX6G9oQASKqCxaD91O4=
+github.com/s21platform/society-proto v0.0.23/go.mod h1:wLBVqLkJplzBeE0T25OUJGR2uV4I1Ut97K2Ouhc3sTQ=
 github.com/s21platform/user-proto v0.0.11 h1:Y0eIBBlYsfFF+yRJEWClE8VJeqHjKgn0ge5a/1hkLA4=
 github.com/s21platform/user-proto v0.0.11/go.mod h1:+W3ciXEQrPUZ3+KOiEyXV7OZCxcfoyVV2WUkR25NfHM=
 github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOfJA=

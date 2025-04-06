@@ -109,3 +109,11 @@ func (uc *Usecase) GetSocietyDirectionList(r *http.Request) (*optionhub.GetByNam
 
 	return resp, nil
 }
+
+func (uc *Usecase) GetOptionRequests(r *http.Request) (model.OptionRequestsList, error) {
+	resp, err := uc.oC.GetOptionRequests(r.Context())
+	if err != nil {
+		return model.OptionRequestsList{}, fmt.Errorf("failed to get option requests in usecase: %w", err)
+	}
+	return resp, nil
+}

@@ -390,6 +390,21 @@ func (mr *MockOptionServiceMockRecorder) GetHobbyList(r interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetHobbyList", reflect.TypeOf((*MockOptionService)(nil).GetHobbyList), r)
 }
 
+// GetOptionRequests mocks base method.
+func (m *MockOptionService) GetOptionRequests(r *http.Request) (model.OptionRequestsList, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetOptionRequests", r)
+	ret0, _ := ret[0].(model.OptionRequestsList)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetOptionRequests indicates an expected call of GetOptionRequests.
+func (mr *MockOptionServiceMockRecorder) GetOptionRequests(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOptionRequests", reflect.TypeOf((*MockOptionService)(nil).GetOptionRequests), r)
+}
+
 // GetOsList mocks base method.
 func (m *MockOptionService) GetOsList(r *http.Request) (*model.OptionsStruct, error) {
 	m.ctrl.T.Helper()
@@ -504,10 +519,10 @@ func (mr *MockSocietyServiceMockRecorder) CreateSociety(r interface{}) *gomock.C
 }
 
 // GetSocietyInfo mocks base method.
-func (m *MockSocietyService) GetSocietyInfo(r *http.Request) (*society_proto.GetSocietyInfoOut, error) {
+func (m *MockSocietyService) GetSocietyInfo(r *http.Request) (*model.SocietyInfo, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetSocietyInfo", r)
-	ret0, _ := ret[0].(*society_proto.GetSocietyInfoOut)
+	ret0, _ := ret[0].(*model.SocietyInfo)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -676,6 +691,21 @@ func (m *MockAdvertService) EXPECT() *MockAdvertServiceMockRecorder {
 	return m.recorder
 }
 
+// CancelAdvert mocks base method.
+func (m *MockAdvertService) CancelAdvert(r *http.Request) (*advert_proto.AdvertEmpty, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CancelAdvert", r)
+	ret0, _ := ret[0].(*advert_proto.AdvertEmpty)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CancelAdvert indicates an expected call of CancelAdvert.
+func (mr *MockAdvertServiceMockRecorder) CancelAdvert(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CancelAdvert", reflect.TypeOf((*MockAdvertService)(nil).CancelAdvert), r)
+}
+
 // CreateAdvert mocks base method.
 func (m *MockAdvertService) CreateAdvert(r *http.Request) (*advert_proto.AdvertEmpty, error) {
 	m.ctrl.T.Helper()
@@ -704,4 +734,19 @@ func (m *MockAdvertService) GetAdverts(r *http.Request) (*advert_proto.GetAdvert
 func (mr *MockAdvertServiceMockRecorder) GetAdverts(r interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAdverts", reflect.TypeOf((*MockAdvertService)(nil).GetAdverts), r)
+}
+
+// RestoreAdvert mocks base method.
+func (m *MockAdvertService) RestoreAdvert(r *http.Request) (*advert_proto.AdvertEmpty, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RestoreAdvert", r)
+	ret0, _ := ret[0].(*advert_proto.AdvertEmpty)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RestoreAdvert indicates an expected call of RestoreAdvert.
+func (mr *MockAdvertServiceMockRecorder) RestoreAdvert(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RestoreAdvert", reflect.TypeOf((*MockAdvertService)(nil).RestoreAdvert), r)
 }

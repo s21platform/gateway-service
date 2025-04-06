@@ -53,11 +53,12 @@ type OptionService interface {
 	GetSkillList(r *http.Request) (*optionhub.GetByNameOut, error)
 	GetCityList(r *http.Request) (*optionhub.GetByNameOut, error)
 	GetSocietyDirectionList(r *http.Request) (*optionhub.GetByNameOut, error)
+	GetOptionRequests(r *http.Request) (model.OptionRequestsList, error)
 }
 
 type SocietyService interface {
 	CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error)
-	GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error)
+	GetSocietyInfo(r *http.Request) (*model.SocietyInfo, error)
 	UpdateSociety(r *http.Request) error
 }
 
@@ -75,4 +76,6 @@ type ChatService interface {
 type AdvertService interface {
 	GetAdverts(r *http.Request) (*advert.GetAdvertsOut, error)
 	CreateAdvert(r *http.Request) (*advert.AdvertEmpty, error)
+	CancelAdvert(r *http.Request) (*advert.AdvertEmpty, error)
+	RestoreAdvert(r *http.Request) (*advert.AdvertEmpty, error)
 }

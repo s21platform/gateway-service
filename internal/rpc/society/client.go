@@ -71,7 +71,6 @@ func (s *Service) UpdateSociety(ctx context.Context, req *model.SocietyUpdate) e
 		SocietyUUID:    req.SocietyUUID,
 		Name:           req.Name,
 		Description:    req.Description,
-		PhotoURL:       req.PhotoURL,
 		FormatID:       req.FormatID,
 		PostPermission: req.PostPermissionID,
 		IsSearch:       req.IsSearch,

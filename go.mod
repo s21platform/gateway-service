@@ -11,7 +11,7 @@ require (
 	github.com/s21platform/advert-proto v0.0.5
 	github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5
 	github.com/s21platform/avatar-proto v0.0.10
-	github.com/s21platform/chat-proto v0.0.12
+	github.com/s21platform/chat-proto v0.0.14
 	github.com/s21platform/friends-proto v0.0.12
 	github.com/s21platform/logger-lib v0.0.6
 	github.com/s21platform/metrics-lib v0.0.8

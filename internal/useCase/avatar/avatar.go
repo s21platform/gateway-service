@@ -87,7 +87,10 @@ func (uc *Usecase) UploadSocietyAvatar(r *http.Request) (*avatar.SetSocietyAvata
 }
 
 func (uc *Usecase) GetSocietyAvatarsList(r *http.Request) (*avatar.GetAllSocietyAvatarsOut, error) {
-	uuid := r.Context().Value(config.KeyUUID).(string)
+	uuid := r.URL.Query().Get("uuid")
+	if uuid == "" {
+		return nil, fmt.Errorf("failed to no society UUID in request")
+	}
 
 	resp, err := uc.aC.GetAllSocietyAvatars(r.Context(), uuid)
 	if err != nil {

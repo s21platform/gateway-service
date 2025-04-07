@@ -33,6 +33,7 @@ type Config struct {
 	Search       Search
 	Chat         Chat
 	Advert       Advert
+	Feed         Feed
 }
 
 // Service struct for storage this server config variables
@@ -103,6 +104,11 @@ type Chat struct {
 }
 
 type Advert struct {
+	Host string `env:"ADVERT_SERVICE_HOST"`
+	Port string `env:"ADVERT_SERVICE_PORT"`
+}
+
+type Feed struct {
 	Host string `env:"ADVERT_SERVICE_HOST"`
 	Port string `env:"ADVERT_SERVICE_PORT"`
 }

@@ -76,7 +76,7 @@ func (uc *Usecase) UploadSocietyAvatar(r *http.Request) (*avatar.SetSocietyAvata
 	}
 	defer file.Close()
 
-	uuid := r.Context().Value(config.KeyUUID).(string)
+	uuid := r.Context().Value("societyUUID").(string)
 	filename := r.FormValue("filename")
 
 	resp, err := uc.aC.SetSocietyAvatar(r.Context(), filename, file, uuid)
@@ -87,7 +87,7 @@ func (uc *Usecase) UploadSocietyAvatar(r *http.Request) (*avatar.SetSocietyAvata
 }
 
 func (uc *Usecase) GetSocietyAvatarsList(r *http.Request) (*avatar.GetAllSocietyAvatarsOut, error) {
-	uuid := r.URL.Query().Get("society_id")
+	uuid := r.URL.Query().Get("societyUUID")
 	if uuid == "" {
 		return nil, fmt.Errorf("failed to no society UUID in request")
 	}

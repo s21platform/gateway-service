@@ -76,7 +76,7 @@ func (uc *Usecase) UploadSocietyAvatar(r *http.Request) (*avatar.SetSocietyAvata
 	}
 	defer file.Close()
 
-	uuid := r.Context().Value("societyUUID").(string)
+	uuid := r.FormValue("societyUUID")
 	filename := r.FormValue("filename")
 
 	resp, err := uc.aC.SetSocietyAvatar(r.Context(), filename, file, uuid)

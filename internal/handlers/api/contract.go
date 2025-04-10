@@ -5,6 +5,8 @@ package api
 import (
 	"net/http"
 
+	"google.golang.org/protobuf/types/known/emptypb"
+
 	advert "github.com/s21platform/advert-proto/advert-proto"
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
 	chat "github.com/s21platform/chat-proto/chat-proto"
@@ -13,7 +15,7 @@ import (
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 	societyproto "github.com/s21platform/society-proto/society-proto"
 	userproto "github.com/s21platform/user-proto/user-proto"
-	"google.golang.org/protobuf/types/known/emptypb"
+
 	"github.com/s21platform/gateway-service/internal/model"
 )
 

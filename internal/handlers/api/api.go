@@ -211,23 +211,15 @@ func (h *Handler) MarkNotificationAsRead(w http.ResponseWriter, r *http.Request)
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 	logger.AddFuncName("MarkNotificationAsRead")
 
-	result, err := h.nS.MarkNotificationAsRead(r)
-	if err != nil {
+	if _, err := h.nS.MarkNotificationAsRead(r); err != nil {
 		logger.Error(fmt.Sprintf("failed to mark notification as read: %v", err))
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	jsn, err := json.Marshal(result)
-	if err != nil {
-		logger.Error(fmt.Sprintf("failed to marshal response: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write(jsn)
+	_, _ = w.Write([]byte("{}"))
 }
 
 func (h *Handler) GetCountFriends(w http.ResponseWriter, r *http.Request) {

@@ -14,6 +14,8 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	advertproto "github.com/s21platform/advert-proto/advert-proto"
@@ -895,4 +897,119 @@ func TestHandler_GetOptionRequests(t *testing.T) {
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})
+}
+
+func TestHandler_MarkNotificationAsRead(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	tests := []struct {
+		name           string
+		requestBody    interface{}
+		setupMock      func(mock *MockNotificationService)
+		expectedStatus int
+		expectedBody   string
+	}{
+		{
+			name: "successful_mark_as_read",
+			requestBody: model.MarkNotificationsAsReadRequest{
+				Data: struct {
+					IDs []int64 `json:"ids"`
+				}{
+					IDs: []int64{1, 2, 3},
+				},
+			},
+			setupMock: func(mock *MockNotificationService) {
+				mockLogger.EXPECT().AddFuncName("MarkNotificationAsRead")
+				mock.EXPECT().
+					MarkNotificationAsRead(gomock.Any()).
+					Return(&emptypb.Empty{}, nil)
+			},
+			expectedStatus: http.StatusOK,
+			expectedBody:   `{}` + "\n",
+		},
+		{
+			name:        "invalid_request_body",
+			requestBody: "invalid json",
+			setupMock: func(mock *MockNotificationService) {
+				mockLogger.EXPECT().AddFuncName("MarkNotificationAsRead")
+				mockLogger.EXPECT().Error(gomock.Any())
+			},
+			expectedStatus: http.StatusBadRequest,
+			expectedBody:   "",
+		},
+		{
+			name: "empty_ids",
+			requestBody: model.MarkNotificationsAsReadRequest{
+				Data: struct {
+					IDs []int64 `json:"ids"`
+				}{
+					IDs: []int64{},
+				},
+			},
+			setupMock: func(mock *MockNotificationService) {
+				mockLogger.EXPECT().AddFuncName("MarkNotificationAsRead")
+				mockLogger.EXPECT().Error("notification IDs are required")
+			},
+			expectedStatus: http.StatusBadRequest,
+			expectedBody:   "",
+		},
+		{
+			name: "service_error",
+			requestBody: model.MarkNotificationsAsReadRequest{
+				Data: struct {
+					IDs []int64 `json:"ids"`
+				}{
+					IDs: []int64{1},
+				},
+			},
+			setupMock: func(mock *MockNotificationService) {
+				mockLogger.EXPECT().AddFuncName("MarkNotificationAsRead")
+				mockLogger.EXPECT().Error("failed to mark notification as read: service error")
+				mock.EXPECT().
+					MarkNotificationAsRead(gomock.Any()).
+					Return(nil, errors.New("service error"))
+			},
+			expectedStatus: http.StatusInternalServerError,
+			expectedBody:   "",
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			mockNotificationService := NewMockNotificationService(ctrl)
+			tt.setupMock(mockNotificationService)
+
+			ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+
+			var body []byte
+			var err error
+			if str, ok := tt.requestBody.(string); ok {
+				body = []byte(str)
+			} else {
+				body, err = json.Marshal(tt.requestBody)
+				require.NoError(t, err)
+			}
+
+			r := httptest.NewRequest(http.MethodPatch, "/api/notification", bytes.NewReader(body))
+			r = r.WithContext(ctx)
+			w := httptest.NewRecorder()
+
+			handler := New(nil, nil, mockNotificationService, nil, nil, nil, nil, nil, nil)
+			handler.MarkNotificationAsRead(w, r)
+
+			assert.Equal(t, tt.expectedStatus, w.Code)
+			if tt.expectedBody != "" {
+				assert.JSONEq(t, tt.expectedBody, w.Body.String())
+			}
+		})
+	}
 }

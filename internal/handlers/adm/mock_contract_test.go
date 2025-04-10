@@ -5,92 +5,92 @@
 package adm
 
 import (
-	context "context"
+	http "net/http"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
 	staff "github.com/s21platform/staff-service/pkg/staff"
 )
 
-// MockStaffClient is a mock of StaffClient interface.
-type MockStaffClient struct {
+// MockStaffService is a mock of StaffService interface.
+type MockStaffService struct {
 	ctrl     *gomock.Controller
-	recorder *MockStaffClientMockRecorder
+	recorder *MockStaffServiceMockRecorder
 }
 
-// MockStaffClientMockRecorder is the mock recorder for MockStaffClient.
-type MockStaffClientMockRecorder struct {
-	mock *MockStaffClient
+// MockStaffServiceMockRecorder is the mock recorder for MockStaffService.
+type MockStaffServiceMockRecorder struct {
+	mock *MockStaffService
 }
 
-// NewMockStaffClient creates a new mock instance.
-func NewMockStaffClient(ctrl *gomock.Controller) *MockStaffClient {
-	mock := &MockStaffClient{ctrl: ctrl}
-	mock.recorder = &MockStaffClientMockRecorder{mock}
+// NewMockStaffService creates a new mock instance.
+func NewMockStaffService(ctrl *gomock.Controller) *MockStaffService {
+	mock := &MockStaffService{ctrl: ctrl}
+	mock.recorder = &MockStaffServiceMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockStaffClient) EXPECT() *MockStaffClientMockRecorder {
+func (m *MockStaffService) EXPECT() *MockStaffServiceMockRecorder {
 	return m.recorder
 }
 
 // CreateStaff mocks base method.
-func (m *MockStaffClient) CreateStaff(ctx context.Context, in *staff.CreateIn) (*staff.Staff, error) {
+func (m *MockStaffService) CreateStaff(r *http.Request) (*staff.Staff, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateStaff", ctx, in)
+	ret := m.ctrl.Call(m, "CreateStaff", r)
 	ret0, _ := ret[0].(*staff.Staff)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CreateStaff indicates an expected call of CreateStaff.
-func (mr *MockStaffClientMockRecorder) CreateStaff(ctx, in interface{}) *gomock.Call {
+func (mr *MockStaffServiceMockRecorder) CreateStaff(r interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateStaff", reflect.TypeOf((*MockStaffClient)(nil).CreateStaff), ctx, in)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateStaff", reflect.TypeOf((*MockStaffService)(nil).CreateStaff), r)
 }
 
 // GetStaff mocks base method.
-func (m *MockStaffClient) GetStaff(ctx context.Context, in *staff.GetIn) (*staff.Staff, error) {
+func (m *MockStaffService) GetStaff(r *http.Request, staffID string) (*staff.Staff, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetStaff", ctx, in)
+	ret := m.ctrl.Call(m, "GetStaff", r, staffID)
 	ret0, _ := ret[0].(*staff.Staff)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetStaff indicates an expected call of GetStaff.
-func (mr *MockStaffClientMockRecorder) GetStaff(ctx, in interface{}) *gomock.Call {
+func (mr *MockStaffServiceMockRecorder) GetStaff(r, staffID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStaff", reflect.TypeOf((*MockStaffClient)(nil).GetStaff), ctx, in)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStaff", reflect.TypeOf((*MockStaffService)(nil).GetStaff), r, staffID)
 }
 
 // ListStaff mocks base method.
-func (m *MockStaffClient) ListStaff(ctx context.Context, in *staff.ListIn) (*staff.ListOut, error) {
+func (m *MockStaffService) ListStaff(r *http.Request) (*staff.ListOut, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListStaff", ctx, in)
+	ret := m.ctrl.Call(m, "ListStaff", r)
 	ret0, _ := ret[0].(*staff.ListOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // ListStaff indicates an expected call of ListStaff.
-func (mr *MockStaffClientMockRecorder) ListStaff(ctx, in interface{}) *gomock.Call {
+func (mr *MockStaffServiceMockRecorder) ListStaff(r interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListStaff", reflect.TypeOf((*MockStaffClient)(nil).ListStaff), ctx, in)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListStaff", reflect.TypeOf((*MockStaffService)(nil).ListStaff), r)
 }
 
 // StaffLogin mocks base method.
-func (m *MockStaffClient) StaffLogin(ctx context.Context, in *staff.LoginIn) (*staff.LoginOut, error) {
+func (m *MockStaffService) StaffLogin(r *http.Request) (*staff.LoginOut, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "StaffLogin", ctx, in)
+	ret := m.ctrl.Call(m, "StaffLogin", r)
 	ret0, _ := ret[0].(*staff.LoginOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // StaffLogin indicates an expected call of StaffLogin.
-func (mr *MockStaffClientMockRecorder) StaffLogin(ctx, in interface{}) *gomock.Call {
+func (mr *MockStaffServiceMockRecorder) StaffLogin(r interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StaffLogin", reflect.TypeOf((*MockStaffClient)(nil).StaffLogin), ctx, in)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StaffLogin", reflect.TypeOf((*MockStaffService)(nil).StaffLogin), r)
 }

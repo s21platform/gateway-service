@@ -2,139 +2,114 @@ package adm
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/s21platform/staff-service/pkg/staff"
+	logger_lib "github.com/s21platform/logger-lib"
+
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 type Handler struct {
-	sC StaffClient
+	sS StaffService
 }
 
-func New(sC StaffClient) *Handler {
-	return &Handler{sC: sC}
+func New(sS StaffService) *Handler {
+	return &Handler{sS: sS}
 }
 
 func (h *Handler) StaffLogin(w http.ResponseWriter, r *http.Request) {
-	var loginRequest staff.LoginIn
-	if err := json.NewDecoder(r.Body).Decode(&loginRequest); err != nil {
-		http.Error(w, "failed to decode request body", http.StatusBadRequest)
-		return
-	}
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("StaffLogin")
 
-	response, err := h.sC.StaffLogin(r.Context(), &loginRequest)
+	result, err := h.sS.StaffLogin(r)
 	if err != nil {
-		log.Println("failed to login", err)
-		http.Error(w, "failed to login", http.StatusInternalServerError)
+		logger.Error(fmt.Sprintf("failed to login: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	jsn, err := json.Marshal(response)
+	jsn, err := json.Marshal(result)
 	if err != nil {
-		http.Error(w, "failed to marshal response", http.StatusInternalServerError)
+		logger.Error(fmt.Sprintf("failed to marshal response: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(jsn)
 }
 
 func (h *Handler) CreateStaff(w http.ResponseWriter, r *http.Request) {
-	var req staff.CreateIn
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "failed to decode request body", http.StatusBadRequest)
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("CreateStaff")
+
+	result, err := h.sS.CreateStaff(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to create staff: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	staff, err := h.sC.CreateStaff(r.Context(), &req)
+	jsn, err := json.Marshal(result)
 	if err != nil {
-		http.Error(w, "failed to create staff", http.StatusInternalServerError)
+		logger.Error(fmt.Sprintf("failed to marshal response: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(staff); err != nil {
-		http.Error(w, "failed to encode response", http.StatusInternalServerError)
-		return
-	}
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
 }
 
 func (h *Handler) ListStaff(w http.ResponseWriter, r *http.Request) {
-	req := &staff.ListIn{
-		Page:     1,  // значение по умолчанию
-		PageSize: 10, // значение по умолчанию
-	}
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("ListStaff")
 
-	// Обработка page
-	if page := r.URL.Query().Get("page"); page != "" {
-		pageInt, err := strconv.ParseInt(page, 10, 32)
-		if err != nil {
-			http.Error(w, "invalid page parameter", http.StatusBadRequest)
-			return
-		}
-		req.Page = int32(pageInt)
-	}
-
-	// Обработка page_size
-	if pageSize := r.URL.Query().Get("page_size"); pageSize != "" {
-		pageSizeInt, err := strconv.ParseInt(pageSize, 10, 32)
-		if err != nil {
-			http.Error(w, "invalid page_size parameter", http.StatusBadRequest)
-			return
-		}
-		req.PageSize = int32(pageSizeInt)
-	}
-
-	// Обработка search_term
-	if searchTerm := r.URL.Query().Get("search_term"); searchTerm != "" {
-		req.SearchTerm = &searchTerm
-	}
-
-	// Обработка role_id
-	if roleID := r.URL.Query().Get("role_id"); roleID != "" {
-		roleIDInt, err := strconv.ParseInt(roleID, 10, 32)
-		if err != nil {
-			http.Error(w, "invalid role_id parameter", http.StatusBadRequest)
-			return
-		}
-		roleIDInt32 := int32(roleIDInt)
-		req.RoleId = &roleIDInt32
-	}
-
-	staffList, err := h.sC.ListStaff(r.Context(), req)
+	result, err := h.sS.ListStaff(r)
 	if err != nil {
-		http.Error(w, "failed to list staff", http.StatusInternalServerError)
+		logger.Error(fmt.Sprintf("failed to list staff: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to marshal response: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(staffList); err != nil {
-		http.Error(w, "failed to encode response", http.StatusInternalServerError)
-		return
-	}
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
 }
 
 func (h *Handler) GetStaff(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("GetStaff")
+
 	staffID := chi.URLParam(r, "uuid")
-	if staffID == "" {
-		http.Error(w, "staff ID is required", http.StatusBadRequest)
+	result, err := h.sS.GetStaff(r, staffID)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to get staff: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	staff, err := h.sC.GetStaff(r.Context(), &staff.GetIn{Id: staffID})
+	jsn, err := json.Marshal(result)
 	if err != nil {
-		http.Error(w, "failed to get staff", http.StatusInternalServerError)
+		logger.Error(fmt.Sprintf("failed to marshal response: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(staff); err != nil {
-		http.Error(w, "failed to encode response", http.StatusInternalServerError)
-		return
-	}
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
 }
 
 func AttachAdmRoutes(r chi.Router, handler *Handler) {

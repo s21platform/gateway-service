@@ -37,6 +37,7 @@ import (
 	optionusecase "github.com/s21platform/gateway-service/internal/useCase/option"
 	searchusecase "github.com/s21platform/gateway-service/internal/useCase/search"
 	societyusecase "github.com/s21platform/gateway-service/internal/useCase/society"
+	staffusecase "github.com/s21platform/gateway-service/internal/useCase/staff"
 	userusecase "github.com/s21platform/gateway-service/internal/useCase/user"
 )
 
@@ -75,11 +76,12 @@ func main() {
 	searchUseCase := searchusecase.New(searchClient)
 	chatUseCase := chatusecase.New(chatClient)
 	advertUseCase := advertusecase.New(advertClient)
+	staffUseCase := staffusecase.New(staffClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(cfg, authUseCase)
 	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase, searchUseCase, chatUseCase, advertUseCase)
-	admHandlers := adm.New(staffClient)
+	admHandlers := adm.New(staffUseCase)
 
 	r := chi.NewRouter()
 

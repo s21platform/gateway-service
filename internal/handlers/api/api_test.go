@@ -217,14 +217,18 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
 		req = req.WithContext(ctx)
 
-		expectedResult := &societyproto.GetSocietyInfoOut{
-			Name:           "Test Society",
-			Description:    "Test Description",
-			OwnerUUID:      "owner-uuid",
-			PhotoURL:       "https://example.com/photo.jpg",
-			FormatID:       1,
-			PostPermission: 2,
-			IsSearch:       true,
+		expectedResult := &model.SocietyInfo{
+			SocietyUUID:      "test-uuid",
+			Name:             "Test Society",
+			Description:      "Test Description",
+			OwnerUUID:        "owner-uuid",
+			PhotoURL:         "https://example.com/photo.jpg",
+			FormatID:         1,
+			PostPermissionID: 2,
+			IsSearch:         true,
+			CountSubscribe:   0,
+			Tags:             []int64{},
+			CanEditSociety:   false,
 		}
 
 		mockLogger.EXPECT().AddFuncName("GetSocietyInfo")
@@ -247,10 +251,9 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 		s.GetSocietyInfo(w, req)
 
 		assert.Equal(t, http.StatusOK, w.Code)
-
 		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
 
-		var responseBody societyproto.GetSocietyInfoOut
+		var responseBody model.SocietyInfo
 		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
 		assert.NoError(t, err)
 		assert.Equal(t, expectedResult, &responseBody)
@@ -268,7 +271,7 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 
 		expectedError := errors.New("database error")
 		mockLogger.EXPECT().AddFuncName("GetSocietyInfo")
-		mockLogger.EXPECT().Error("failed to get society info error: database error") // Ожидаем вызов Error
+		mockLogger.EXPECT().Error("failed to get society info error: database error")
 		mockSocietyService.EXPECT().GetSocietyInfo(req).Return(nil, expectedError)
 
 		w := httptest.NewRecorder()

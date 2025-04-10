@@ -30,6 +30,17 @@ func NewService(cfg *config.Config) *Service {
 	return &Service{client: client}
 }
 
+func (s *Service) GetChats(ctx context.Context) (*chat.GetChatsOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
+	resp, err := s.client.GetChats(ctx, &chat.ChatEmpty{})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get chats in rpc: %v", err)
+	}
+
+	return resp, nil
+}
+
 func (s *Service) CreatePrivateChat(ctx context.Context, uuid string) (*chat.CreatePrivateChatOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 

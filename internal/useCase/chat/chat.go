@@ -18,6 +18,15 @@ func New(cC ChatClient) *Usecase {
 	return &Usecase{cC: cC}
 }
 
+func (u *Usecase) GetChats(r *http.Request) (*chat.GetChatsOut, error) {
+	resp, err := u.cC.GetChats(r.Context())
+	if err != nil {
+		return nil, fmt.Errorf("failed to get chats in usecase: %v", err)
+	}
+
+	return resp, nil
+}
+
 func (u *Usecase) CreatePrivateChat(r *http.Request) (*chat.CreatePrivateChatOut, error) {
 	var requestData model.PrivateChatRequest
 

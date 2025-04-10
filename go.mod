@@ -3,7 +3,6 @@ module github.com/s21platform/gateway-service
 go 1.24
 
 require (
-	github.com/go-chi/chi v1.5.5
 	github.com/go-chi/chi/v5 v5.2.1
 	github.com/golang-jwt/jwt/v4 v4.5.1
 	github.com/golang/mock v1.6.0
@@ -12,11 +11,11 @@ require (
 	github.com/s21platform/advert-proto v0.0.5
 	github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5
 	github.com/s21platform/avatar-proto v0.0.10
-	github.com/s21platform/chat-proto v0.0.12
+	github.com/s21platform/chat-proto v0.0.14
 	github.com/s21platform/friends-proto v0.0.12
 	github.com/s21platform/logger-lib v0.0.6
 	github.com/s21platform/metrics-lib v0.0.9
-	github.com/s21platform/notification-proto v0.0.2
+	github.com/s21platform/notification-service v0.0.2
 	github.com/s21platform/optionhub-proto v1.0.13
 	github.com/s21platform/search-proto v0.0.10
 	github.com/s21platform/society-proto v0.0.23
@@ -35,7 +34,6 @@ require (
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.10.0 // indirect
-	github.com/s21platform/notification-service v0.0.2 // indirect
 	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
 	golang.org/x/text v0.23.0 // indirect

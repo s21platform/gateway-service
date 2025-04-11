@@ -12,6 +12,7 @@ import (
 	advert_proto "github.com/s21platform/advert-proto/advert-proto"
 	avatar_proto "github.com/s21platform/avatar-proto/avatar-proto"
 	chat_proto "github.com/s21platform/chat-proto/chat-proto"
+	feed_proto "github.com/s21platform/feed-proto/feed-proto"
 	friends_proto "github.com/s21platform/friends-proto/friends-proto"
 	model "github.com/s21platform/gateway-service/internal/model"
 	notification_proto "github.com/s21platform/notification-proto/notification-proto"
@@ -749,4 +750,42 @@ func (m *MockAdvertService) RestoreAdvert(r *http.Request) (*advert_proto.Advert
 func (mr *MockAdvertServiceMockRecorder) RestoreAdvert(r interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RestoreAdvert", reflect.TypeOf((*MockAdvertService)(nil).RestoreAdvert), r)
+}
+
+// MockFeedService is a mock of FeedService interface.
+type MockFeedService struct {
+	ctrl     *gomock.Controller
+	recorder *MockFeedServiceMockRecorder
+}
+
+// MockFeedServiceMockRecorder is the mock recorder for MockFeedService.
+type MockFeedServiceMockRecorder struct {
+	mock *MockFeedService
+}
+
+// NewMockFeedService creates a new mock instance.
+func NewMockFeedService(ctrl *gomock.Controller) *MockFeedService {
+	mock := &MockFeedService{ctrl: ctrl}
+	mock.recorder = &MockFeedServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockFeedService) EXPECT() *MockFeedServiceMockRecorder {
+	return m.recorder
+}
+
+// CreateUserPost mocks base method.
+func (m *MockFeedService) CreateUserPost(r *http.Request) (*feed_proto.CreateUserPostOut, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUserPost", r)
+	ret0, _ := ret[0].(*feed_proto.CreateUserPostOut)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateUserPost indicates an expected call of CreateUserPost.
+func (mr *MockFeedServiceMockRecorder) CreateUserPost(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUserPost", reflect.TypeOf((*MockFeedService)(nil).CreateUserPost), r)
 }

@@ -5,15 +5,16 @@ import (
 	"fmt"
 	"log"
 
-	feed "github.com/s21platform/feed-proto/feed-proto"
+	feedproto "github.com/s21platform/feed-proto/feed-proto"
 	"github.com/s21platform/gateway-service/internal/config"
 	"github.com/s21platform/gateway-service/internal/model"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 )
 
 type Service struct {
-	client feed.FeedServiceClient
+	client feedproto.FeedServiceClient
 }
 
 func New(cfg *config.Config) *Service {
@@ -22,10 +23,18 @@ func New(cfg *config.Config) *Service {
 	if err != nil {
 		log.Fatalf("failed to create grpc client: %v", err)
 	}
-	client := feed.NewFeedServiceClient(conn)
+	client := feedproto.NewFeedServiceClient(conn)
 	return &Service{client: client}
 }
 
-func (s *Service) CreateUserPost(ctx context.Context, req *model.CreateUserPostRequestData) (*feed.CreateUserPostOut, error) {
-
+func (s *Service) CreateUserPost(ctx context.Context, req *model.CreateUserPostRequestData) (*feedproto.CreateUserPostOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	request := &feedproto.CreateUserPostIn{
+		Content: req.Content,
+	}
+	resp, err := s.client.CreateUserPost(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create advert in grpc: %w", err)
+	}
+	return resp, nil
 }

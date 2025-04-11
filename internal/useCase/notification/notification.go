@@ -52,7 +52,7 @@ func (u *UseCase) GetNotification(r *http.Request) (*notification.NotificationOu
 	return u.client.GetNotifications(r.Context(), limit, offset)
 }
 
-func (u *UseCase) MarkNotificationAsRead(r *http.Request) (*emptypb.Empty, error) {
+func (u *UseCase) MarkNotificationsAsRead(r *http.Request) (*emptypb.Empty, error) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 
 	body, err := io.ReadAll(r.Body)

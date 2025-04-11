@@ -38,7 +38,7 @@ type AvatarService interface {
 type NotificationService interface {
 	GetCountNotification(r *http.Request) (*notification.NotificationCountOut, error)
 	GetNotification(r *http.Request) (*notification.NotificationOut, error)
-	MarkNotificationAsRead(r *http.Request) (*emptypb.Empty, error)
+	MarkNotificationsAsRead(r *http.Request) (*emptypb.Empty, error)
 }
 
 type FriendsService interface {

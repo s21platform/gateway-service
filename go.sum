@@ -55,6 +55,8 @@ github.com/s21platform/metrics-lib v0.0.9 h1:nFz4W+xps2nlxpOyGW/JLjZf2sTN/YXomum
 github.com/s21platform/metrics-lib v0.0.9/go.mod h1:Z1Aiy5uuyEmM//rQmhqkVh0JR8l5sVwe83TQegdNFxQ=
 github.com/s21platform/notification-service v0.0.2 h1:CpnosI3ZOxN5OSMD83gRuLhXst+huIEUXO9ES7bZ4rc=
 github.com/s21platform/notification-service v0.0.2/go.mod h1:PU3Ohx/uLNzIwor134rgCQ5Dt8wjhu9ugGWyqUSceDY=
+github.com/s21platform/notification-service v0.0.3 h1:YC9ZS+ELs0IZyyA+oQEiaSp5bSP5qnCAmOAzKifT3+k=
+github.com/s21platform/notification-service v0.0.3/go.mod h1:hx2tTur02F9MD9TYvoKlO1lgPlcts/h/3okGII00xfs=
 github.com/s21platform/optionhub-proto v1.0.13 h1:EsV0LwFn63H+oxYAsyjrnq5KBy07j3ZFtpGSIWSSTUQ=
 github.com/s21platform/optionhub-proto v1.0.13/go.mod h1:drAGej/ZykdMnAOs4xljgKo6KZrNCZzrCslQ6noBqhM=
 github.com/s21platform/search-proto v0.0.10 h1:BbYUDgVaGbWuvxdQefg9exiN06xdMhXROPBkdioKJ/Q=

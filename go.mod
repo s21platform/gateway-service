@@ -15,7 +15,7 @@ require (
 	github.com/s21platform/friends-proto v0.0.12
 	github.com/s21platform/logger-lib v0.0.6
 	github.com/s21platform/metrics-lib v0.0.9
-	github.com/s21platform/notification-service v0.0.2
+	github.com/s21platform/notification-service v0.0.3
 	github.com/s21platform/optionhub-proto v1.0.13
 	github.com/s21platform/search-proto v0.0.10
 	github.com/s21platform/society-proto v0.0.23

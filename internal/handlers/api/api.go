@@ -11,7 +11,6 @@ import (
 	logger_lib "github.com/s21platform/logger-lib"
 
 	"github.com/s21platform/gateway-service/internal/config"
-	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Handler struct {
@@ -212,20 +211,7 @@ func (h *Handler) MarkNotificationAsRead(w http.ResponseWriter, r *http.Request)
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 	logger.AddFuncName("MarkNotificationAsRead")
 
-	var req model.MarkNotificationsAsReadRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		logger.Error("failed to decode request body")
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	if len(req.Data.IDs) == 0 {
-		logger.Error("notification IDs are required")
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	if _, err := h.nS.MarkNotificationAsRead(r); err != nil {
+	if _, err := h.nS.MarkNotificationsAsRead(r); err != nil {
 		logger.Error(fmt.Sprintf("failed to mark notification as read: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return

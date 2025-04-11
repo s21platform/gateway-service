@@ -1017,7 +1017,7 @@ func TestHandler_MarkNotificationAsRead(t *testing.T) {
 			setupMock: func(mock *MockNotificationService) {
 				mockLogger.EXPECT().AddFuncName("MarkNotificationAsRead")
 				mock.EXPECT().
-					MarkNotificationAsRead(gomock.Any()).
+					MarkNotificationsAsRead(gomock.Any()).
 					Return(&emptypb.Empty{}, nil)
 			},
 			expectedStatus: http.StatusOK,
@@ -1062,7 +1062,7 @@ func TestHandler_MarkNotificationAsRead(t *testing.T) {
 				mockLogger.EXPECT().AddFuncName("MarkNotificationAsRead")
 				mockLogger.EXPECT().Error("failed to mark notification as read: service error")
 				mock.EXPECT().
-					MarkNotificationAsRead(gomock.Any()).
+					MarkNotificationsAsRead(gomock.Any()).
 					Return(nil, errors.New("service error"))
 			},
 			expectedStatus: http.StatusInternalServerError,

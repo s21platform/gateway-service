@@ -255,19 +255,19 @@ func (mr *MockNotificationServiceMockRecorder) GetNotification(r interface{}) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetNotification", reflect.TypeOf((*MockNotificationService)(nil).GetNotification), r)
 }
 
-// MarkNotificationAsRead mocks base method.
-func (m *MockNotificationService) MarkNotificationAsRead(r *http.Request) (*emptypb.Empty, error) {
+// MarkNotificationsAsRead mocks base method.
+func (m *MockNotificationService) MarkNotificationsAsRead(r *http.Request) (*emptypb.Empty, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "MarkNotificationAsRead", r)
+	ret := m.ctrl.Call(m, "MarkNotificationsAsRead", r)
 	ret0, _ := ret[0].(*emptypb.Empty)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// MarkNotificationAsRead indicates an expected call of MarkNotificationAsRead.
-func (mr *MockNotificationServiceMockRecorder) MarkNotificationAsRead(r interface{}) *gomock.Call {
+// MarkNotificationsAsRead indicates an expected call of MarkNotificationsAsRead.
+func (mr *MockNotificationServiceMockRecorder) MarkNotificationsAsRead(r interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MarkNotificationAsRead", reflect.TypeOf((*MockNotificationService)(nil).MarkNotificationAsRead), r)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MarkNotificationsAsRead", reflect.TypeOf((*MockNotificationService)(nil).MarkNotificationsAsRead), r)
 }
 
 // MockFriendsService is a mock of FriendsService interface.

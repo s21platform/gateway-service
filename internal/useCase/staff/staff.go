@@ -68,8 +68,8 @@ func (u *UseCase) ListStaff(r *http.Request) (*staff.ListOut, error) {
 	if page := r.URL.Query().Get("page"); page != "" {
 		pageInt, err := strconv.ParseInt(page, 10, 32)
 		if err != nil {
-			logger.Error(fmt.Sprintf("invalid page parameter: %v", err))
-			return nil, fmt.Errorf("invalid page parameter: %w", err)
+			logger.Error(fmt.Sprintf("failed to parse page parameter: %v", err))
+			return nil, fmt.Errorf("failed to parse page parameter: %w", err)
 		}
 		req.Page = int32(pageInt)
 	}
@@ -77,8 +77,8 @@ func (u *UseCase) ListStaff(r *http.Request) (*staff.ListOut, error) {
 	if pageSize := r.URL.Query().Get("page_size"); pageSize != "" {
 		pageSizeInt, err := strconv.ParseInt(pageSize, 10, 32)
 		if err != nil {
-			logger.Error(fmt.Sprintf("invalid page_size parameter: %v", err))
-			return nil, fmt.Errorf("invalid page_size parameter: %w", err)
+			logger.Error(fmt.Sprintf("failed to parse page_size parameter: %v", err))
+			return nil, fmt.Errorf("failed to parse page_size parameter: %w", err)
 		}
 		req.PageSize = int32(pageSizeInt)
 	}
@@ -90,8 +90,8 @@ func (u *UseCase) ListStaff(r *http.Request) (*staff.ListOut, error) {
 	if roleID := r.URL.Query().Get("role_id"); roleID != "" {
 		roleIDInt, err := strconv.ParseInt(roleID, 10, 32)
 		if err != nil {
-			logger.Error(fmt.Sprintf("invalid role_id parameter: %v", err))
-			return nil, fmt.Errorf("invalid role_id parameter: %w", err)
+			logger.Error(fmt.Sprintf("failed to parse role_id parameter: %v", err))
+			return nil, fmt.Errorf("failed to parse role_id parameter: %w", err)
 		}
 		roleIDInt32 := int32(roleIDInt)
 		req.RoleId = &roleIDInt32

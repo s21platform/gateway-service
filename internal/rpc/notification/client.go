@@ -49,32 +49,13 @@ func (c *Client) GetNotifications(ctx context.Context, limit int64, offset int64
 	return result, nil
 }
 
-func (c *Client) MarkNotificationAsRead(ctx context.Context, notificationID int64) (*emptypb.Empty, error) {
-	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
-	result, err := c.client.MarkNotificationAsRead(ctx, &notification.MarkNotificationAsReadIn{NotificationId: notificationID})
-	if err != nil {
-		log.Printf("failed to mark notification as read: %v", err)
-		return nil, fmt.Errorf("failed to mark notification as read: %w", err)
-	}
-	return result, nil
-}
-
 func (c *Client) MarkNotificationsAsRead(ctx context.Context, ids []int64) (*emptypb.Empty, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
-	var lastErr error
-	for _, id := range ids {
-		result, err := c.client.MarkNotificationAsRead(ctx, &notification.MarkNotificationAsReadIn{NotificationId: id})
-		if err != nil {
-			lastErr = err
-			continue
-		}
-		if result == nil {
-			lastErr = fmt.Errorf("empty result for notification ID: %d", id)
-			continue
-		}
+
+	_, err := c.client.MarkNotificationsAsRead(ctx, &notification.MarkNotificationsAsReadIn{NotificationIds: ids})
+	if err != nil {
+		return nil, fmt.Errorf("failed to mark notifications as read: %w", err)
 	}
-	if lastErr != nil {
-		return nil, fmt.Errorf("failed to mark some notifications as read: %w", lastErr)
-	}
+
 	return &emptypb.Empty{}, nil
 }

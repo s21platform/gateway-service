@@ -8,7 +8,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	advert "github.com/s21platform/advert-proto/advert-proto"
-	avatar "github.com/s21platform/avatar-proto/avatar-proto"
+	"github.com/s21platform/avatar-service/pkg/avatar"
 	chat "github.com/s21platform/chat-proto/chat-proto"
 	friends "github.com/s21platform/friends-proto/friends-proto"
 	"github.com/s21platform/notification-service/pkg/notification"

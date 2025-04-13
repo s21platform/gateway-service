@@ -75,11 +75,11 @@ func main() {
 	searchUseCase := searchusecase.New(searchClient)
 	chatUseCase := chatusecase.New(chatClient)
 	advertUseCase := advertusecase.New(advertClient)
-	feedUsecase := feedusecase.New(feedClient)
+	feedUseCase := feedusecase.New(feedClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(cfg, authUseCase)
-	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase, searchUseCase, chatUseCase, advertUseCase, feedUsecase)
+	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase, searchUseCase, chatUseCase, advertUseCase, feedUseCase)
 
 	r := chi.NewRouter()
 

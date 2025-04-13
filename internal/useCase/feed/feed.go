@@ -1,12 +1,10 @@
 package feed
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
 	feed "github.com/s21platform/feed-proto/feed-proto"
-	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Usecase struct {
@@ -18,15 +16,9 @@ func New(feS FeedClient) *Usecase {
 }
 
 func (u *Usecase) CreateUserPost(r *http.Request) (*feed.CreateUserPostOut, error) {
-	requestData := model.CreateUserPostRequestData{}
+	content := r.URL.Query().Get("content")
 
-	err := json.NewDecoder(r.Body).Decode(&requestData)
-	if err != nil {
-		return nil, fmt.Errorf("failed to decode request body: %v", err)
-	}
-	defer r.Body.Close()
-
-	resp, err := u.feS.CreateUserPost(r.Context(), &requestData)
+	resp, err := u.feS.CreateUserPost(r.Context(), content)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create post in usecase: %v", err)
 	}

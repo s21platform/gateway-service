@@ -707,17 +707,17 @@ func (h *Handler) CreateUserPost(w http.ResponseWriter, r *http.Request) {
 
 	result, err := h.feS.CreateUserPost(r)
 	if err != nil {
-        logger.Error(fmt.Sprintf("failed to create user post: %v", err))
-        w.WriteHeader(http.StatusInternalServerError)
-        return
-    }
+		logger.Error(fmt.Sprintf("failed to create user post: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 	jsn, err := json.Marshal(result)
 	if err != nil {
-        logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
-        w.WriteHeader(http.StatusInternalServerError)
-        return
-    }
+		logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
@@ -766,7 +766,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/advert", handler.CreateAdvert)
 		apiRouter.Put("/advert/cancel", handler.CancelAdvert)
 		apiRouter.Patch("/advert/restore", handler.RestoreAdvert)
-		apiRouter.Post("/feed", handler.CreateUserPost)
+		apiRouter.Post("/feed/post", handler.CreateUserPost)
 
 		//crm routes
 		apiRouter.Get("/option_requests", handler.GetOptionRequests)

@@ -1,5 +1,5 @@
 package model
 
-type CreateUserPostRequestData struct {
+type CreatePostRequest struct {
 	Content string `json:"content"`
 }

@@ -109,8 +109,8 @@ type Advert struct {
 }
 
 type Feed struct {
-	Host string `env:"ADVERT_SERVICE_HOST"`
-	Port string `env:"ADVERT_SERVICE_PORT"`
+	Host string `env:"FEED_SERVICE_HOST"`
+	Port string `env:"FEED_SERVICE_PORT"`
 }
 
 func MustLoad() *Config {

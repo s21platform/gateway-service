@@ -14,6 +14,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	advertproto "github.com/s21platform/advert-proto/advert-proto"
@@ -220,14 +221,18 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
 		req = req.WithContext(ctx)
 
-		expectedResult := &societyproto.GetSocietyInfoOut{
-			Name:           "Test Society",
-			Description:    "Test Description",
-			OwnerUUID:      "owner-uuid",
-			PhotoURL:       "https://example.com/photo.jpg",
-			FormatID:       1,
-			PostPermission: 2,
-			IsSearch:       true,
+		expectedResult := &model.SocietyInfo{
+			SocietyUUID:      "test-uuid",
+			Name:             "Test Society",
+			Description:      "Test Description",
+			OwnerUUID:        "owner-uuid",
+			PhotoURL:         "https://example.com/photo.jpg",
+			FormatID:         1,
+			PostPermissionID: 2,
+			IsSearch:         true,
+			CountSubscribe:   0,
+			Tags:             []int64{},
+			CanEditSociety:   false,
 		}
 
 		mockLogger.EXPECT().AddFuncName("GetSocietyInfo")
@@ -251,10 +256,9 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 		s.GetSocietyInfo(w, req)
 
 		assert.Equal(t, http.StatusOK, w.Code)
-
 		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
 
-		var responseBody societyproto.GetSocietyInfoOut
+		var responseBody model.SocietyInfo
 		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
 		assert.NoError(t, err)
 		assert.Equal(t, expectedResult, &responseBody)
@@ -272,7 +276,7 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 
 		expectedError := errors.New("database error")
 		mockLogger.EXPECT().AddFuncName("GetSocietyInfo")
-		mockLogger.EXPECT().Error("failed to get society info error: database error") // Ожидаем вызов Error
+		mockLogger.EXPECT().Error("failed to get society info error: database error")
 		mockSocietyService.EXPECT().GetSocietyInfo(req).Return(nil, expectedError)
 
 		w := httptest.NewRecorder()
@@ -1080,6 +1084,64 @@ func TestHandler_CreateUserPost(t *testing.T) {
 		)
 
 		s.CreateUserPost(w, r)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
+func TestHandler_MarkNotificationAsRead(t *testing.T) {
+	t.Parallel()
+
+	t.Run("successful_mark_as_read", func(t *testing.T) {
+		t.Parallel()
+
+		mockCtrl := gomock.NewController(t)
+		defer mockCtrl.Finish()
+
+		mockLogger := logger_lib.NewMockLoggerInterface(mockCtrl)
+		mockNotificationService := NewMockNotificationService(mockCtrl)
+
+		mockLogger.EXPECT().AddFuncName("MarkNotificationAsRead")
+		mockNotificationService.EXPECT().
+			MarkNotificationsAsRead(gomock.Any()).
+			Return(&emptypb.Empty{}, nil)
+
+		ctx := context.WithValue(context.Background(), config.KeyLogger, mockLogger)
+
+		r := httptest.NewRequest(http.MethodPatch, "/api/notification", nil)
+		r = r.WithContext(ctx)
+		w := httptest.NewRecorder()
+
+		handler := New(nil, nil, mockNotificationService, nil, nil, nil, nil, nil, nil, nil)
+		handler.MarkNotificationAsRead(w, r)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.JSONEq(t, `{}`+"\n", w.Body.String())
+	})
+
+	t.Run("service_error", func(t *testing.T) {
+		t.Parallel()
+
+		mockCtrl := gomock.NewController(t)
+		defer mockCtrl.Finish()
+
+		mockLogger := logger_lib.NewMockLoggerInterface(mockCtrl)
+		mockNotificationService := NewMockNotificationService(mockCtrl)
+
+		mockLogger.EXPECT().AddFuncName("MarkNotificationAsRead")
+		mockLogger.EXPECT().Error(gomock.Any())
+		mockNotificationService.EXPECT().
+			MarkNotificationsAsRead(gomock.Any()).
+			Return(nil, errors.New("service error"))
+
+		ctx := context.WithValue(context.Background(), config.KeyLogger, mockLogger)
+
+		r := httptest.NewRequest(http.MethodPatch, "/api/notification", nil)
+		r = r.WithContext(ctx)
+		w := httptest.NewRecorder()
+
+		handler := New(nil, nil, mockNotificationService, nil, nil, nil, nil, nil, nil, nil)
+		handler.MarkNotificationAsRead(w, r)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})

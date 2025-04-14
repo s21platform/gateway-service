@@ -5,12 +5,14 @@ package api
 import (
 	"net/http"
 
+	"google.golang.org/protobuf/types/known/emptypb"
+
 	advert "github.com/s21platform/advert-proto/advert-proto"
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
 	chat "github.com/s21platform/chat-proto/chat-proto"
 	feed "github.com/s21platform/feed-proto/feed-proto"
 	friends "github.com/s21platform/friends-proto/friends-proto"
-	notificationproto "github.com/s21platform/notification-proto/notification-proto"
+	"github.com/s21platform/notification-service/pkg/notification"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 	societyproto "github.com/s21platform/society-proto/society-proto"
 	userproto "github.com/s21platform/user-proto/user-proto"
@@ -35,8 +37,9 @@ type AvatarService interface {
 }
 
 type NotificationService interface {
-	GetCountNotification(r *http.Request) (*notificationproto.NotificationCountOut, error)
-	GetNotification(r *http.Request) (*notificationproto.NotificationOut, error)
+	GetCountNotification(r *http.Request) (*notification.NotificationCountOut, error)
+	GetNotification(r *http.Request) (*notification.NotificationOut, error)
+	MarkNotificationsAsRead(r *http.Request) (*emptypb.Empty, error)
 }
 
 type FriendsService interface {

@@ -13,6 +13,7 @@ import (
 	"github.com/s21platform/metrics-lib/pkg"
 
 	"github.com/s21platform/gateway-service/internal/config"
+	"github.com/s21platform/gateway-service/internal/handlers/adm"
 	"github.com/s21platform/gateway-service/internal/handlers/api"
 	authhandler "github.com/s21platform/gateway-service/internal/handlers/auth"
 	"github.com/s21platform/gateway-service/internal/middlewares"
@@ -26,6 +27,7 @@ import (
 	"github.com/s21platform/gateway-service/internal/rpc/option"
 	"github.com/s21platform/gateway-service/internal/rpc/search"
 	"github.com/s21platform/gateway-service/internal/rpc/society"
+	"github.com/s21platform/gateway-service/internal/rpc/staff"
 	"github.com/s21platform/gateway-service/internal/rpc/user"
 	advertusecase "github.com/s21platform/gateway-service/internal/useCase/advert"
 	authusecase "github.com/s21platform/gateway-service/internal/useCase/auth"
@@ -37,6 +39,7 @@ import (
 	optionusecase "github.com/s21platform/gateway-service/internal/useCase/option"
 	searchusecase "github.com/s21platform/gateway-service/internal/useCase/search"
 	societyusecase "github.com/s21platform/gateway-service/internal/useCase/society"
+	staffusecase "github.com/s21platform/gateway-service/internal/useCase/staff"
 	userusecase "github.com/s21platform/gateway-service/internal/useCase/user"
 )
 
@@ -63,6 +66,7 @@ func main() {
 	chatClient := chat.NewService(cfg)
 	advertClient := advert.New(cfg)
 	feedClient := feed.New(cfg)
+	staffClient := staff.New(cfg)
 
 	// usecases declaration
 	authUseCase := authusecase.New(authClient)
@@ -75,11 +79,13 @@ func main() {
 	searchUseCase := searchusecase.New(searchClient)
 	chatUseCase := chatusecase.New(chatClient)
 	advertUseCase := advertusecase.New(advertClient)
+	staffUseCase := staffusecase.New(staffClient)
 	feedUseCase := feedusecase.New(feedClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(cfg, authUseCase)
 	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase, searchUseCase, chatUseCase, advertUseCase, feedUseCase)
+	admHandlers := adm.New(staffUseCase)
 
 	r := chi.NewRouter()
 
@@ -92,6 +98,7 @@ func main() {
 
 	authhandler.AttachAuthRoutes(r, authHandlers)
 	api.AttachApiRoutes(r, apiHandlers, cfg)
+	adm.AttachAdmRoutes(r, admHandlers)
 
 	log.Println("Server starting...")
 

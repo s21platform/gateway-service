@@ -208,6 +208,21 @@ func (h *Handler) GetNotifications(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) MarkNotificationAsRead(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("MarkNotificationAsRead")
+
+	if _, err := h.nS.MarkNotificationsAsRead(r); err != nil {
+		logger.Error(fmt.Sprintf("failed to mark notification as read: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write([]byte("{}\n"))
+}
+
 func (h *Handler) GetCountFriends(w http.ResponseWriter, r *http.Request) {
 	result, err := h.fS.GetCountFriends(r)
 	if err != nil {
@@ -740,6 +755,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Delete("/avatar/society", handler.DeleteSocietyAvatar)
 		apiRouter.Get("/notification/count", handler.CountNotifications)
 		apiRouter.Get("/notification", handler.GetNotifications)
+		apiRouter.Patch("/notification", handler.MarkNotificationAsRead)
 		apiRouter.Get("/friends/counts", handler.GetCountFriends)
 		apiRouter.Get("/option/os", handler.GetOsBySearchName)
 		apiRouter.Get("/option/workplace", handler.GetWorkPlaceBySearchName)

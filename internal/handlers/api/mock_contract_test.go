@@ -15,10 +15,11 @@ import (
 	feed_proto "github.com/s21platform/feed-proto/feed-proto"
 	friends_proto "github.com/s21platform/friends-proto/friends-proto"
 	model "github.com/s21platform/gateway-service/internal/model"
-	notification_proto "github.com/s21platform/notification-proto/notification-proto"
+	notification "github.com/s21platform/notification-service/pkg/notification"
 	optionhub_proto "github.com/s21platform/optionhub-proto/optionhub-proto"
 	society_proto "github.com/s21platform/society-proto/society-proto"
 	user_proto "github.com/s21platform/user-proto/user-proto"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // MockUserService is a mock of UserService interface.
@@ -226,10 +227,10 @@ func (m *MockNotificationService) EXPECT() *MockNotificationServiceMockRecorder 
 }
 
 // GetCountNotification mocks base method.
-func (m *MockNotificationService) GetCountNotification(r *http.Request) (*notification_proto.NotificationCountOut, error) {
+func (m *MockNotificationService) GetCountNotification(r *http.Request) (*notification.NotificationCountOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCountNotification", r)
-	ret0, _ := ret[0].(*notification_proto.NotificationCountOut)
+	ret0, _ := ret[0].(*notification.NotificationCountOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -241,10 +242,10 @@ func (mr *MockNotificationServiceMockRecorder) GetCountNotification(r interface{
 }
 
 // GetNotification mocks base method.
-func (m *MockNotificationService) GetNotification(r *http.Request) (*notification_proto.NotificationOut, error) {
+func (m *MockNotificationService) GetNotification(r *http.Request) (*notification.NotificationOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetNotification", r)
-	ret0, _ := ret[0].(*notification_proto.NotificationOut)
+	ret0, _ := ret[0].(*notification.NotificationOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -253,6 +254,21 @@ func (m *MockNotificationService) GetNotification(r *http.Request) (*notificatio
 func (mr *MockNotificationServiceMockRecorder) GetNotification(r interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetNotification", reflect.TypeOf((*MockNotificationService)(nil).GetNotification), r)
+}
+
+// MarkNotificationsAsRead mocks base method.
+func (m *MockNotificationService) MarkNotificationsAsRead(r *http.Request) (*emptypb.Empty, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "MarkNotificationsAsRead", r)
+	ret0, _ := ret[0].(*emptypb.Empty)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// MarkNotificationsAsRead indicates an expected call of MarkNotificationsAsRead.
+func (mr *MockNotificationServiceMockRecorder) MarkNotificationsAsRead(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MarkNotificationsAsRead", reflect.TypeOf((*MockNotificationService)(nil).MarkNotificationsAsRead), r)
 }
 
 // MockFriendsService is a mock of FriendsService interface.

@@ -79,8 +79,8 @@ func main() {
 	searchUseCase := searchusecase.New(searchClient)
 	chatUseCase := chatusecase.New(chatClient)
 	advertUseCase := advertusecase.New(advertClient)
-	staffUseCase := staffusecase.New(staffClient)
 	feedUseCase := feedusecase.New(feedClient)
+	staffUseCase := staffusecase.New(staffClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(cfg, authUseCase)

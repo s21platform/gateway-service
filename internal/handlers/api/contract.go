@@ -10,6 +10,7 @@ import (
 	advert "github.com/s21platform/advert-proto/advert-proto"
 	avatar "github.com/s21platform/avatar-proto/avatar-proto"
 	chat "github.com/s21platform/chat-proto/chat-proto"
+	feed "github.com/s21platform/feed-proto/feed-proto"
 	friends "github.com/s21platform/friends-proto/friends-proto"
 	"github.com/s21platform/notification-service/pkg/notification"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
@@ -81,4 +82,8 @@ type AdvertService interface {
 	CreateAdvert(r *http.Request) (*advert.AdvertEmpty, error)
 	CancelAdvert(r *http.Request) (*advert.AdvertEmpty, error)
 	RestoreAdvert(r *http.Request) (*advert.AdvertEmpty, error)
+}
+
+type FeedService interface {
+	CreateUserPost(r *http.Request) (*feed.CreateUserPostOut, error)
 }

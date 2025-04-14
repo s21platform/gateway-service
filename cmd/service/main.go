@@ -21,6 +21,7 @@ import (
 	"github.com/s21platform/gateway-service/internal/rpc/auth"
 	"github.com/s21platform/gateway-service/internal/rpc/avatar"
 	"github.com/s21platform/gateway-service/internal/rpc/chat"
+	"github.com/s21platform/gateway-service/internal/rpc/feed"
 	"github.com/s21platform/gateway-service/internal/rpc/friends"
 	"github.com/s21platform/gateway-service/internal/rpc/notification"
 	"github.com/s21platform/gateway-service/internal/rpc/option"
@@ -32,6 +33,7 @@ import (
 	authusecase "github.com/s21platform/gateway-service/internal/useCase/auth"
 	avatarusecase "github.com/s21platform/gateway-service/internal/useCase/avatar"
 	chatusecase "github.com/s21platform/gateway-service/internal/useCase/chat"
+	feedusecase "github.com/s21platform/gateway-service/internal/useCase/feed"
 	friendsusecase "github.com/s21platform/gateway-service/internal/useCase/friends"
 	notificationusecase "github.com/s21platform/gateway-service/internal/useCase/notification"
 	optionusecase "github.com/s21platform/gateway-service/internal/useCase/option"
@@ -63,6 +65,7 @@ func main() {
 	searchClient := search.NewService(cfg)
 	chatClient := chat.NewService(cfg)
 	advertClient := advert.New(cfg)
+	feedClient := feed.New(cfg)
 	staffClient := staff.New(cfg)
 
 	// usecases declaration
@@ -76,11 +79,12 @@ func main() {
 	searchUseCase := searchusecase.New(searchClient)
 	chatUseCase := chatusecase.New(chatClient)
 	advertUseCase := advertusecase.New(advertClient)
+	feedUseCase := feedusecase.New(feedClient)
 	staffUseCase := staffusecase.New(staffClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(cfg, authUseCase)
-	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase, searchUseCase, chatUseCase, advertUseCase)
+	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase, searchUseCase, chatUseCase, advertUseCase, feedUseCase)
 	admHandlers := adm.New(staffUseCase)
 
 	r := chi.NewRouter()

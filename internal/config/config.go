@@ -34,6 +34,7 @@ type Config struct {
 	Search       Search
 	Chat         Chat
 	Advert       Advert
+	Feed         Feed
 	Staff        Staff
 }
 
@@ -107,6 +108,11 @@ type Chat struct {
 type Advert struct {
 	Host string `env:"ADVERT_SERVICE_HOST"`
 	Port string `env:"ADVERT_SERVICE_PORT"`
+}
+
+type Feed struct {
+	Host string `env:"FEED_SERVICE_HOST"`
+	Port string `env:"FEED_SERVICE_PORT"`
 }
 
 type Staff struct {

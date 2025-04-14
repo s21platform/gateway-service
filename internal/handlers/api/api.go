@@ -23,10 +23,11 @@ type Handler struct {
 	srS SearchService
 	cS  ChatService
 	adS AdvertService
+	feS FeedService
 }
 
-func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsService, oS OptionService, sS SocietyService, srS SearchService, cS ChatService, adS AdvertService) *Handler {
-	return &Handler{uS: uS, aS: aS, nS: nS, fS: fS, oS: oS, sS: sS, srS: srS, cS: cS, adS: adS}
+func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsService, oS OptionService, sS SocietyService, srS SearchService, cS ChatService, adS AdvertService, feS FeedService) *Handler {
+	return &Handler{uS: uS, aS: aS, nS: nS, fS: fS, oS: oS, sS: sS, srS: srS, cS: cS, adS: adS, feS: feS}
 }
 
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
@@ -715,6 +716,29 @@ func (h *Handler) GetOptionRequests(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) CreateUserPost(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("CreateUserPost")
+
+	result, err := h.feS.CreateUserPost(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to create user post: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(func(next http.Handler) http.Handler {
@@ -758,6 +782,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/advert", handler.CreateAdvert)
 		apiRouter.Put("/advert/cancel", handler.CancelAdvert)
 		apiRouter.Patch("/advert/restore", handler.RestoreAdvert)
+		apiRouter.Post("/feed/post", handler.CreateUserPost)
 
 		//crm routes
 		apiRouter.Get("/option_requests", handler.GetOptionRequests)

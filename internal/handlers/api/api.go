@@ -65,31 +65,44 @@ func (h *Handler) PeerInfo(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) SetUserAvatar(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("SetUserAvatar")
+
 	resp, err := h.aS.UploadUserAvatar(r)
 	if err != nil {
-		log.Printf("upload avatar error: %v", err)
+		logger.Error(fmt.Sprintf("failed to set user avatar: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	jsn, err := json.Marshal(resp)
 	if err != nil {
-		log.Printf("json marshal error: %v", err)
-	}
-	_, _ = w.Write(jsn)
-}
-
-func (h *Handler) GetAllUserAvatars(w http.ResponseWriter, r *http.Request) {
-	avatars, err := h.aS.GetUserAvatarsList(r)
-	if err != nil {
-		log.Printf("get all avatars error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	jsn, err := json.Marshal(avatars)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) GetAllUserAvatars(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("GetAllUserAvatars")
+
+	resp, err := h.aS.GetUserAvatarsList(r)
 	if err != nil {
-		log.Printf("json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to get all user avatars: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(resp)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -98,16 +111,19 @@ func (h *Handler) GetAllUserAvatars(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) DeleteUserAvatar(w http.ResponseWriter, r *http.Request) {
-	deletedAvatar, err := h.aS.RemoveUserAvatar(r)
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("DeleteUserAvatar")
+
+	resp, err := h.aS.RemoveUserAvatar(r)
 	if err != nil {
-		log.Printf("delete avatar error: %v", err)
+		logger.Error(fmt.Sprintf("failed to delete user avatar: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	jsn, err := json.Marshal(deletedAvatar)
+	jsn, err := json.Marshal(resp)
 	if err != nil {
-		log.Printf("json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -118,31 +134,44 @@ func (h *Handler) DeleteUserAvatar(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) SetSocietyAvatar(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("SetSocietyAvatar")
+
 	resp, err := h.aS.UploadSocietyAvatar(r)
 	if err != nil {
-		log.Printf("upload avatar error: %v", err)
+		logger.Error(fmt.Sprintf("failed to set society avatar: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	jsn, err := json.Marshal(resp)
 	if err != nil {
-		log.Printf("json marshal error: %v", err)
-	}
-	_, _ = w.Write(jsn)
-}
-
-func (h *Handler) GetAllSocietyAvatars(w http.ResponseWriter, r *http.Request) {
-	avatars, err := h.aS.GetSocietyAvatarsList(r)
-	if err != nil {
-		log.Printf("get all avatars error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	jsn, err := json.Marshal(avatars)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) GetAllSocietyAvatars(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("GetAllSocietyAvatars")
+
+	resp, err := h.aS.GetSocietyAvatarsList(r)
 	if err != nil {
-		log.Printf("json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to get all society avatars: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(resp)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -151,16 +180,19 @@ func (h *Handler) GetAllSocietyAvatars(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) DeleteSocietyAvatar(w http.ResponseWriter, r *http.Request) {
-	deletedAvatar, err := h.aS.RemoveSocietyAvatar(r)
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("DeleteSocietyAvatar")
+
+	resp, err := h.aS.RemoveSocietyAvatar(r)
 	if err != nil {
-		log.Printf("delete avatar error: %v", err)
+		logger.Error(fmt.Sprintf("failed to delete society avatar: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	jsn, err := json.Marshal(deletedAvatar)
+	jsn, err := json.Marshal(resp)
 	if err != nil {
-		log.Printf("json marshal error: %v", err)
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

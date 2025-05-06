@@ -177,10 +177,34 @@ func prepareResponse(message string, isAuth bool) ([]byte, error) {
 	return msg, nil
 }
 
+func (h *Handler) CheckEmailAvailability(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("CheckEmailAvailability")
+
+	result, err := h.aucSrv.CheckEmailAvailability(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to restore advert: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(&result)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func AttachAuthRoutes(r chi.Router, handler *Handler) {
 	r.Route("/auth", func(authRouter chi.Router) {
 		authRouter.Post("/login", handler.Login)
 		authRouter.Get("/check-auth", handler.CheckAuth)
 		authRouter.Get("/logout", handler.Logout)
+		authRouter.Get("/check-email", handler.CheckEmailAvailability)
 	})
 }

@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 
-	auth "github.com/s21platform/auth-proto/auth-proto"
+	"github.com/s21platform/auth-service/pkg/auth"
 
 	"github.com/s21platform/gateway-service/internal/config"
 )
@@ -50,4 +50,13 @@ func (s *Service) DoLogin(ctx context.Context, username, password string) (*JWT,
 		return nil, status.Error(codes.Internal, "Unknown error")
 	}
 	return &JWT{Jwt: resp.Jwt}, nil
+}
+
+func (s *Service) CheckEmailAvailability(ctx context.Context, email string) (*auth.CheckEmailAvailabilityOut, error) {
+	resp, err := s.client.CheckEmailAvailability(ctx, &auth.CheckEmailAvailabilityIn{Email: email})
+	if err != nil {
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to check email in grpc: %v", err))
+	}
+
+	return resp, nil
 }

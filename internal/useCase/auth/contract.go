@@ -4,6 +4,7 @@ import (
 	"context"
 
 	authproto "github.com/s21platform/auth-service/pkg/auth"
+
 	"github.com/s21platform/gateway-service/internal/rpc/auth"
 )
 

@@ -183,7 +183,7 @@ func (h *Handler) CheckEmailAvailability(w http.ResponseWriter, r *http.Request)
 
 	result, err := h.aucSrv.CheckEmailAvailability(r)
 	if err != nil {
-		logger.Error(fmt.Sprintf("failed to restore advert: %v", err))
+		logger.Error(fmt.Sprintf("failed to check email: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

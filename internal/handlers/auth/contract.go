@@ -2,10 +2,13 @@ package auth
 
 import (
 	"context"
+	"net/http"
 
+	"github.com/s21platform/gateway-service/internal/model"
 	"github.com/s21platform/gateway-service/internal/rpc/auth"
 )
 
 type Usecase interface {
 	Login(ctx context.Context, username string, password string) (*auth.JWT, error)
+	CheckEmailAvailability(r *http.Request) (*model.EmailResponse, error)
 }

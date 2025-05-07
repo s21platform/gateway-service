@@ -1,6 +1,6 @@
 module github.com/s21platform/gateway-service
 
-go 1.24
+go 1.24.0
 
 require (
 	github.com/go-chi/chi/v5 v5.2.1
@@ -9,7 +9,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/s21platform/advert-proto v0.0.5
-	github.com/s21platform/auth-proto v0.0.0-20240514091002-319cbc4745e5
+	github.com/s21platform/auth-service v0.0.0-20250506223447-def7d9e56880
 	github.com/s21platform/avatar-proto v0.0.10
 	github.com/s21platform/avatar-service v0.0.0-20250413140705-e6a9bfa3b906
 	github.com/s21platform/chat-proto v0.0.14

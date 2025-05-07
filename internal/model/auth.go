@@ -15,3 +15,7 @@ type CheckAuth struct {
 	IsAuth bool   `json:"isAuthenticated"`
 	Error  string `json:"error,omitempty"`
 }
+
+type EmailResponse struct {
+	IsAvailable bool `json:"isAvailable"`
+}

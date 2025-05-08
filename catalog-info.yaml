@@ -18,6 +18,3 @@ spec:
   type: service
   lifecycle: production
   owner: alexseipopov  # GitHub-логин ответственного
-  providesApis:
-  consumesApis:
-  dependsOn:

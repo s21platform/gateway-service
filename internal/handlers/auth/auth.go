@@ -200,11 +200,35 @@ func (h *Handler) CheckEmailAvailability(w http.ResponseWriter, r *http.Request)
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) SendUserVerificationCode(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("SendUserVerificationCode")
+
+	result, err := h.aucSrv.SendUserVerificationCode(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to send user verification code: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(&result)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func AttachAuthRoutes(r chi.Router, handler *Handler) {
 	r.Route("/auth", func(authRouter chi.Router) {
 		authRouter.Post("/login", handler.Login)
 		authRouter.Get("/check-auth", handler.CheckAuth)
 		authRouter.Get("/logout", handler.Logout)
 		authRouter.Get("/check-email", handler.CheckEmailAvailability)
+		authRouter.Post("/send-code", handler.SendUserVerificationCode)
 	})
 }

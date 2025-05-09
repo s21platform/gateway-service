@@ -11,4 +11,5 @@ import (
 type AuthClient interface {
 	DoLogin(ctx context.Context, username, password string) (*auth.JWT, error)
 	CheckEmailAvailability(ctx context.Context, email string) (*authproto.CheckEmailAvailabilityOut, error)
+	SendUserVerificationCode(ctx context.Context, email string) (*authproto.SendUserVerificationCodeOut, error)
 }

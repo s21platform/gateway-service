@@ -17,5 +17,9 @@ type CheckAuth struct {
 }
 
 type EmailResponse struct {
-	IsAvailable bool `json:"isAvailable"`
+	IsAvailable bool `json:"is_available"`
+}
+
+type CodeRequest struct {
+	Email string `json:"email"`
 }

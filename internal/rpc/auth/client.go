@@ -60,3 +60,12 @@ func (s *Service) CheckEmailAvailability(ctx context.Context, email string) (*au
 
 	return resp, nil
 }
+
+func (s *Service) SendUserVerificationCode(ctx context.Context, email string) (*auth.SendUserVerificationCodeOut, error) {
+	resp, err := s.client.SendUserVerificationCode(ctx, &auth.SendUserVerificationCodeIn{Email: email})
+	if err != nil {
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to send code in grpc: %v", err))
+	}
+
+	return resp, nil
+}

@@ -69,3 +69,22 @@ func (s *Service) SendUserVerificationCode(ctx context.Context, email string) (*
 
 	return resp, nil
 }
+
+func (s *Service) LoginV2(ctx context.Context, login, password string) (*auth.LoginV2Out, error) {
+	resp, err := s.client.LoginV2(ctx, &auth.LoginV2In{
+		Login:    login,
+		Password: password,
+	})
+	if err != nil {
+		if statusError, ok := status.FromError(err); ok {
+			switch statusError.Code() {
+			case codes.InvalidArgument:
+				return nil, status.Error(codes.InvalidArgument, "Неверно введены логин или пароль")
+			default:
+				return nil, status.Error(codes.Internal, "Неизвестная ошибка")
+			}
+		}
+		return nil, status.Error(codes.Internal, "Unknown error")
+	}
+	return resp, nil
+}

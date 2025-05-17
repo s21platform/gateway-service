@@ -23,3 +23,12 @@ type EmailResponse struct {
 type CodeRequest struct {
 	Email string `json:"email"`
 }
+
+type LoginV2Response struct {
+	AccessToken string `json:"access_token"`
+}
+
+type LoginRequest struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
+}

@@ -54,3 +54,20 @@ func (uc *Usecase) SendUserVerificationCode(r *http.Request) (*authproto.SendUse
 
 	return resp, nil
 }
+
+func (uc *Usecase) LoginV2(r *http.Request) (*authproto.LoginV2Out, error) {
+	var requestData model.LoginRequest
+
+	err := json.NewDecoder(r.Body).Decode(&requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %v", err)
+	}
+	defer r.Body.Close()
+
+	resp, err := uc.aC.LoginV2(r.Context(), requestData.Login, requestData.Password)
+	if err != nil {
+		return nil, fmt.Errorf("failed to login in usecase: %v", err)
+	}
+
+	return resp, nil
+}

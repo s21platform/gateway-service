@@ -9,7 +9,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/s21platform/advert-proto v0.0.5
-	github.com/s21platform/auth-service v0.0.0-20250509170327-76f8dcdf576c
+	github.com/s21platform/auth-service v0.0.1
 	github.com/s21platform/avatar-proto v0.0.10
 	github.com/s21platform/avatar-service v0.0.0-20250413140705-e6a9bfa3b906
 	github.com/s21platform/chat-proto v0.0.14

@@ -18,7 +18,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	advertproto "github.com/s21platform/advert-proto/advert-proto"
-	chatproto "github.com/s21platform/chat-proto/chat-proto"
+	chatproto "github.com/s21platform/chat-service/pkg/chat"
 	feedproto "github.com/s21platform/feed-proto/feed-proto"
 	logger_lib "github.com/s21platform/logger-lib"
 	societyproto "github.com/s21platform/society-proto/society-proto"

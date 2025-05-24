@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	chat "github.com/s21platform/chat-proto/chat-proto"
+	"github.com/s21platform/chat-service/pkg/chat"
 
 	"github.com/s21platform/gateway-service/internal/model"
 )

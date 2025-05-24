@@ -8,8 +8,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/protobuf/types/known/emptypb"
 
-	chat "github.com/s21platform/chat-proto/chat-proto"
+	"github.com/s21platform/chat-service/pkg/chat"
 
 	"github.com/s21platform/gateway-service/internal/config"
 )
@@ -33,7 +34,7 @@ func NewService(cfg *config.Config) *Service {
 func (s *Service) GetChats(ctx context.Context) (*chat.GetChatsOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 
-	resp, err := s.client.GetChats(ctx, &chat.ChatEmpty{})
+	resp, err := s.client.GetChats(ctx, &emptypb.Empty{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get chats in rpc: %v", err)
 	}

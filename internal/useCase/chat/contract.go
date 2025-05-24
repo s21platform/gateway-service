@@ -3,7 +3,7 @@ package chat
 import (
 	"context"
 
-	chat "github.com/s21platform/chat-proto/chat-proto"
+	"github.com/s21platform/chat-service/pkg/chat"
 )
 
 type ChatClient interface {

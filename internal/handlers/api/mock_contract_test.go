@@ -10,8 +10,8 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 	advert_proto "github.com/s21platform/advert-proto/advert-proto"
-	avatar_proto "github.com/s21platform/avatar-proto/avatar-proto"
-	chat_proto "github.com/s21platform/chat-proto/chat-proto"
+	avatar "github.com/s21platform/avatar-service/pkg/avatar"
+	chat "github.com/s21platform/chat-service/pkg/chat"
 	feed_proto "github.com/s21platform/feed-proto/feed-proto"
 	friends_proto "github.com/s21platform/friends-proto/friends-proto"
 	model "github.com/s21platform/gateway-service/internal/model"
@@ -114,10 +114,10 @@ func (m *MockAvatarService) EXPECT() *MockAvatarServiceMockRecorder {
 }
 
 // GetSocietyAvatarsList mocks base method.
-func (m *MockAvatarService) GetSocietyAvatarsList(r *http.Request) (*avatar_proto.GetAllSocietyAvatarsOut, error) {
+func (m *MockAvatarService) GetSocietyAvatarsList(r *http.Request) (*avatar.GetAllSocietyAvatarsOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetSocietyAvatarsList", r)
-	ret0, _ := ret[0].(*avatar_proto.GetAllSocietyAvatarsOut)
+	ret0, _ := ret[0].(*avatar.GetAllSocietyAvatarsOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -129,10 +129,10 @@ func (mr *MockAvatarServiceMockRecorder) GetSocietyAvatarsList(r interface{}) *g
 }
 
 // GetUserAvatarsList mocks base method.
-func (m *MockAvatarService) GetUserAvatarsList(r *http.Request) (*avatar_proto.GetAllUserAvatarsOut, error) {
+func (m *MockAvatarService) GetUserAvatarsList(r *http.Request) (*avatar.GetAllUserAvatarsOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUserAvatarsList", r)
-	ret0, _ := ret[0].(*avatar_proto.GetAllUserAvatarsOut)
+	ret0, _ := ret[0].(*avatar.GetAllUserAvatarsOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -144,10 +144,10 @@ func (mr *MockAvatarServiceMockRecorder) GetUserAvatarsList(r interface{}) *gomo
 }
 
 // RemoveSocietyAvatar mocks base method.
-func (m *MockAvatarService) RemoveSocietyAvatar(r *http.Request) (*avatar_proto.Avatar, error) {
+func (m *MockAvatarService) RemoveSocietyAvatar(r *http.Request) (*avatar.Avatar, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveSocietyAvatar", r)
-	ret0, _ := ret[0].(*avatar_proto.Avatar)
+	ret0, _ := ret[0].(*avatar.Avatar)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -159,10 +159,10 @@ func (mr *MockAvatarServiceMockRecorder) RemoveSocietyAvatar(r interface{}) *gom
 }
 
 // RemoveUserAvatar mocks base method.
-func (m *MockAvatarService) RemoveUserAvatar(r *http.Request) (*avatar_proto.Avatar, error) {
+func (m *MockAvatarService) RemoveUserAvatar(r *http.Request) (*avatar.Avatar, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveUserAvatar", r)
-	ret0, _ := ret[0].(*avatar_proto.Avatar)
+	ret0, _ := ret[0].(*avatar.Avatar)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -174,10 +174,10 @@ func (mr *MockAvatarServiceMockRecorder) RemoveUserAvatar(r interface{}) *gomock
 }
 
 // UploadSocietyAvatar mocks base method.
-func (m *MockAvatarService) UploadSocietyAvatar(r *http.Request) (*avatar_proto.SetSocietyAvatarOut, error) {
+func (m *MockAvatarService) UploadSocietyAvatar(r *http.Request) (*avatar.SetSocietyAvatarOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UploadSocietyAvatar", r)
-	ret0, _ := ret[0].(*avatar_proto.SetSocietyAvatarOut)
+	ret0, _ := ret[0].(*avatar.SetSocietyAvatarOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -189,10 +189,10 @@ func (mr *MockAvatarServiceMockRecorder) UploadSocietyAvatar(r interface{}) *gom
 }
 
 // UploadUserAvatar mocks base method.
-func (m *MockAvatarService) UploadUserAvatar(r *http.Request) (*avatar_proto.SetUserAvatarOut, error) {
+func (m *MockAvatarService) UploadUserAvatar(r *http.Request) (*avatar.SetUserAvatarOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UploadUserAvatar", r)
-	ret0, _ := ret[0].(*avatar_proto.SetUserAvatarOut)
+	ret0, _ := ret[0].(*avatar.SetUserAvatarOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -641,10 +641,10 @@ func (m *MockChatService) EXPECT() *MockChatServiceMockRecorder {
 }
 
 // CreatePrivateChat mocks base method.
-func (m *MockChatService) CreatePrivateChat(r *http.Request) (*chat_proto.CreatePrivateChatOut, error) {
+func (m *MockChatService) CreatePrivateChat(r *http.Request) (*chat.CreatePrivateChatOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePrivateChat", r)
-	ret0, _ := ret[0].(*chat_proto.CreatePrivateChatOut)
+	ret0, _ := ret[0].(*chat.CreatePrivateChatOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -656,10 +656,10 @@ func (mr *MockChatServiceMockRecorder) CreatePrivateChat(r interface{}) *gomock.
 }
 
 // GetChats mocks base method.
-func (m *MockChatService) GetChats(r *http.Request) (*chat_proto.GetChatsOut, error) {
+func (m *MockChatService) GetChats(r *http.Request) (*chat.GetChatsOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetChats", r)
-	ret0, _ := ret[0].(*chat_proto.GetChatsOut)
+	ret0, _ := ret[0].(*chat.GetChatsOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -671,10 +671,10 @@ func (mr *MockChatServiceMockRecorder) GetChats(r interface{}) *gomock.Call {
 }
 
 // GetPrivateRecentMessages mocks base method.
-func (m *MockChatService) GetPrivateRecentMessages(r *http.Request) (*chat_proto.GetPrivateRecentMessagesOut, error) {
+func (m *MockChatService) GetPrivateRecentMessages(r *http.Request) (*chat.GetPrivateRecentMessagesOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPrivateRecentMessages", r)
-	ret0, _ := ret[0].(*chat_proto.GetPrivateRecentMessagesOut)
+	ret0, _ := ret[0].(*chat.GetPrivateRecentMessagesOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

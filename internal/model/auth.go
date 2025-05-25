@@ -24,11 +24,19 @@ type CodeRequest struct {
 	Email string `json:"email"`
 }
 
-type LoginV2Response struct {
-	AccessToken string `json:"access_token"`
+type RegisterRequest struct {
+	Email           string `json:"email"`
+	Password        string `json:"password"`
+	ConfirmPassword string `json:"confirm_password"`
+	Code            string `json:"code"`
+	CodeLookupUUID  string `json:"code_lookup_uuid"`
 }
 
 type LoginRequest struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
+}
+
+type LoginV2Response struct {
+	AccessToken string `json:"access_token"`
 }

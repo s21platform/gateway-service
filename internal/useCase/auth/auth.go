@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	authproto "github.com/s21platform/auth-service/pkg/auth"
+	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/s21platform/gateway-service/internal/model"
 	"github.com/s21platform/gateway-service/internal/rpc/auth"
@@ -50,6 +51,40 @@ func (uc *Usecase) SendUserVerificationCode(r *http.Request) (*authproto.SendUse
 	resp, err := uc.aC.SendUserVerificationCode(r.Context(), requestData.Email)
 	if err != nil {
 		return nil, fmt.Errorf("failed to send code in usecase: %v", err)
+	}
+
+	return resp, nil
+}
+
+func (uc *Usecase) RegisterUser(r *http.Request) (*emptypb.Empty, error) {
+	var requestData model.RegisterRequest
+
+	err := json.NewDecoder(r.Body).Decode(&requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %v", err)
+	}
+	defer r.Body.Close()
+
+	resp, err := uc.aC.RegisterUser(r.Context(), &requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to register in usecase: %v", err)
+	}
+
+	return resp, nil
+}
+
+func (uc *Usecase) LoginV2(r *http.Request) (*authproto.LoginV2Out, error) {
+	var requestData model.LoginRequest
+
+	err := json.NewDecoder(r.Body).Decode(&requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %v", err)
+	}
+	defer r.Body.Close()
+
+	resp, err := uc.aC.LoginV2(r.Context(), requestData.Login, requestData.Password)
+	if err != nil {
+		return nil, fmt.Errorf("failed to login in usecase: %v", err)
 	}
 
 	return resp, nil

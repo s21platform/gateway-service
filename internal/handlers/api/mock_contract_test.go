@@ -11,7 +11,6 @@ import (
 	gomock "github.com/golang/mock/gomock"
 	advert_proto "github.com/s21platform/advert-proto/advert-proto"
 	avatar "github.com/s21platform/avatar-service/pkg/avatar"
-	chat_proto "github.com/s21platform/chat-proto/chat-proto"
 	chat "github.com/s21platform/chat-service/pkg/chat"
 	feed_proto "github.com/s21platform/feed-proto/feed-proto"
 	friends_proto "github.com/s21platform/friends-proto/friends-proto"

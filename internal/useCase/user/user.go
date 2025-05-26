@@ -3,9 +3,10 @@ package user
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/s21platform/user-service/pkg/user"
 	"io"
 	"net/http"
+
+	"github.com/s21platform/user-service/pkg/user"
 
 	userproto "github.com/s21platform/user-proto/user-proto"
 

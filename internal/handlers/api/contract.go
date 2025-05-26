@@ -3,8 +3,9 @@
 package api
 
 import (
-	"github.com/s21platform/user-service/pkg/user"
 	"net/http"
+
+	"github.com/s21platform/user-service/pkg/user"
 
 	"google.golang.org/protobuf/types/known/emptypb"
 

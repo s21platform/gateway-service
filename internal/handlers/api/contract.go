@@ -3,6 +3,7 @@
 package api
 
 import (
+	"github.com/s21platform/user-service/pkg/user"
 	"net/http"
 
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -12,18 +13,20 @@ import (
 	chat "github.com/s21platform/chat-proto/chat-proto"
 	feed "github.com/s21platform/feed-proto/feed-proto"
 	friends "github.com/s21platform/friends-proto/friends-proto"
+	"github.com/s21platform/gateway-service/internal/model"
 	"github.com/s21platform/notification-service/pkg/notification"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 	societyproto "github.com/s21platform/society-proto/society-proto"
 	userproto "github.com/s21platform/user-proto/user-proto"
-
-	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type UserService interface {
 	GetInfoByUUID(r *http.Request) (*userproto.GetUserInfoByUUIDOut, error)
 	UpdateProfileInfo(r *http.Request) (*userproto.UpdateProfileOut, error)
 	GetPeerInfo(r *http.Request) (*userproto.GetUserInfoByUUIDOut, error)
+	SetUserFriends(r *http.Request) (*user.SetFriendsOut, error)
+	RemoveUserFriends(r *http.Request) (*user.RemoveFriendsOut, error)
+	GetUserCountFriends(r *http.Request) (*user.GetCountFriendsOut, error)
 }
 
 type AvatarService interface {

@@ -10,7 +10,7 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 	advert_proto "github.com/s21platform/advert-proto/advert-proto"
-	avatar_proto "github.com/s21platform/avatar-proto/avatar-proto"
+	avatar "github.com/s21platform/avatar-service/pkg/avatar"
 	chat_proto "github.com/s21platform/chat-proto/chat-proto"
 	feed_proto "github.com/s21platform/feed-proto/feed-proto"
 	friends_proto "github.com/s21platform/friends-proto/friends-proto"
@@ -19,6 +19,7 @@ import (
 	optionhub_proto "github.com/s21platform/optionhub-proto/optionhub-proto"
 	society_proto "github.com/s21platform/society-proto/society-proto"
 	user_proto "github.com/s21platform/user-proto/user-proto"
+	user "github.com/s21platform/user-service/pkg/user"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -75,6 +76,51 @@ func (mr *MockUserServiceMockRecorder) GetPeerInfo(r interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPeerInfo", reflect.TypeOf((*MockUserService)(nil).GetPeerInfo), r)
 }
 
+// GetUserCountFriends mocks base method.
+func (m *MockUserService) GetUserCountFriends(r *http.Request) (*user.GetCountFriendsOut, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserCountFriends", r)
+	ret0, _ := ret[0].(*user.GetCountFriendsOut)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserCountFriends indicates an expected call of GetUserCountFriends.
+func (mr *MockUserServiceMockRecorder) GetUserCountFriends(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserCountFriends", reflect.TypeOf((*MockUserService)(nil).GetUserCountFriends), r)
+}
+
+// RemoveUserFriends mocks base method.
+func (m *MockUserService) RemoveUserFriends(r *http.Request) (*user.RemoveFriendsOut, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveUserFriends", r)
+	ret0, _ := ret[0].(*user.RemoveFriendsOut)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RemoveUserFriends indicates an expected call of RemoveUserFriends.
+func (mr *MockUserServiceMockRecorder) RemoveUserFriends(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveUserFriends", reflect.TypeOf((*MockUserService)(nil).RemoveUserFriends), r)
+}
+
+// SetUserFriends mocks base method.
+func (m *MockUserService) SetUserFriends(r *http.Request) (*user.SetFriendsOut, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetUserFriends", r)
+	ret0, _ := ret[0].(*user.SetFriendsOut)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SetUserFriends indicates an expected call of SetUserFriends.
+func (mr *MockUserServiceMockRecorder) SetUserFriends(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetUserFriends", reflect.TypeOf((*MockUserService)(nil).SetUserFriends), r)
+}
+
 // UpdateProfileInfo mocks base method.
 func (m *MockUserService) UpdateProfileInfo(r *http.Request) (*user_proto.UpdateProfileOut, error) {
 	m.ctrl.T.Helper()
@@ -114,10 +160,10 @@ func (m *MockAvatarService) EXPECT() *MockAvatarServiceMockRecorder {
 }
 
 // GetSocietyAvatarsList mocks base method.
-func (m *MockAvatarService) GetSocietyAvatarsList(r *http.Request) (*avatar_proto.GetAllSocietyAvatarsOut, error) {
+func (m *MockAvatarService) GetSocietyAvatarsList(r *http.Request) (*avatar.GetAllSocietyAvatarsOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetSocietyAvatarsList", r)
-	ret0, _ := ret[0].(*avatar_proto.GetAllSocietyAvatarsOut)
+	ret0, _ := ret[0].(*avatar.GetAllSocietyAvatarsOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -129,10 +175,10 @@ func (mr *MockAvatarServiceMockRecorder) GetSocietyAvatarsList(r interface{}) *g
 }
 
 // GetUserAvatarsList mocks base method.
-func (m *MockAvatarService) GetUserAvatarsList(r *http.Request) (*avatar_proto.GetAllUserAvatarsOut, error) {
+func (m *MockAvatarService) GetUserAvatarsList(r *http.Request) (*avatar.GetAllUserAvatarsOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetUserAvatarsList", r)
-	ret0, _ := ret[0].(*avatar_proto.GetAllUserAvatarsOut)
+	ret0, _ := ret[0].(*avatar.GetAllUserAvatarsOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -144,10 +190,10 @@ func (mr *MockAvatarServiceMockRecorder) GetUserAvatarsList(r interface{}) *gomo
 }
 
 // RemoveSocietyAvatar mocks base method.
-func (m *MockAvatarService) RemoveSocietyAvatar(r *http.Request) (*avatar_proto.Avatar, error) {
+func (m *MockAvatarService) RemoveSocietyAvatar(r *http.Request) (*avatar.Avatar, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveSocietyAvatar", r)
-	ret0, _ := ret[0].(*avatar_proto.Avatar)
+	ret0, _ := ret[0].(*avatar.Avatar)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -159,10 +205,10 @@ func (mr *MockAvatarServiceMockRecorder) RemoveSocietyAvatar(r interface{}) *gom
 }
 
 // RemoveUserAvatar mocks base method.
-func (m *MockAvatarService) RemoveUserAvatar(r *http.Request) (*avatar_proto.Avatar, error) {
+func (m *MockAvatarService) RemoveUserAvatar(r *http.Request) (*avatar.Avatar, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveUserAvatar", r)
-	ret0, _ := ret[0].(*avatar_proto.Avatar)
+	ret0, _ := ret[0].(*avatar.Avatar)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -174,10 +220,10 @@ func (mr *MockAvatarServiceMockRecorder) RemoveUserAvatar(r interface{}) *gomock
 }
 
 // UploadSocietyAvatar mocks base method.
-func (m *MockAvatarService) UploadSocietyAvatar(r *http.Request) (*avatar_proto.SetSocietyAvatarOut, error) {
+func (m *MockAvatarService) UploadSocietyAvatar(r *http.Request) (*avatar.SetSocietyAvatarOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UploadSocietyAvatar", r)
-	ret0, _ := ret[0].(*avatar_proto.SetSocietyAvatarOut)
+	ret0, _ := ret[0].(*avatar.SetSocietyAvatarOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -189,10 +235,10 @@ func (mr *MockAvatarServiceMockRecorder) UploadSocietyAvatar(r interface{}) *gom
 }
 
 // UploadUserAvatar mocks base method.
-func (m *MockAvatarService) UploadUserAvatar(r *http.Request) (*avatar_proto.SetUserAvatarOut, error) {
+func (m *MockAvatarService) UploadUserAvatar(r *http.Request) (*avatar.SetUserAvatarOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UploadUserAvatar", r)
-	ret0, _ := ret[0].(*avatar_proto.SetUserAvatarOut)
+	ret0, _ := ret[0].(*avatar.SetUserAvatarOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

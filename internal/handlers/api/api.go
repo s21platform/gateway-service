@@ -133,6 +133,61 @@ func (h *Handler) DeleteUserAvatar(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) SetUserFriends(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("SetUserFriends")
+
+	resp, err := h.uS.SetUserFriends(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to set user friends: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	jsn, err := json.Marshal(resp)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) RemoveUserFriends(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("RemoveUserFriends")
+	resp, err := h.uS.RemoveUserFriends(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to remove user friends: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	jsn, err := json.Marshal(resp)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) GetUserCountFriends(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("GetUserCountFriends")
+	resp, err := h.uS.GetUserCountFriends(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to get user friends: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	jsn, err := json.Marshal(resp)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func (h *Handler) SetSocietyAvatar(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 	logger.AddFuncName("SetSocietyAvatar")
@@ -788,7 +843,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Get("/notification/count", handler.CountNotifications)
 		apiRouter.Get("/notification", handler.GetNotifications)
 		apiRouter.Patch("/notification", handler.MarkNotificationAsRead)
-		apiRouter.Get("/friends/counts", handler.GetCountFriends)
 		apiRouter.Get("/option/os", handler.GetOsBySearchName)
 		apiRouter.Get("/option/workplace", handler.GetWorkPlaceBySearchName)
 		apiRouter.Get("/option/study-place", handler.GetStudyPlaceBySearchName)
@@ -801,6 +855,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Put("/society", handler.UpdateSociety)
 		apiRouter.Post("/friends", handler.SetFriends)
 		apiRouter.Delete("/friends", handler.RemoveFriends)
+		apiRouter.Get("/friends/counts", handler.GetCountFriends)
 		apiRouter.Get("/friends/check", handler.CheckSubscriptionToPeer)
 		apiRouter.Get("/peer/{uuid}", handler.PeerInfo)
 		apiRouter.Get("/search", handler.Search)

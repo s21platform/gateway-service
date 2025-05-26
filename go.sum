@@ -41,14 +41,10 @@ github.com/rogpeppe/go-internal v1.10.0 h1:TMyTOH3F/DB16zRVcYyreMH6GnZZrwQVAoYjR
 github.com/rogpeppe/go-internal v1.10.0/go.mod h1:UQnix2H7Ngw/k4C5ijL5+65zddjncjaFoBhdsK/akog=
 github.com/s21platform/advert-proto v0.0.5 h1:JvP3K63qyoUeWMofBN4kq0CkqRUlOkfg1ViuAyQJqI0=
 github.com/s21platform/advert-proto v0.0.5/go.mod h1:M5btJoM5jmTGjfsXlFVw3wKWFwCs7Oe9kQAjJ70XxiY=
-github.com/s21platform/auth-service v0.0.0-20250509170327-76f8dcdf576c h1:9DXDVm4Z86rhzuvdShJl4lmU1IeCxVxTvNdJ2GjUAe0=
-github.com/s21platform/auth-service v0.0.0-20250509170327-76f8dcdf576c/go.mod h1:lU9VlKpl/CtINbUvL1oqiw37j71muy85j1hfJeafw9U=
-github.com/s21platform/avatar-proto v0.0.10 h1:y/0HBZlYbt2Zyu64ggcgQ1HW8P+GotW9enKt7G/r6Ao=
-github.com/s21platform/avatar-proto v0.0.10/go.mod h1:jX+yDX1SPHVrRjiQN1zuNTR2e00grbXv554yOhpQZCo=
+github.com/s21platform/auth-service v0.0.1 h1:jQpYg7i0jWH9XR3OZcGPvrwMgwHz3Le5T3xbHdhUc7c=
+github.com/s21platform/auth-service v0.0.1/go.mod h1:lAC47ofAgx7rYkZ+vqPhRqU9rF5jIRG0KqK2Zse6KL0=
 github.com/s21platform/avatar-service v0.0.0-20250413162426-a937ac435e67 h1:G4mlRtDb6alTjyQCnpa3NKmLDMFo9R6TdK39Qsb92G0=
 github.com/s21platform/avatar-service v0.0.0-20250413162426-a937ac435e67/go.mod h1:lWVhJj2Sg6f7yk2b8vN8wU5AQX4WE4bJYaIZCosV5cw=
-github.com/s21platform/chat-proto v0.0.14 h1:a+MTpMkBgiXzZXv6p1OnNW1gNkmG8xCv1ifEnuDv3Dc=
-github.com/s21platform/chat-proto v0.0.14/go.mod h1:CeEtQiKpmGWom1FPgUAOWUpuPBeiXTVi2D261XSTdHo=
 github.com/s21platform/chat-service v0.0.2 h1:bZhs+o94LXo0xSImg08zJkqUburuVrJCU/4AgSVqIFk=
 github.com/s21platform/chat-service v0.0.2/go.mod h1:eLS/50WgAm4ksZgUNbOStqHWOzKjMNtKc5GaiIRDnXY=
 github.com/s21platform/feed-proto v0.0.1 h1:BkFhIg28M4iCNXOhbkWU++7RedAFjiaeEe8J74poloo=

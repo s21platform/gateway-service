@@ -223,6 +223,64 @@ func (h *Handler) SendUserVerificationCode(w http.ResponseWriter, r *http.Reques
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("RegisterUser")
+
+	resp, err := h.aucSrv.RegisterUser(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to register user: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(&resp)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) LoginV2(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("LoginV2")
+
+	resp, err := h.aucSrv.LoginV2(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to login: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(&model.LoginV2Response{AccessToken: resp.AccessToken})
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    resp.RefreshToken,
+		Expires:  time.Now().Add(30 * 24 * time.Hour),
+		HttpOnly: true,
+		Path:     "/",
+		Secure:   false,
+		SameSite: http.SameSiteStrictMode,
+	})
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+
+	logger.Info("OK")
+}
+
 func AttachAuthRoutes(r chi.Router, handler *Handler) {
 	r.Route("/auth", func(authRouter chi.Router) {
 		authRouter.Post("/login", handler.Login)
@@ -230,5 +288,7 @@ func AttachAuthRoutes(r chi.Router, handler *Handler) {
 		authRouter.Get("/logout", handler.Logout)
 		authRouter.Get("/check-email", handler.CheckEmailAvailability)
 		authRouter.Post("/send-code", handler.SendUserVerificationCode)
+		authRouter.Post("/register-user", handler.RegisterUser)
+		authRouter.Post("/v2/login", handler.LoginV2)
 	})
 }

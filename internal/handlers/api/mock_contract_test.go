@@ -12,6 +12,7 @@ import (
 	advert_proto "github.com/s21platform/advert-proto/advert-proto"
 	avatar "github.com/s21platform/avatar-service/pkg/avatar"
 	chat_proto "github.com/s21platform/chat-proto/chat-proto"
+	chat "github.com/s21platform/chat-service/pkg/chat"
 	feed_proto "github.com/s21platform/feed-proto/feed-proto"
 	friends_proto "github.com/s21platform/friends-proto/friends-proto"
 	model "github.com/s21platform/gateway-service/internal/model"
@@ -687,10 +688,10 @@ func (m *MockChatService) EXPECT() *MockChatServiceMockRecorder {
 }
 
 // CreatePrivateChat mocks base method.
-func (m *MockChatService) CreatePrivateChat(r *http.Request) (*chat_proto.CreatePrivateChatOut, error) {
+func (m *MockChatService) CreatePrivateChat(r *http.Request) (*chat.CreatePrivateChatOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePrivateChat", r)
-	ret0, _ := ret[0].(*chat_proto.CreatePrivateChatOut)
+	ret0, _ := ret[0].(*chat.CreatePrivateChatOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -702,10 +703,10 @@ func (mr *MockChatServiceMockRecorder) CreatePrivateChat(r interface{}) *gomock.
 }
 
 // GetChats mocks base method.
-func (m *MockChatService) GetChats(r *http.Request) (*chat_proto.GetChatsOut, error) {
+func (m *MockChatService) GetChats(r *http.Request) (*chat.GetChatsOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetChats", r)
-	ret0, _ := ret[0].(*chat_proto.GetChatsOut)
+	ret0, _ := ret[0].(*chat.GetChatsOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -717,10 +718,10 @@ func (mr *MockChatServiceMockRecorder) GetChats(r interface{}) *gomock.Call {
 }
 
 // GetPrivateRecentMessages mocks base method.
-func (m *MockChatService) GetPrivateRecentMessages(r *http.Request) (*chat_proto.GetPrivateRecentMessagesOut, error) {
+func (m *MockChatService) GetPrivateRecentMessages(r *http.Request) (*chat.GetPrivateRecentMessagesOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPrivateRecentMessages", r)
-	ret0, _ := ret[0].(*chat_proto.GetPrivateRecentMessagesOut)
+	ret0, _ := ret[0].(*chat.GetPrivateRecentMessagesOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

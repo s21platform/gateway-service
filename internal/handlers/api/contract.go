@@ -10,7 +10,7 @@ import (
 
 	advert "github.com/s21platform/advert-proto/advert-proto"
 	"github.com/s21platform/avatar-service/pkg/avatar"
-	chat "github.com/s21platform/chat-proto/chat-proto"
+	"github.com/s21platform/chat-service/pkg/chat"
 	feed "github.com/s21platform/feed-proto/feed-proto"
 	friends "github.com/s21platform/friends-proto/friends-proto"
 	"github.com/s21platform/gateway-service/internal/model"

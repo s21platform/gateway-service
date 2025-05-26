@@ -3,9 +3,10 @@ package user
 import (
 	"context"
 
-	"github.com/s21platform/gateway-service/internal/model"
 	userproto "github.com/s21platform/user-proto/user-proto"
 	user "github.com/s21platform/user-service/pkg/user"
+
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type UserClient interface {

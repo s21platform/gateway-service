@@ -14,11 +14,12 @@ import (
 	"github.com/s21platform/chat-service/pkg/chat"
 	feed "github.com/s21platform/feed-proto/feed-proto"
 	friends "github.com/s21platform/friends-proto/friends-proto"
-	"github.com/s21platform/gateway-service/internal/model"
 	"github.com/s21platform/notification-service/pkg/notification"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 	societyproto "github.com/s21platform/society-proto/society-proto"
 	userproto "github.com/s21platform/user-proto/user-proto"
+
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type UserService interface {

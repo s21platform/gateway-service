@@ -7,8 +7,8 @@ import (
 )
 
 type FriendsClient interface {
-	GetCountFriends(ctx context.Context) (*friends.GetCountFriendsOut, error)
-	SetFriends(ctx context.Context, peer *friends.SetFriendsIn) (*friends.SetFriendsOut, error)
-	RemoveFriends(ctx context.Context, peer *friends.RemoveFriendsIn) (*friends.RemoveFriendsOut, error)
+	//GetCountFriends(ctx context.Context) (*friends.GetCountFriendsOut, error)
+	//SetFriends(ctx context.Context, peer *friends.SetFriendsIn) (*friends.SetFriendsOut, error)
+	//RemoveFriends(ctx context.Context, peer *friends.RemoveFriendsIn) (*friends.RemoveFriendsOut, error)
 	CheckSubscribeToPeer(ctx context.Context, peer *friends.IsFriendExistIn) (*friends.IsFriendExistOut, error)
 }

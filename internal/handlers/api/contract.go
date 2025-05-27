@@ -13,7 +13,6 @@ import (
 	"github.com/s21platform/avatar-service/pkg/avatar"
 	"github.com/s21platform/chat-service/pkg/chat"
 	feed "github.com/s21platform/feed-proto/feed-proto"
-	friends "github.com/s21platform/friends-proto/friends-proto"
 	"github.com/s21platform/notification-service/pkg/notification"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 	societyproto "github.com/s21platform/society-proto/society-proto"
@@ -48,9 +47,6 @@ type NotificationService interface {
 }
 
 type FriendsService interface {
-	GetCountFriends(r *http.Request) (*friends.GetCountFriendsOut, error)
-	SetFriends(r *http.Request) (*friends.SetFriendsOut, error)
-	RemoveFriends(r *http.Request) (*friends.RemoveFriendsOut, error)
 	CheckSubscribe(r *http.Request) (*model.CheckSubscribe, error)
 }
 

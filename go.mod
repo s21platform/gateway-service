@@ -10,9 +10,7 @@ require (
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/s21platform/advert-proto v0.0.5
 	github.com/s21platform/auth-service v0.0.0-20250509170327-76f8dcdf576c
-	github.com/s21platform/avatar-proto v0.0.10
 	github.com/s21platform/avatar-service v0.0.0-20250413162426-a937ac435e67
-	github.com/s21platform/chat-proto v0.0.14
 	github.com/s21platform/chat-service v0.0.2
 	github.com/s21platform/feed-proto v0.0.1
 	github.com/s21platform/friends-proto v0.0.12
@@ -24,7 +22,7 @@ require (
 	github.com/s21platform/society-proto v0.0.23
 	github.com/s21platform/staff-service v0.1.1
 	github.com/s21platform/user-proto v0.0.16
-	github.com/s21platform/user-service v0.0.3
+	github.com/s21platform/user-service v0.0.4
 	github.com/stretchr/testify v1.10.0
 	google.golang.org/grpc v1.72.2
 	google.golang.org/protobuf v1.36.6

@@ -17,7 +17,6 @@ import (
 	notification "github.com/s21platform/notification-service/pkg/notification"
 	optionhub_proto "github.com/s21platform/optionhub-proto/optionhub-proto"
 	society_proto "github.com/s21platform/society-proto/society-proto"
-	user_proto "github.com/s21platform/user-proto/user-proto"
 	user "github.com/s21platform/user-service/pkg/user"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
@@ -46,10 +45,10 @@ func (m *MockUserService) EXPECT() *MockUserServiceMockRecorder {
 }
 
 // GetInfoByUUID mocks base method.
-func (m *MockUserService) GetInfoByUUID(r *http.Request) (*user_proto.GetUserInfoByUUIDOut, error) {
+func (m *MockUserService) GetInfoByUUID(r *http.Request) (*user.GetUserInfoByUUIDOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetInfoByUUID", r)
-	ret0, _ := ret[0].(*user_proto.GetUserInfoByUUIDOut)
+	ret0, _ := ret[0].(*user.GetUserInfoByUUIDOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -61,10 +60,10 @@ func (mr *MockUserServiceMockRecorder) GetInfoByUUID(r interface{}) *gomock.Call
 }
 
 // GetPeerInfo mocks base method.
-func (m *MockUserService) GetPeerInfo(r *http.Request) (*user_proto.GetUserInfoByUUIDOut, error) {
+func (m *MockUserService) GetPeerInfo(r *http.Request) (*user.GetUserInfoByUUIDOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPeerInfo", r)
-	ret0, _ := ret[0].(*user_proto.GetUserInfoByUUIDOut)
+	ret0, _ := ret[0].(*user.GetUserInfoByUUIDOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -121,10 +120,10 @@ func (mr *MockUserServiceMockRecorder) SetUserFriends(r interface{}) *gomock.Cal
 }
 
 // UpdateProfileInfo mocks base method.
-func (m *MockUserService) UpdateProfileInfo(r *http.Request) (*user_proto.UpdateProfileOut, error) {
+func (m *MockUserService) UpdateProfileInfo(r *http.Request) (*user.UpdateProfileOut, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateProfileInfo", r)
-	ret0, _ := ret[0].(*user_proto.UpdateProfileOut)
+	ret0, _ := ret[0].(*user.UpdateProfileOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

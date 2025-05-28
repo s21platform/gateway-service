@@ -11,6 +11,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/s21platform/user-service/pkg/user"
+
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -22,7 +24,6 @@ import (
 	feedproto "github.com/s21platform/feed-proto/feed-proto"
 	logger_lib "github.com/s21platform/logger-lib"
 	societyproto "github.com/s21platform/society-proto/society-proto"
-	userproto "github.com/s21platform/user-proto/user-proto"
 
 	"github.com/s21platform/gateway-service/internal/config"
 	"github.com/s21platform/gateway-service/internal/model"
@@ -45,7 +46,7 @@ func TestApi_GetProfile(t *testing.T) {
 		w := httptest.NewRecorder()
 		r = r.WithContext(ctx)
 
-		userInfo := &userproto.GetUserInfoByUUIDOut{
+		userInfo := &user.GetUserInfoByUUIDOut{
 			Nickname: "",
 			Avatar:   "",
 		}

@@ -21,7 +21,7 @@ require (
 	github.com/s21platform/search-proto v0.0.10
 	github.com/s21platform/society-proto v0.0.23
 	github.com/s21platform/staff-service v0.1.1
-	github.com/s21platform/user-proto v0.0.12
+	github.com/s21platform/user-service v0.0.4
 	github.com/stretchr/testify v1.10.0
 	google.golang.org/grpc v1.72.1
 	google.golang.org/protobuf v1.36.6

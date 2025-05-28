@@ -45,10 +45,6 @@ type NotificationService interface {
 	MarkNotificationsAsRead(r *http.Request) (*emptypb.Empty, error)
 }
 
-type FriendsService interface {
-	CheckSubscribe(r *http.Request) (*model.CheckSubscribe, error)
-}
-
 type OptionService interface {
 	GetOsList(r *http.Request) (*model.OptionsStruct, error)
 	GetWorkPlaceList(r *http.Request) (*optionhub.GetByNameOut, error)

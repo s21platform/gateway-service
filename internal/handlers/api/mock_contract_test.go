@@ -315,44 +315,6 @@ func (mr *MockNotificationServiceMockRecorder) MarkNotificationsAsRead(r interfa
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MarkNotificationsAsRead", reflect.TypeOf((*MockNotificationService)(nil).MarkNotificationsAsRead), r)
 }
 
-// MockFriendsService is a mock of FriendsService interface.
-type MockFriendsService struct {
-	ctrl     *gomock.Controller
-	recorder *MockFriendsServiceMockRecorder
-}
-
-// MockFriendsServiceMockRecorder is the mock recorder for MockFriendsService.
-type MockFriendsServiceMockRecorder struct {
-	mock *MockFriendsService
-}
-
-// NewMockFriendsService creates a new mock instance.
-func NewMockFriendsService(ctrl *gomock.Controller) *MockFriendsService {
-	mock := &MockFriendsService{ctrl: ctrl}
-	mock.recorder = &MockFriendsServiceMockRecorder{mock}
-	return mock
-}
-
-// EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockFriendsService) EXPECT() *MockFriendsServiceMockRecorder {
-	return m.recorder
-}
-
-// CheckSubscribe mocks base method.
-func (m *MockFriendsService) CheckSubscribe(r *http.Request) (*model.CheckSubscribe, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CheckSubscribe", r)
-	ret0, _ := ret[0].(*model.CheckSubscribe)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CheckSubscribe indicates an expected call of CheckSubscribe.
-func (mr *MockFriendsServiceMockRecorder) CheckSubscribe(r interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckSubscribe", reflect.TypeOf((*MockFriendsService)(nil).CheckSubscribe), r)
-}
-
 // MockOptionService is a mock of OptionService interface.
 type MockOptionService struct {
 	ctrl     *gomock.Controller

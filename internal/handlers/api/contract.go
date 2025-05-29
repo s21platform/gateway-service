@@ -8,22 +8,25 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	advert "github.com/s21platform/advert-proto/advert-proto"
-	"github.com/s21platform/avatar-service/pkg/avatar"
-	"github.com/s21platform/chat-service/pkg/chat"
 	feed "github.com/s21platform/feed-proto/feed-proto"
-	friends "github.com/s21platform/friends-proto/friends-proto"
-	"github.com/s21platform/notification-service/pkg/notification"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 	societyproto "github.com/s21platform/society-proto/society-proto"
-	userproto "github.com/s21platform/user-proto/user-proto"
+
+	"github.com/s21platform/avatar-service/pkg/avatar"
+	"github.com/s21platform/chat-service/pkg/chat"
+	"github.com/s21platform/notification-service/pkg/notification"
+	"github.com/s21platform/user-service/pkg/user"
 
 	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type UserService interface {
-	GetInfoByUUID(r *http.Request) (*userproto.GetUserInfoByUUIDOut, error)
-	UpdateProfileInfo(r *http.Request) (*userproto.UpdateProfileOut, error)
-	GetPeerInfo(r *http.Request) (*userproto.GetUserInfoByUUIDOut, error)
+	GetInfoByUUID(r *http.Request) (*user.GetUserInfoByUUIDOut, error)
+	UpdateProfileInfo(r *http.Request) (*user.UpdateProfileOut, error)
+	GetPeerInfo(r *http.Request) (*user.GetUserInfoByUUIDOut, error)
+	SetUserFriends(r *http.Request) (*user.SetFriendsOut, error)
+	RemoveUserFriends(r *http.Request) (*user.RemoveFriendsOut, error)
+	GetUserCountFriends(r *http.Request) (*user.GetCountFriendsOut, error)
 }
 
 type AvatarService interface {
@@ -40,13 +43,6 @@ type NotificationService interface {
 	GetCountNotification(r *http.Request) (*notification.NotificationCountOut, error)
 	GetNotification(r *http.Request) (*notification.NotificationOut, error)
 	MarkNotificationsAsRead(r *http.Request) (*emptypb.Empty, error)
-}
-
-type FriendsService interface {
-	GetCountFriends(r *http.Request) (*friends.GetCountFriendsOut, error)
-	SetFriends(r *http.Request) (*friends.SetFriendsOut, error)
-	RemoveFriends(r *http.Request) (*friends.RemoveFriendsOut, error)
-	CheckSubscribe(r *http.Request) (*model.CheckSubscribe, error)
 }
 
 type OptionService interface {

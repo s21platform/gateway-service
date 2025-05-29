@@ -17,7 +17,6 @@ type Handler struct {
 	uS  UserService
 	aS  AvatarService
 	nS  NotificationService
-	fS  FriendsService
 	oS  OptionService
 	sS  SocietyService
 	srS SearchService
@@ -26,8 +25,8 @@ type Handler struct {
 	feS FeedService
 }
 
-func New(uS UserService, aS AvatarService, nS NotificationService, fS FriendsService, oS OptionService, sS SocietyService, srS SearchService, cS ChatService, adS AdvertService, feS FeedService) *Handler {
-	return &Handler{uS: uS, aS: aS, nS: nS, fS: fS, oS: oS, sS: sS, srS: srS, cS: cS, adS: adS, feS: feS}
+func New(uS UserService, aS AvatarService, nS NotificationService, oS OptionService, sS SocietyService, srS SearchService, cS ChatService, adS AdvertService, feS FeedService) *Handler {
+	return &Handler{uS: uS, aS: aS, nS: nS, oS: oS, sS: sS, srS: srS, cS: cS, adS: adS, feS: feS}
 }
 
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
@@ -128,6 +127,67 @@ func (h *Handler) DeleteUserAvatar(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) SetUserFriends(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("SetUserFriends")
+
+	resp, err := h.uS.SetUserFriends(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to set user friends: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(resp)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) RemoveUserFriends(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("RemoveUserFriends")
+	resp, err := h.uS.RemoveUserFriends(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to remove user friends: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(resp)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
+func (h *Handler) GetUserCountFriends(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("GetUserCountFriends")
+	resp, err := h.uS.GetUserCountFriends(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to get user friends: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	jsn, err := json.Marshal(resp)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(jsn)
@@ -255,63 +315,63 @@ func (h *Handler) MarkNotificationAsRead(w http.ResponseWriter, r *http.Request)
 	_, _ = w.Write([]byte("{}\n"))
 }
 
-func (h *Handler) GetCountFriends(w http.ResponseWriter, r *http.Request) {
-	result, err := h.fS.GetCountFriends(r)
-	if err != nil {
-		log.Printf("failed to get friends error: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	jsn, err := json.Marshal(result)
-	if err != nil {
-		log.Printf("failed to json marshal error: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write(jsn)
-}
-
-func (h *Handler) SetFriends(w http.ResponseWriter, r *http.Request) {
-	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
-	logger.AddFuncName("SetFriends")
-	result, err := h.fS.SetFriends(r)
-	if err != nil {
-		logger.Error(fmt.Sprintf("failed to set friends error: %v", err))
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	jsn, err := json.Marshal(result)
-	if err != nil {
-		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	_, _ = w.Write(jsn)
-}
-
-func (h *Handler) RemoveFriends(w http.ResponseWriter, r *http.Request) {
-	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
-	logger.AddFuncName("RemoveFriends")
-	result, err := h.fS.RemoveFriends(r)
-	if err != nil {
-		logger.Error(fmt.Sprintf("failed to remove friends error: %v", err))
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	jsn, err := json.Marshal(result)
-	if err != nil {
-		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	log.Println("json: ", string(jsn))
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write(jsn)
-}
+//func (h *Handler) GetCountFriends(w http.ResponseWriter, r *http.Request) {
+//	result, err := h.fS.GetCountFriends(r)
+//	if err != nil {
+//		log.Printf("failed to get friends error: %v", err)
+//		w.WriteHeader(http.StatusInternalServerError)
+//		return
+//	}
+//	jsn, err := json.Marshal(result)
+//	if err != nil {
+//		log.Printf("failed to json marshal error: %v", err)
+//		w.WriteHeader(http.StatusInternalServerError)
+//		return
+//	}
+//	w.Header().Set("Content-Type", "application/json")
+//	w.WriteHeader(http.StatusOK)
+//	_, _ = w.Write(jsn)
+//}
+//
+//func (h *Handler) SetFriends(w http.ResponseWriter, r *http.Request) {
+//	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+//	logger.AddFuncName("SetFriends")
+//	result, err := h.fS.SetFriends(r)
+//	if err != nil {
+//		logger.Error(fmt.Sprintf("failed to set friends error: %v", err))
+//		w.WriteHeader(http.StatusInternalServerError)
+//		return
+//	}
+//	jsn, err := json.Marshal(result)
+//	if err != nil {
+//		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
+//		w.WriteHeader(http.StatusInternalServerError)
+//		return
+//	}
+//	w.Header().Set("Content-Type", "application/json")
+//	_, _ = w.Write(jsn)
+//}
+//
+//func (h *Handler) RemoveFriends(w http.ResponseWriter, r *http.Request) {
+//	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+//	logger.AddFuncName("RemoveFriends")
+//	result, err := h.fS.RemoveFriends(r)
+//	if err != nil {
+//		logger.Error(fmt.Sprintf("failed to remove friends error: %v", err))
+//		w.WriteHeader(http.StatusInternalServerError)
+//		return
+//	}
+//	jsn, err := json.Marshal(result)
+//	if err != nil {
+//		logger.Error(fmt.Sprintf("failed to json marshal error: %v", err))
+//		w.WriteHeader(http.StatusInternalServerError)
+//		return
+//	}
+//	log.Println("json: ", string(jsn))
+//	w.Header().Set("Content-Type", "application/json")
+//	w.WriteHeader(http.StatusOK)
+//	_, _ = w.Write(jsn)
+//}
 
 func (h *Handler) GetOsBySearchName(w http.ResponseWriter, r *http.Request) {
 	osList, err := h.oS.GetOsList(r)
@@ -512,25 +572,25 @@ func (h *Handler) UpdateSociety(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (h *Handler) CheckSubscriptionToPeer(w http.ResponseWriter, r *http.Request) {
-	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
-	logger.AddFuncName("CheckSubscriptionToPeer")
-	result, err := h.fS.CheckSubscribe(r)
-	if err != nil {
-		logger.Error(fmt.Sprintf("check subscribe error: %v", err))
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	jsn, err := json.Marshal(result)
-	if err != nil {
-		logger.Error(fmt.Sprintf("json marshal error: %v", err))
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write(jsn)
-}
+//func (h *Handler) CheckSubscriptionToPeer(w http.ResponseWriter, r *http.Request) {
+//	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+//	logger.AddFuncName("CheckSubscriptionToPeer")
+//	result, err := h.fS.CheckSubscribe(r)
+//	if err != nil {
+//		logger.Error(fmt.Sprintf("check subscribe error: %v", err))
+//		w.WriteHeader(http.StatusInternalServerError)
+//		return
+//	}
+//	jsn, err := json.Marshal(result)
+//	if err != nil {
+//		logger.Error(fmt.Sprintf("json marshal error: %v", err))
+//		w.WriteHeader(http.StatusInternalServerError)
+//		return
+//	}
+//	w.Header().Set("Content-Type", "application/json")
+//	w.WriteHeader(http.StatusOK)
+//	_, _ = w.Write(jsn)
+//}
 
 func (h *Handler) Search(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
@@ -788,7 +848,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Get("/notification/count", handler.CountNotifications)
 		apiRouter.Get("/notification", handler.GetNotifications)
 		apiRouter.Patch("/notification", handler.MarkNotificationAsRead)
-		apiRouter.Get("/friends/counts", handler.GetCountFriends)
 		apiRouter.Get("/option/os", handler.GetOsBySearchName)
 		apiRouter.Get("/option/workplace", handler.GetWorkPlaceBySearchName)
 		apiRouter.Get("/option/study-place", handler.GetStudyPlaceBySearchName)
@@ -799,9 +858,10 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/society", handler.CreateSociety)
 		apiRouter.Get("/society", handler.GetSocietyInfo)
 		apiRouter.Put("/society", handler.UpdateSociety)
-		apiRouter.Post("/friends", handler.SetFriends)
-		apiRouter.Delete("/friends", handler.RemoveFriends)
-		apiRouter.Get("/friends/check", handler.CheckSubscriptionToPeer)
+		apiRouter.Post("/friends", handler.SetUserFriends)
+		apiRouter.Delete("/friends", handler.RemoveUserFriends)
+		apiRouter.Get("/friends/counts", handler.GetUserCountFriends)
+		//apiRouter.Get("/friends/check", handler.CheckSubscriptionToPeer)
 		apiRouter.Get("/peer/{uuid}", handler.PeerInfo)
 		apiRouter.Get("/search", handler.Search)
 		//apiRouter.Post("/society/member", handler.SubscribeToSociety)

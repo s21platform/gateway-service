@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/http"
 
-	userproto "github.com/s21platform/user-proto/user-proto"
+	"github.com/s21platform/user-service/pkg/user"
 
 	"github.com/s21platform/gateway-service/internal/config"
 	"github.com/s21platform/gateway-service/internal/model"
@@ -20,7 +20,7 @@ func New(uC UserClient) *Usecase {
 	return &Usecase{uC: uC}
 }
 
-func (u *Usecase) GetInfoByUUID(r *http.Request) (*userproto.GetUserInfoByUUIDOut, error) {
+func (u *Usecase) GetInfoByUUID(r *http.Request) (*user.GetUserInfoByUUIDOut, error) {
 	uuid := r.Context().Value(config.KeyUUID).(string)
 	resp, err := u.uC.GetInfo(r.Context(), uuid)
 	if err != nil {
@@ -29,7 +29,7 @@ func (u *Usecase) GetInfoByUUID(r *http.Request) (*userproto.GetUserInfoByUUIDOu
 	return resp, nil
 }
 
-func (u *Usecase) GetPeerInfo(r *http.Request) (*userproto.GetUserInfoByUUIDOut, error) {
+func (u *Usecase) GetPeerInfo(r *http.Request) (*user.GetUserInfoByUUIDOut, error) {
 	uuid := r.PathValue("uuid")
 	if uuid == "" {
 		return nil, fmt.Errorf("uuid is empty")
@@ -41,7 +41,7 @@ func (u *Usecase) GetPeerInfo(r *http.Request) (*userproto.GetUserInfoByUUIDOut,
 	return resp, nil
 }
 
-func (u *Usecase) UpdateProfileInfo(r *http.Request) (*userproto.UpdateProfileOut, error) {
+func (u *Usecase) UpdateProfileInfo(r *http.Request) (*user.UpdateProfileOut, error) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read body for update profile: %w", err)
@@ -60,5 +60,62 @@ func (u *Usecase) UpdateProfileInfo(r *http.Request) (*userproto.UpdateProfileOu
 		return nil, fmt.Errorf("failed to update profile: %w", err)
 	}
 
+	return resp, nil
+}
+
+func (u *Usecase) SetUserFriends(r *http.Request) (*user.SetFriendsOut, error) {
+	var readPeer struct {
+		Peer string `json:"peer"`
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read Body: %v", err)
+	}
+	defer r.Body.Close()
+
+	if len(body) == 0 {
+		return nil, fmt.Errorf("failed to request body is empty")
+	}
+	if err = json.Unmarshal(body, &readPeer); err != nil {
+		return nil, fmt.Errorf("failed to json unmarshal: %v", err)
+	}
+
+	resp, err := u.uC.SetFriends(r.Context(), &user.SetFriendsIn{Peer: readPeer.Peer})
+	if err != nil {
+		return nil, fmt.Errorf("failed to user service Set Friends: %v", err)
+	}
+
+	return resp, nil
+}
+
+func (u *Usecase) RemoveUserFriends(r *http.Request) (*user.RemoveFriendsOut, error) {
+	var readPeer struct {
+		Peer string `json:"peer"`
+	}
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read Body: %v", err)
+	}
+	defer r.Body.Close()
+	if len(body) == 0 {
+		return nil, fmt.Errorf("failed to request body is empty")
+	}
+	if err = json.Unmarshal(body, &readPeer); err != nil {
+		return nil, fmt.Errorf("failed to json unmarshal: %v", err)
+	}
+
+	resp, err := u.uC.RemoveFriends(r.Context(), &user.RemoveFriendsIn{Peer: readPeer.Peer})
+	if err != nil {
+		return nil, fmt.Errorf("failed to user service RemoveFriends: %v", err)
+	}
+	return resp, nil
+}
+
+func (u *Usecase) GetUserCountFriends(r *http.Request) (*user.GetCountFriendsOut, error) {
+	resp, err := u.uC.GetCountFriends(r.Context())
+	if err != nil {
+		return nil, fmt.Errorf("failed to u.fC.GetCountFriends: %v", err)
+	}
 	return resp, nil
 }

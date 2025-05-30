@@ -11,18 +11,19 @@ import (
 	"testing"
 	"time"
 
+	
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
-
+	
 	advertproto "github.com/s21platform/advert-proto/advert-proto"
 	chatproto "github.com/s21platform/chat-service/pkg/chat"
 	logger_lib "github.com/s21platform/logger-lib"
 	societyproto "github.com/s21platform/society-proto/society-proto"
 	"github.com/s21platform/user-service/pkg/user"
-
+	
 	"github.com/s21platform/gateway-service/internal/config"
 	"github.com/s21platform/gateway-service/internal/model"
 )
@@ -61,7 +62,6 @@ func TestApi_GetProfile(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			nil,
 		)
 
 		s.MyProfile(w, r)
@@ -85,7 +85,6 @@ func TestApi_GetProfile(t *testing.T) {
 
 		s := New(
 			mockUserService,
-			nil,
 			nil,
 			nil,
 			nil,
@@ -139,7 +138,6 @@ func TestApi_CreateSociety(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			nil,
 			mockSocietyService,
 			nil,
 			nil,
@@ -183,7 +181,6 @@ func TestApi_CreateSociety(t *testing.T) {
 		w := httptest.NewRecorder()
 
 		s := New(
-			nil,
 			nil,
 			nil,
 			nil,
@@ -244,7 +241,6 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			nil,
 			mockSocietyService,
 			nil,
 			nil,
@@ -281,7 +277,6 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 		w := httptest.NewRecorder()
 
 		s := New(
-			nil,
 			nil,
 			nil,
 			nil,
@@ -335,7 +330,6 @@ func TestApi_GetAdverts(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			nil,
 			mockAdvertService,
 			nil,
 		)
@@ -360,7 +354,6 @@ func TestApi_GetAdverts(t *testing.T) {
 		mockAdvertService.EXPECT().GetAdverts(r).Return(nil, mockErr)
 
 		s := New(
-			nil,
 			nil,
 			nil,
 			nil,
@@ -407,7 +400,6 @@ func TestApi_CreateAdvert(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			nil,
 			mockAdvertService,
 			nil,
 		)
@@ -432,7 +424,6 @@ func TestApi_CreateAdvert(t *testing.T) {
 		mockAdvertService.EXPECT().CreateAdvert(r).Return(nil, mockErr)
 
 		s := New(
-			nil,
 			nil,
 			nil,
 			nil,
@@ -495,7 +486,6 @@ func TestApi_GetChats(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			nil,
 			mockChatService,
 			nil,
 			nil,
@@ -521,7 +511,6 @@ func TestApi_GetChats(t *testing.T) {
 		mockChatService.EXPECT().GetChats(r).Return(nil, mockErr)
 
 		s := New(
-			nil,
 			nil,
 			nil,
 			nil,
@@ -569,7 +558,6 @@ func TestApi_CreatePrivateChat(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			nil,
 			mockChatService,
 			nil,
 			nil,
@@ -595,7 +583,6 @@ func TestApi_CreatePrivateChat(t *testing.T) {
 		mockChatService.EXPECT().CreatePrivateChat(r).Return(nil, mockErr)
 
 		s := New(
-			nil,
 			nil,
 			nil,
 			nil,
@@ -662,7 +649,6 @@ func TestApi_GetPrivateRecentMessages(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			nil,
 			mockChatService,
 			nil,
 			nil,
@@ -690,7 +676,6 @@ func TestApi_GetPrivateRecentMessages(t *testing.T) {
 		mockChatService.EXPECT().GetPrivateRecentMessages(r).Return(nil, mockErr)
 
 		s := New(
-			nil,
 			nil,
 			nil,
 			nil,
@@ -797,7 +782,6 @@ func TestApi_CancelAdvert(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			nil,
 			mockAdvertService,
 			nil,
 		)
@@ -822,7 +806,6 @@ func TestApi_CancelAdvert(t *testing.T) {
 		mockAdvertService.EXPECT().CancelAdvert(r).Return(nil, mockErr)
 
 		s := New(
-			nil,
 			nil,
 			nil,
 			nil,
@@ -869,7 +852,6 @@ func TestApi_RestoreAdvert(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			nil,
 			mockAdvertService,
 			nil,
 		)
@@ -894,7 +876,6 @@ func TestApi_RestoreAdvert(t *testing.T) {
 		mockAdvertService.EXPECT().RestoreAdvert(r).Return(nil, mockErr)
 
 		s := New(
-			nil,
 			nil,
 			nil,
 			nil,
@@ -952,7 +933,6 @@ func TestHandler_GetOptionRequests(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			nil,
 			mockOptionService,
 			nil,
 			nil,
@@ -992,7 +972,6 @@ func TestHandler_GetOptionRequests(t *testing.T) {
 		w := httptest.NewRecorder()
 
 		h := New(
-			nil,
 			nil,
 			nil,
 			nil,
@@ -1038,16 +1017,15 @@ func TestHandler_CreatePost(t *testing.T) {
 		mockUserService.EXPECT().CreatePost(r).Return(expected, nil)
 
 		s := New(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
 			mockUserService,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
 		)
 
 		s.CreatePost(w, r)
@@ -1070,16 +1048,15 @@ func TestHandler_CreatePost(t *testing.T) {
 		mockUserService.EXPECT().CreatePost(r).Return(nil, mockErr)
 
 		s := New(
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
-			nil,
 			mockUserService,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
 		)
 
 		s.CreatePost(w, r)
@@ -1111,7 +1088,7 @@ func TestHandler_MarkNotificationAsRead(t *testing.T) {
 		r = r.WithContext(ctx)
 		w := httptest.NewRecorder()
 
-		handler := New(nil, nil, mockNotificationService, nil, nil, nil, nil, nil, nil, nil)
+		handler := New(nil, nil, mockNotificationService, nil, nil, nil, nil, nil, nil)
 		handler.MarkNotificationAsRead(w, r)
 
 		assert.Equal(t, http.StatusOK, w.Code)
@@ -1139,7 +1116,7 @@ func TestHandler_MarkNotificationAsRead(t *testing.T) {
 		r = r.WithContext(ctx)
 		w := httptest.NewRecorder()
 
-		handler := New(nil, nil, mockNotificationService, nil, nil, nil, nil, nil, nil, nil)
+		handler := New(nil, nil, mockNotificationService, nil, nil, nil, nil, nil, nil)
 		handler.MarkNotificationAsRead(w, r)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)

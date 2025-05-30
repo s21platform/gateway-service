@@ -72,3 +72,59 @@ func (u *Usecase) CreatePost(r *http.Request) (*user.CreatePostOut, error) {
 	}
 	return resp, nil
 }
+func (u *Usecase) SetUserFriends(r *http.Request) (*user.SetFriendsOut, error) {
+	var readPeer struct {
+		Peer string `json:"peer"`
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read Body: %v", err)
+	}
+	defer r.Body.Close()
+
+	if len(body) == 0 {
+		return nil, fmt.Errorf("failed to request body is empty")
+	}
+	if err = json.Unmarshal(body, &readPeer); err != nil {
+		return nil, fmt.Errorf("failed to json unmarshal: %v", err)
+	}
+
+	resp, err := u.uC.SetFriends(r.Context(), &user.SetFriendsIn{Peer: readPeer.Peer})
+	if err != nil {
+		return nil, fmt.Errorf("failed to user service Set Friends: %v", err)
+	}
+
+	return resp, nil
+}
+
+func (u *Usecase) RemoveUserFriends(r *http.Request) (*user.RemoveFriendsOut, error) {
+	var readPeer struct {
+		Peer string `json:"peer"`
+	}
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read Body: %v", err)
+	}
+	defer r.Body.Close()
+	if len(body) == 0 {
+		return nil, fmt.Errorf("failed to request body is empty")
+	}
+	if err = json.Unmarshal(body, &readPeer); err != nil {
+		return nil, fmt.Errorf("failed to json unmarshal: %v", err)
+	}
+
+	resp, err := u.uC.RemoveFriends(r.Context(), &user.RemoveFriendsIn{Peer: readPeer.Peer})
+	if err != nil {
+		return nil, fmt.Errorf("failed to user service RemoveFriends: %v", err)
+	}
+	return resp, nil
+}
+
+func (u *Usecase) GetUserCountFriends(r *http.Request) (*user.GetCountFriendsOut, error) {
+	resp, err := u.uC.GetCountFriends(r.Context())
+	if err != nil {
+		return nil, fmt.Errorf("failed to u.fC.GetCountFriends: %v", err)
+	}
+	return resp, nil
+}

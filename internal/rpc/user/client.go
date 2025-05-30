@@ -11,14 +11,14 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
-	"github.com/s21platform/user-service/pkg/user"
+	user "github.com/s21platform/user-service/pkg/user"
 
 	"github.com/s21platform/gateway-service/internal/config"
 	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Service struct {
-	client user.UserServiceClient
+	clientUser user.UserServiceClient
 }
 
 func NewService(cfg *config.Config) *Service {
@@ -28,14 +28,12 @@ func NewService(cfg *config.Config) *Service {
 		log.Fatalf("failed to connect: %v", err)
 	}
 	client := user.NewUserServiceClient(conn)
-	return &Service{client: client}
+	return &Service{clientUser: client}
 }
 
 func (s *Service) GetInfo(ctx context.Context, uuid string) (*user.GetUserInfoByUUIDOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
-	resp, err := s.client.GetUserInfoByUUID(ctx, &user.GetUserInfoByUUIDIn{
-		Uuid: uuid,
-	})
+	resp, err := s.clientUser.GetUserInfoByUUID(ctx, &user.GetUserInfoByUUIDIn{Uuid: uuid})
 	if err != nil {
 		log.Printf("failed to call: %v", err)
 		return nil, status.Error(codes.Internal, err.Error())
@@ -45,7 +43,7 @@ func (s *Service) GetInfo(ctx context.Context, uuid string) (*user.GetUserInfoBy
 
 func (s *Service) UpdateProfile(ctx context.Context, data model.ProfileData) (*user.UpdateProfileOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
-	resp, err := s.client.UpdateProfile(ctx, data.FromDTO())
+	resp, err := s.clientUser.UpdateProfile(ctx, data.FromDTO())
 	if err != nil {
 		return nil, fmt.Errorf("failed to update user profile: %v", err)
 	}
@@ -57,9 +55,35 @@ func (s *Service) CreatePost(ctx context.Context, content string) (*user.CreateP
 	request := &user.CreatePostIn{
 		Content: content,
 	}
-	resp, err := s.client.CreatePost(ctx, request)
+	resp, err := s.clientUser.CreatePost(ctx, request)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create post in grpc: %w", err)
+	}
+	return resp, nil
+}
+func (s *Service) GetCountFriends(ctx context.Context) (*user.GetCountFriendsOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	resp, err := s.clientUser.GetCountFriends(ctx, &user.EmptyFriends{})
+	if err != nil {
+		return nil, fmt.Errorf("failed to s.client.GetCountFriends: %v", err)
+	}
+	return resp, nil
+}
+
+func (s *Service) SetFriends(ctx context.Context, peer *user.SetFriendsIn) (*user.SetFriendsOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	resp, err := s.clientUser.SetFriends(ctx, peer)
+	if err != nil {
+		return nil, fmt.Errorf("failed to s.client.SetFriends: %v", err)
+	}
+	return resp, nil
+}
+
+func (s *Service) RemoveFriends(ctx context.Context, peer *user.RemoveFriendsIn) (*user.RemoveFriendsOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	resp, err := s.clientUser.RemoveFriends(ctx, peer)
+	if err != nil {
+		return nil, fmt.Errorf("failed to s.client.RemoveFriends: %v", err)
 	}
 	return resp, nil
 }

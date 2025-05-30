@@ -22,7 +22,8 @@ import (
 	"github.com/s21platform/gateway-service/internal/rpc/avatar"
 	"github.com/s21platform/gateway-service/internal/rpc/chat"
 	"github.com/s21platform/gateway-service/internal/rpc/feed"
-	"github.com/s21platform/gateway-service/internal/rpc/friends"
+
+	//"github.com/s21platform/gateway-service/internal/rpc/friends"
 	"github.com/s21platform/gateway-service/internal/rpc/notification"
 	"github.com/s21platform/gateway-service/internal/rpc/option"
 	"github.com/s21platform/gateway-service/internal/rpc/search"
@@ -34,7 +35,8 @@ import (
 	avatarusecase "github.com/s21platform/gateway-service/internal/useCase/avatar"
 	chatusecase "github.com/s21platform/gateway-service/internal/useCase/chat"
 	feedusecase "github.com/s21platform/gateway-service/internal/useCase/feed"
-	friendsusecase "github.com/s21platform/gateway-service/internal/useCase/friends"
+
+	//friendsusecase "github.com/s21platform/gateway-service/internal/useCase/friends"
 	notificationusecase "github.com/s21platform/gateway-service/internal/useCase/notification"
 	optionusecase "github.com/s21platform/gateway-service/internal/useCase/option"
 	searchusecase "github.com/s21platform/gateway-service/internal/useCase/search"
@@ -59,7 +61,7 @@ func main() {
 	userClient := user.NewService(cfg)
 	avatarClient := avatar.New(cfg)
 	notificationClient := notification.New(cfg)
-	friendsClient := friends.NewService(cfg)
+	//friendsClient := friends.NewService(cfg)
 	optionClient := option.New(cfg)
 	societyClient := society.NewService(cfg)
 	searchClient := search.NewService(cfg)
@@ -73,7 +75,7 @@ func main() {
 	userUsecase := userusecase.New(userClient)
 	avatarUsecase := avatarusecase.New(avatarClient)
 	notificationUsecase := notificationusecase.New(notificationClient)
-	friendsUseCase := friendsusecase.New(friendsClient)
+	//friendsUseCase := friendsusecase.New(friendsClient)
 	optionUsecase := optionusecase.New(optionClient)
 	societyUseCase := societyusecase.New(societyClient)
 	searchUseCase := searchusecase.New(searchClient)
@@ -84,7 +86,7 @@ func main() {
 
 	// handlers declaration
 	authHandlers := authhandler.New(cfg, authUseCase)
-	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, friendsUseCase, optionUsecase, societyUseCase, searchUseCase, chatUseCase, advertUseCase, feedUseCase)
+	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, optionUsecase, societyUseCase, searchUseCase, chatUseCase, advertUseCase, feedUseCase)
 	admHandlers := adm.New(staffUseCase)
 
 	r := chi.NewRouter()

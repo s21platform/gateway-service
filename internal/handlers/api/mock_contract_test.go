@@ -16,7 +16,6 @@ import (
 	advert_proto "github.com/s21platform/advert-proto/advert-proto"
 	avatar "github.com/s21platform/avatar-service/pkg/avatar"
 	chat "github.com/s21platform/chat-service/pkg/chat"
-	friends_proto "github.com/s21platform/friends-proto/friends-proto"
 	model "github.com/s21platform/gateway-service/internal/model"
 	notification "github.com/s21platform/notification-service/pkg/notification"
 	optionhub_proto "github.com/s21platform/optionhub-proto/optionhub-proto"
@@ -93,6 +92,51 @@ func (m *MockUserService) GetPeerInfo(r *http.Request) (*user.GetUserInfoByUUIDO
 func (mr *MockUserServiceMockRecorder) GetPeerInfo(r any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPeerInfo", reflect.TypeOf((*MockUserService)(nil).GetPeerInfo), r)
+}
+
+// GetUserCountFriends mocks base method.
+func (m *MockUserService) GetUserCountFriends(r *http.Request) (*user.GetCountFriendsOut, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserCountFriends", r)
+	ret0, _ := ret[0].(*user.GetCountFriendsOut)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserCountFriends indicates an expected call of GetUserCountFriends.
+func (mr *MockUserServiceMockRecorder) GetUserCountFriends(r any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserCountFriends", reflect.TypeOf((*MockUserService)(nil).GetUserCountFriends), r)
+}
+
+// RemoveUserFriends mocks base method.
+func (m *MockUserService) RemoveUserFriends(r *http.Request) (*user.RemoveFriendsOut, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveUserFriends", r)
+	ret0, _ := ret[0].(*user.RemoveFriendsOut)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RemoveUserFriends indicates an expected call of RemoveUserFriends.
+func (mr *MockUserServiceMockRecorder) RemoveUserFriends(r any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveUserFriends", reflect.TypeOf((*MockUserService)(nil).RemoveUserFriends), r)
+}
+
+// SetUserFriends mocks base method.
+func (m *MockUserService) SetUserFriends(r *http.Request) (*user.SetFriendsOut, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetUserFriends", r)
+	ret0, _ := ret[0].(*user.SetFriendsOut)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SetUserFriends indicates an expected call of SetUserFriends.
+func (mr *MockUserServiceMockRecorder) SetUserFriends(r any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetUserFriends", reflect.TypeOf((*MockUserService)(nil).SetUserFriends), r)
 }
 
 // UpdateProfileInfo mocks base method.
@@ -291,90 +335,6 @@ func (m *MockNotificationService) MarkNotificationsAsRead(r *http.Request) (*emp
 func (mr *MockNotificationServiceMockRecorder) MarkNotificationsAsRead(r any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MarkNotificationsAsRead", reflect.TypeOf((*MockNotificationService)(nil).MarkNotificationsAsRead), r)
-}
-
-// MockFriendsService is a mock of FriendsService interface.
-type MockFriendsService struct {
-	ctrl     *gomock.Controller
-	recorder *MockFriendsServiceMockRecorder
-	isgomock struct{}
-}
-
-// MockFriendsServiceMockRecorder is the mock recorder for MockFriendsService.
-type MockFriendsServiceMockRecorder struct {
-	mock *MockFriendsService
-}
-
-// NewMockFriendsService creates a new mock instance.
-func NewMockFriendsService(ctrl *gomock.Controller) *MockFriendsService {
-	mock := &MockFriendsService{ctrl: ctrl}
-	mock.recorder = &MockFriendsServiceMockRecorder{mock}
-	return mock
-}
-
-// EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockFriendsService) EXPECT() *MockFriendsServiceMockRecorder {
-	return m.recorder
-}
-
-// CheckSubscribe mocks base method.
-func (m *MockFriendsService) CheckSubscribe(r *http.Request) (*model.CheckSubscribe, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CheckSubscribe", r)
-	ret0, _ := ret[0].(*model.CheckSubscribe)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// CheckSubscribe indicates an expected call of CheckSubscribe.
-func (mr *MockFriendsServiceMockRecorder) CheckSubscribe(r any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckSubscribe", reflect.TypeOf((*MockFriendsService)(nil).CheckSubscribe), r)
-}
-
-// GetCountFriends mocks base method.
-func (m *MockFriendsService) GetCountFriends(r *http.Request) (*friends_proto.GetCountFriendsOut, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetCountFriends", r)
-	ret0, _ := ret[0].(*friends_proto.GetCountFriendsOut)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetCountFriends indicates an expected call of GetCountFriends.
-func (mr *MockFriendsServiceMockRecorder) GetCountFriends(r any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCountFriends", reflect.TypeOf((*MockFriendsService)(nil).GetCountFriends), r)
-}
-
-// RemoveFriends mocks base method.
-func (m *MockFriendsService) RemoveFriends(r *http.Request) (*friends_proto.RemoveFriendsOut, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "RemoveFriends", r)
-	ret0, _ := ret[0].(*friends_proto.RemoveFriendsOut)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// RemoveFriends indicates an expected call of RemoveFriends.
-func (mr *MockFriendsServiceMockRecorder) RemoveFriends(r any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveFriends", reflect.TypeOf((*MockFriendsService)(nil).RemoveFriends), r)
-}
-
-// SetFriends mocks base method.
-func (m *MockFriendsService) SetFriends(r *http.Request) (*friends_proto.SetFriendsOut, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SetFriends", r)
-	ret0, _ := ret[0].(*friends_proto.SetFriendsOut)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// SetFriends indicates an expected call of SetFriends.
-func (mr *MockFriendsServiceMockRecorder) SetFriends(r any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetFriends", reflect.TypeOf((*MockFriendsService)(nil).SetFriends), r)
 }
 
 // MockOptionService is a mock of OptionService interface.

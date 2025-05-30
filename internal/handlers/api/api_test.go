@@ -988,7 +988,7 @@ func TestHandler_GetOptionRequests(t *testing.T) {
 	})
 }
 
-func TestHandler_CreatePost(t *testing.T) {
+func TestHandler_CreateUserPost(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -999,7 +999,7 @@ func TestHandler_CreatePost(t *testing.T) {
 
 	t.Run("should_create_post", func(t *testing.T) {
 		mockUserService := NewMockUserService(ctrl)
-		mockLogger.EXPECT().AddFuncName("CreatePost")
+		mockLogger.EXPECT().AddFuncName("CreateUserPost")
 
 		req := httptest.NewRequest(http.MethodPost, "/user", nil)
 		req.Header.Set("Content-Type", "application/json")
@@ -1013,7 +1013,7 @@ func TestHandler_CreatePost(t *testing.T) {
 			PostUuid: "test-uuid",
 		}
 
-		mockUserService.EXPECT().CreatePost(r).Return(expected, nil)
+		mockUserService.EXPECT().CreateUserPost(r).Return(expected, nil)
 
 		s := New(
 			mockUserService,
@@ -1027,14 +1027,14 @@ func TestHandler_CreatePost(t *testing.T) {
 			nil,
 		)
 
-		s.CreatePost(w, r)
+		s.CreateUserPost(w, r)
 
 		assert.Equal(t, http.StatusOK, w.Code)
 	})
 
 	t.Run("should_err_us_fail_response", func(t *testing.T) {
 		mockUserService := NewMockUserService(ctrl)
-		mockLogger.EXPECT().AddFuncName("CreatePost")
+		mockLogger.EXPECT().AddFuncName("CreateUserPost")
 		mockLogger.EXPECT().Error(gomock.Any())
 
 		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
@@ -1044,7 +1044,7 @@ func TestHandler_CreatePost(t *testing.T) {
 
 		mockErr := errors.New("some error")
 
-		mockUserService.EXPECT().CreatePost(r).Return(nil, mockErr)
+		mockUserService.EXPECT().CreateUserPost(r).Return(nil, mockErr)
 
 		s := New(
 			mockUserService,
@@ -1058,7 +1058,7 @@ func TestHandler_CreatePost(t *testing.T) {
 			nil,
 		)
 
-		s.CreatePost(w, r)
+		s.CreateUserPost(w, r)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})

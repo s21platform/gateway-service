@@ -50,7 +50,7 @@ func (s *Service) UpdateProfile(ctx context.Context, data model.ProfileData) (*u
 	return resp, nil
 }
 
-func (s *Service) CreatePost(ctx context.Context, content string) (*user.CreatePostOut, error) {
+func (s *Service) CreateUserPost(ctx context.Context, content string) (*user.CreatePostOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	request := &user.CreatePostIn{
 		Content: content,

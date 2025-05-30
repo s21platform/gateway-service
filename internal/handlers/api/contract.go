@@ -23,7 +23,7 @@ type UserService interface {
 	GetInfoByUUID(r *http.Request) (*user.GetUserInfoByUUIDOut, error)
 	UpdateProfileInfo(r *http.Request) (*user.UpdateProfileOut, error)
 	GetPeerInfo(r *http.Request) (*user.GetUserInfoByUUIDOut, error)
-	CreatePost(r *http.Request) (*user.CreatePostOut, error)
+	CreateUserPost(r *http.Request) (*user.CreatePostOut, error)
 	SetUserFriends(r *http.Request) (*user.SetFriendsOut, error)
 	RemoveUserFriends(r *http.Request) (*user.RemoveFriendsOut, error)
 	GetUserCountFriends(r *http.Request) (*user.GetCountFriendsOut, error)

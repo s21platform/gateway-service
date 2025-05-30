@@ -49,19 +49,19 @@ func (m *MockUserService) EXPECT() *MockUserServiceMockRecorder {
 	return m.recorder
 }
 
-// CreatePost mocks base method.
-func (m *MockUserService) CreatePost(r *http.Request) (*user.CreatePostOut, error) {
+// CreateUserPost mocks base method.
+func (m *MockUserService) CreateUserPost(r *http.Request) (*user.CreatePostOut, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreatePost", r)
+	ret := m.ctrl.Call(m, "CreateUserPost", r)
 	ret0, _ := ret[0].(*user.CreatePostOut)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreatePost indicates an expected call of CreatePost.
-func (mr *MockUserServiceMockRecorder) CreatePost(r any) *gomock.Call {
+// CreateUserPost indicates an expected call of CreateUserPost.
+func (mr *MockUserServiceMockRecorder) CreateUserPost(r any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePost", reflect.TypeOf((*MockUserService)(nil).CreatePost), r)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUserPost", reflect.TypeOf((*MockUserService)(nil).CreateUserPost), r)
 }
 
 // GetInfoByUUID mocks base method.

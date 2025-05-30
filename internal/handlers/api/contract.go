@@ -10,11 +10,11 @@ import (
 	advert "github.com/s21platform/advert-proto/advert-proto"
 	"github.com/s21platform/avatar-service/pkg/avatar"
 	"github.com/s21platform/chat-service/pkg/chat"
-	"github.com/s21platform/user-service/pkg/user"
 	friends "github.com/s21platform/friends-proto/friends-proto"
 	"github.com/s21platform/notification-service/pkg/notification"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 	societyproto "github.com/s21platform/society-proto/society-proto"
+	"github.com/s21platform/user-service/pkg/user"
 
 	"github.com/s21platform/gateway-service/internal/model"
 )
@@ -84,6 +84,4 @@ type AdvertService interface {
 	RestoreAdvert(r *http.Request) (*advert.AdvertEmpty, error)
 }
 
-type FeedService interface {
-	// CreateUserPost(r *http.Request) (*feed.CreateUserPostOut, error)
-}
+type FeedService interface{}

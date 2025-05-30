@@ -810,7 +810,7 @@ func (h *Handler) GetOptionRequests(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) CreatePost(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
-	logger.AddFuncName("CreateUserPost")
+	logger.AddFuncName("CreatePost")
 
 	result, err := h.uS.CreatePost(r)
 	if err != nil {

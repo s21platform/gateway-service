@@ -61,6 +61,7 @@ func (s *Service) CreatePost(ctx context.Context, content string) (*user.CreateP
 	}
 	return resp, nil
 }
+
 func (s *Service) GetCountFriends(ctx context.Context) (*user.GetCountFriendsOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	resp, err := s.clientUser.GetCountFriends(ctx, &user.EmptyFriends{})

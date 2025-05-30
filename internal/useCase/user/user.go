@@ -72,6 +72,7 @@ func (u *Usecase) CreatePost(r *http.Request) (*user.CreatePostOut, error) {
 	}
 	return resp, nil
 }
+
 func (u *Usecase) SetUserFriends(r *http.Request) (*user.SetFriendsOut, error) {
 	var readPeer struct {
 		Peer string `json:"peer"`

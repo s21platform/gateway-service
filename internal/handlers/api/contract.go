@@ -11,7 +11,7 @@ import (
 	"github.com/s21platform/chat-service/pkg/chat"
 	"github.com/s21platform/notification-service/pkg/notification"
 	"github.com/s21platform/user-service/pkg/user"
-	
+
 	advert "github.com/s21platform/advert-proto/advert-proto"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 	societyproto "github.com/s21platform/society-proto/society-proto"

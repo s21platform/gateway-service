@@ -11,19 +11,18 @@ import (
 	"testing"
 	"time"
 
-	
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	
+
 	advertproto "github.com/s21platform/advert-proto/advert-proto"
 	chatproto "github.com/s21platform/chat-service/pkg/chat"
 	logger_lib "github.com/s21platform/logger-lib"
 	societyproto "github.com/s21platform/society-proto/society-proto"
 	"github.com/s21platform/user-service/pkg/user"
-	
+
 	"github.com/s21platform/gateway-service/internal/config"
 	"github.com/s21platform/gateway-service/internal/model"
 )

@@ -1,3 +1,3 @@
 package feed
 
-type FeedClient interface {}
+type FeedClient interface{}

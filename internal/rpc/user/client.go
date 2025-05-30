@@ -50,6 +50,18 @@ func (s *Service) UpdateProfile(ctx context.Context, data model.ProfileData) (*u
 	return resp, nil
 }
 
+func (s *Service) CreateUserPost(ctx context.Context, content string) (*user.CreatePostOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	request := &user.CreatePostIn{
+		Content: content,
+	}
+	resp, err := s.clientUser.CreatePost(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create post in grpc: %w", err)
+	}
+	return resp, nil
+}
+
 func (s *Service) GetCountFriends(ctx context.Context) (*user.GetCountFriendsOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	resp, err := s.clientUser.GetCountFriends(ctx, &user.EmptyFriends{})

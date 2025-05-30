@@ -7,15 +7,14 @@ import (
 
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	advert "github.com/s21platform/advert-proto/advert-proto"
-	feed "github.com/s21platform/feed-proto/feed-proto"
-	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
-	societyproto "github.com/s21platform/society-proto/society-proto"
-
 	"github.com/s21platform/avatar-service/pkg/avatar"
 	"github.com/s21platform/chat-service/pkg/chat"
 	"github.com/s21platform/notification-service/pkg/notification"
 	"github.com/s21platform/user-service/pkg/user"
+
+	advert "github.com/s21platform/advert-proto/advert-proto"
+	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
+	societyproto "github.com/s21platform/society-proto/society-proto"
 
 	"github.com/s21platform/gateway-service/internal/model"
 )
@@ -24,6 +23,7 @@ type UserService interface {
 	GetInfoByUUID(r *http.Request) (*user.GetUserInfoByUUIDOut, error)
 	UpdateProfileInfo(r *http.Request) (*user.UpdateProfileOut, error)
 	GetPeerInfo(r *http.Request) (*user.GetUserInfoByUUIDOut, error)
+	CreateUserPost(r *http.Request) (*user.CreatePostOut, error)
 	SetUserFriends(r *http.Request) (*user.SetFriendsOut, error)
 	RemoveUserFriends(r *http.Request) (*user.RemoveFriendsOut, error)
 	GetUserCountFriends(r *http.Request) (*user.GetCountFriendsOut, error)
@@ -80,6 +80,4 @@ type AdvertService interface {
 	RestoreAdvert(r *http.Request) (*advert.AdvertEmpty, error)
 }
 
-type FeedService interface {
-	CreateUserPost(r *http.Request) (*feed.CreateUserPostOut, error)
-}
+type FeedService interface{}

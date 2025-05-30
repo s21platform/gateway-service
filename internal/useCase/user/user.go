@@ -63,6 +63,22 @@ func (u *Usecase) UpdateProfileInfo(r *http.Request) (*user.UpdateProfileOut, er
 	return resp, nil
 }
 
+func (u *Usecase) CreateUserPost(r *http.Request) (*user.CreatePostOut, error) {
+	var req model.CreatePostRequest
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %v", err)
+	}
+	defer r.Body.Close()
+
+	resp, err := u.uC.CreateUserPost(r.Context(), req.Content)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create post in usecase: %v", err)
+	}
+	return resp, nil
+}
+
 func (u *Usecase) SetUserFriends(r *http.Request) (*user.SetFriendsOut, error) {
 	var readPeer struct {
 		Peer string `json:"peer"`

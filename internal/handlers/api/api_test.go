@@ -11,8 +11,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/s21platform/user-service/pkg/user"
-
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -21,9 +19,9 @@ import (
 
 	advertproto "github.com/s21platform/advert-proto/advert-proto"
 	chatproto "github.com/s21platform/chat-service/pkg/chat"
-	feedproto "github.com/s21platform/feed-proto/feed-proto"
 	logger_lib "github.com/s21platform/logger-lib"
 	societyproto "github.com/s21platform/society-proto/society-proto"
+	"github.com/s21platform/user-service/pkg/user"
 
 	"github.com/s21platform/gateway-service/internal/config"
 	"github.com/s21platform/gateway-service/internal/model"
@@ -999,11 +997,11 @@ func TestHandler_CreateUserPost(t *testing.T) {
 	ctx := context.Background()
 	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
 
-	t.Run("should_create_user_post", func(t *testing.T) {
-		mockFeedService := NewMockFeedService(ctrl)
+	t.Run("should_create_post", func(t *testing.T) {
+		mockUserService := NewMockUserService(ctrl)
 		mockLogger.EXPECT().AddFuncName("CreateUserPost")
 
-		req := httptest.NewRequest(http.MethodPost, "/feed", nil)
+		req := httptest.NewRequest(http.MethodPost, "/user", nil)
 		req.Header.Set("Content-Type", "application/json")
 
 		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
@@ -1011,13 +1009,14 @@ func TestHandler_CreateUserPost(t *testing.T) {
 		w := httptest.NewRecorder()
 		r = r.WithContext(ctx)
 
-		expected := &feedproto.CreateUserPostOut{
+		expected := &user.CreatePostOut{
 			PostUuid: "test-uuid",
 		}
 
-		mockFeedService.EXPECT().CreateUserPost(r).Return(expected, nil)
+		mockUserService.EXPECT().CreateUserPost(r).Return(expected, nil)
 
 		s := New(
+			mockUserService,
 			nil,
 			nil,
 			nil,
@@ -1026,7 +1025,6 @@ func TestHandler_CreateUserPost(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			mockFeedService,
 		)
 
 		s.CreateUserPost(w, r)
@@ -1035,7 +1033,7 @@ func TestHandler_CreateUserPost(t *testing.T) {
 	})
 
 	t.Run("should_err_us_fail_response", func(t *testing.T) {
-		mockFeedService := NewMockFeedService(ctrl)
+		mockUserService := NewMockUserService(ctrl)
 		mockLogger.EXPECT().AddFuncName("CreateUserPost")
 		mockLogger.EXPECT().Error(gomock.Any())
 
@@ -1046,9 +1044,10 @@ func TestHandler_CreateUserPost(t *testing.T) {
 
 		mockErr := errors.New("some error")
 
-		mockFeedService.EXPECT().CreateUserPost(r).Return(nil, mockErr)
+		mockUserService.EXPECT().CreateUserPost(r).Return(nil, mockErr)
 
 		s := New(
+			mockUserService,
 			nil,
 			nil,
 			nil,
@@ -1057,7 +1056,6 @@ func TestHandler_CreateUserPost(t *testing.T) {
 			nil,
 			nil,
 			nil,
-			mockFeedService,
 		)
 
 		s.CreateUserPost(w, r)

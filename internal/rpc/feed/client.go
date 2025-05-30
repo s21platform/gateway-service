@@ -1,13 +1,11 @@
 package feed
 
 import (
-	"context"
 	"fmt"
 	"log"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/metadata"
 
 	feedproto "github.com/s21platform/feed-proto/feed-proto"
 
@@ -26,16 +24,4 @@ func New(cfg *config.Config) *Service {
 	}
 	client := feedproto.NewFeedServiceClient(conn)
 	return &Service{client: client}
-}
-
-func (s *Service) CreateUserPost(ctx context.Context, content string) (*feedproto.CreateUserPostOut, error) {
-	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
-	request := &feedproto.CreateUserPostIn{
-		Content: content,
-	}
-	resp, err := s.client.CreateUserPost(ctx, request)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create post in grpc: %w", err)
-	}
-	return resp, nil
 }

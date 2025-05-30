@@ -13,7 +13,6 @@ require (
 	github.com/s21platform/avatar-service v0.0.0-20250413162426-a937ac435e67
 	github.com/s21platform/chat-service v0.0.2
 	github.com/s21platform/feed-proto v0.0.1
-	github.com/s21platform/friends-proto v0.0.12
 	github.com/s21platform/logger-lib v0.0.6
 	github.com/s21platform/metrics-lib v0.0.9
 	github.com/s21platform/notification-service v0.0.4
@@ -21,7 +20,6 @@ require (
 	github.com/s21platform/search-proto v0.0.10
 	github.com/s21platform/society-proto v0.0.23
 	github.com/s21platform/staff-service v0.1.1
-	github.com/s21platform/user-proto v0.0.16
 	github.com/s21platform/user-service v0.0.4
 	github.com/stretchr/testify v1.10.0
 	google.golang.org/grpc v1.72.2

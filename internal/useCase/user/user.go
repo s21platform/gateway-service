@@ -64,9 +64,15 @@ func (u *Usecase) UpdateProfileInfo(r *http.Request) (*user.UpdateProfileOut, er
 }
 
 func (u *Usecase) CreatePost(r *http.Request) (*user.CreatePostOut, error) {
-	content := r.URL.Query().Get("content")
+	var req model.CreatePostRequest
 
-	resp, err := u.uC.CreatePost(r.Context(), content)
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %v", err)
+	}
+	defer r.Body.Close()
+
+	resp, err := u.uC.CreatePost(r.Context(), req.Content)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create post in usecase: %v", err)
 	}

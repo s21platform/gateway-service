@@ -60,6 +60,13 @@ type SocietyService interface {
 	CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error)
 	GetSocietyInfo(r *http.Request) (*model.SocietyInfo, error)
 	UpdateSociety(r *http.Request) error
+	RemoveSociety(r *http.Request) (*societyproto.EmptySociety, error)
+	//GetAccessLevel(r *http.Request) (*societyproto.GetAccessLevelOut, error)
+	//GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error)
+	//SubscribeToSociety(r *http.Request) (*societyproto.SubscribeToSocietyOut, error)
+	//GetPermission(r *http.Request) (*societyproto.GetPermissionsOut, error)
+	//UnsubscribeFromSociety(r *http.Request) (*societyproto.UnsubscribeFromSocietyOut, error)
+	//GetSocietiesForUser(r *http.Request) (*societyproto.GetSocietiesForUserOut, error)
 }
 
 type SearchService interface {

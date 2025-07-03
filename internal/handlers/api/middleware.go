@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/golang-jwt/jwt/v4"
+	logger_lib "github.com/s21platform/logger-lib"
 
 	"github.com/s21platform/gateway-service/internal/config"
 	"github.com/s21platform/gateway-service/internal/model"
@@ -15,13 +16,18 @@ import (
 
 func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, err := r.Cookie("S21SPACE_AUTH_TOKEN")
-		if err == nil {
+		logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+		logger.AddFuncName("CheckJWT")
+		cookie, err := r.Cookie("S21SPACE_AUTH_TOKEN")
+		if err == nil && cookie.Value != "" {
+			logger.Info("older flow (cookie)")
 			CheckJWTWithCookie(r, w, next, cfg)
 			return
 		}
+		logger.Info("try new flow (Bearer)")
 		accessToken := r.Header.Get("access_token")
 		if accessToken == "" {
+			logger.Error("access_token is empty")
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
@@ -39,6 +45,7 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 		}
 		claims, ok := token.Claims.(*model.ClaimsV2)
 		if !ok || !token.Valid {
+			logger.Error("failed to validation token from access_token")
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
@@ -52,7 +59,7 @@ func CheckJWTWithCookie(r *http.Request, w http.ResponseWriter, next http.Handle
 	log.Println("Check jwt for:", r.URL.Path)
 	cookie, err := r.Cookie("S21SPACE_AUTH_TOKEN")
 	if err != nil {
-		log.Println("failed to get cookie value")
+		log.Println("failed to get cookie value in MW")
 		http.SetCookie(w, &http.Cookie{
 			Name:     "S21SPACE_AUTH_TOKEN",
 			Value:    "",

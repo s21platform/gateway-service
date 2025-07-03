@@ -51,6 +51,7 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 		}
 		ctx := context.WithValue(r.Context(), config.KeyUsername, claims.Nickname)
 		ctx = context.WithValue(ctx, config.KeyUUID, claims.Sub)
+		logger.Info(fmt.Sprintf("save to context: %s, %s", claims.Nickname, claims.Sub))
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

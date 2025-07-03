@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 
+	logger_lib "github.com/s21platform/logger-lib"
 	"github.com/s21platform/user-service/pkg/user"
 
 	"github.com/s21platform/gateway-service/internal/config"
@@ -22,8 +23,11 @@ func New(uC UserClient) *Usecase {
 
 func (u *Usecase) GetInfoByUUID(r *http.Request) (*user.GetUserInfoByUUIDOut, error) {
 	uuid := r.Context().Value(config.KeyUUID).(string)
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.Info("UUID: " + uuid)
 	resp, err := u.uC.GetInfo(r.Context(), uuid)
 	if err != nil {
+		logger.Warn("Error: " + err.Error())
 		return nil, err
 	}
 	return resp, nil

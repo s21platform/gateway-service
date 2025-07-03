@@ -1121,3 +1121,82 @@ func TestHandler_MarkNotificationAsRead(t *testing.T) {
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})
 }
+
+func TestHandler_RemoveSociety(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("should_remove_society_successfully", func(t *testing.T) {
+		mockSocietyService := NewMockSocietyService(ctrl)
+
+		req := httptest.NewRequest(http.MethodDelete, "/api/society/remove", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		expectedResult := &societyproto.EmptySociety{}
+
+		mockSocietyService.EXPECT().RemoveSociety(req).Return(expectedResult, nil)
+
+		w := httptest.NewRecorder()
+
+		h := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			mockSocietyService,
+			nil,
+			nil,
+			nil,
+			nil,
+		)
+
+		h.RemoveSociety(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
+
+		var responseBody societyproto.EmptySociety
+		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedResult, responseBody)
+	})
+
+	t.Run("should_return_internal_server_error_if_RemoveSociety_fails", func(t *testing.T) {
+		mockSocietyService := NewMockSocietyService(ctrl)
+
+		req := httptest.NewRequest(http.MethodDelete, "/api/society/remove", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		expectedError := errors.New("failed to remove society")
+		mockSocietyService.EXPECT().RemoveSociety(req).Return(societyproto.EmptySociety{}, expectedError)
+
+		w := httptest.NewRecorder()
+
+		h := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			mockSocietyService,
+			nil,
+			nil,
+			nil,
+			nil,
+		)
+
+		h.RemoveSociety(w, req)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}

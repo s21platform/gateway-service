@@ -830,6 +830,7 @@ func (h *Handler) CreateUserPost(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(jsn)
 }
+
 func (h *Handler) RemoveSociety(w http.ResponseWriter, r *http.Request) {
 	result, err := h.sS.RemoveSociety(r)
 	if err != nil {

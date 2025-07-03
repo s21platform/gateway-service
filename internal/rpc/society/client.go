@@ -3,8 +3,9 @@ package society
 import (
 	"context"
 	"fmt"
-	"github.com/s21platform/gateway-service/internal/model"
 	"log"
+
+	"github.com/s21platform/gateway-service/internal/model"
 
 	"github.com/s21platform/gateway-service/internal/model"
 

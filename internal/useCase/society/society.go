@@ -3,7 +3,6 @@ package society
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/s21platform/gateway-service/internal/model"
 	"io"
 	"net/http"
 

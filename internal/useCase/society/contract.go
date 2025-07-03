@@ -2,6 +2,7 @@ package society
 
 import (
 	"context"
+
 	"github.com/s21platform/gateway-service/internal/model"
 
 	"github.com/s21platform/gateway-service/internal/model"

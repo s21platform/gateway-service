@@ -1166,7 +1166,7 @@ func TestHandler_RemoveSociety(t *testing.T) {
 		var responseBody societyproto.EmptySociety
 		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
 		assert.NoError(t, err)
-		assert.Equal(t, expectedResult, responseBody)
+		assert.Equal(t, expectedResult, &responseBody)
 	})
 
 	t.Run("should_return_internal_server_error_if_RemoveSociety_fails", func(t *testing.T) {
@@ -1179,7 +1179,7 @@ func TestHandler_RemoveSociety(t *testing.T) {
 		req = req.WithContext(ctx)
 
 		expectedError := errors.New("failed to remove society")
-		mockSocietyService.EXPECT().RemoveSociety(req).Return(societyproto.EmptySociety{}, expectedError)
+		mockSocietyService.EXPECT().RemoveSociety(req).Return(&societyproto.EmptySociety{}, expectedError)
 
 		w := httptest.NewRecorder()
 

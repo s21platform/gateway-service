@@ -4,10 +4,15 @@ import (
 	"context"
 	"github.com/s21platform/gateway-service/internal/model"
 
+	"github.com/s21platform/gateway-service/internal/model"
+
 	societyproto "github.com/s21platform/society-proto/society-proto"
 )
 
 type SocietyClient interface {
+	CreateSociety(ctx context.Context, req *model.RequestData) (*societyproto.SetSocietyOut, error)
+	GetSocietyInfo(ctx context.Context, societyInfo string) (*societyproto.GetSocietyInfoOut, error)
+	UpdateSociety(ctx context.Context, req *model.SocietyUpdate) error
 	CreateSociety(ctx context.Context, req *RequestData) (*societyproto.SetSocietyOut, error)
 	RemoveSociety(ctx context.Context, req *model.SocietyId) (*societyproto.EmptySociety, error)
 	//GetAccessLevel(ctx context.Context) (*societyproto.GetAccessLevelOut, error)

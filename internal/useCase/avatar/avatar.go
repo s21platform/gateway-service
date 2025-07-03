@@ -6,9 +6,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/s21platform/gateway-service/internal/config"
-
-	avatar "github.com/s21platform/avatar-proto/avatar-proto"
+	"github.com/s21platform/avatar-service/pkg/avatar"
 )
 
 type Usecase struct {
@@ -24,26 +22,25 @@ func (uc *Usecase) UploadUserAvatar(r *http.Request) (*avatar.SetUserAvatarOut, 
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse multipart form: %w", err)
 	}
+
 	file, _, err := r.FormFile("avatar")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get file from form: %w", err)
 	}
 	defer file.Close()
 
-	uuid := r.Context().Value(config.KeyUUID).(string)
 	filename := r.FormValue("filename")
 
-	resp, err := uc.aC.SetUserAvatar(r.Context(), filename, file, uuid)
+	resp, err := uc.aC.SetUserAvatar(r.Context(), filename, file)
 	if err != nil {
 		return nil, fmt.Errorf("failed to set avatar: %w", err)
 	}
+
 	return resp, nil
 }
 
 func (uc *Usecase) GetUserAvatarsList(r *http.Request) (*avatar.GetAllUserAvatarsOut, error) {
-	uuid := r.Context().Value(config.KeyUUID).(string)
-
-	resp, err := uc.aC.GetAllUserAvatars(r.Context(), uuid)
+	resp, err := uc.aC.GetAllUserAvatars(r.Context())
 	if err != nil {
 		return nil, fmt.Errorf("failed to get avatars: %w", err)
 	}
@@ -70,24 +67,29 @@ func (uc *Usecase) UploadSocietyAvatar(r *http.Request) (*avatar.SetSocietyAvata
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse multipart form: %w", err)
 	}
+
 	file, _, err := r.FormFile("avatar")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get file from form: %w", err)
 	}
 	defer file.Close()
 
-	uuid := r.Context().Value(config.KeyUUID).(string)
+	uuid := r.FormValue("societyUUID")
 	filename := r.FormValue("filename")
 
 	resp, err := uc.aC.SetSocietyAvatar(r.Context(), filename, file, uuid)
 	if err != nil {
 		return nil, fmt.Errorf("failed to set avatar: %w", err)
 	}
+
 	return resp, nil
 }
 
 func (uc *Usecase) GetSocietyAvatarsList(r *http.Request) (*avatar.GetAllSocietyAvatarsOut, error) {
-	uuid := r.Context().Value(config.KeyUUID).(string)
+	uuid := r.URL.Query().Get("societyUUID")
+	if uuid == "" {
+		return nil, fmt.Errorf("failed to no society UUID in request")
+	}
 
 	resp, err := uc.aC.GetAllSocietyAvatars(r.Context(), uuid)
 	if err != nil {

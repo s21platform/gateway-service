@@ -5,13 +5,16 @@ import (
 	"fmt"
 	"log"
 
-	"google.golang.org/grpc/credentials/insecure"
-
-	auth "github.com/s21platform/auth-proto/auth-proto"
-	"github.com/s21platform/gateway-service/internal/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/emptypb"
+
+	"github.com/s21platform/auth-service/pkg/auth"
+
+	"github.com/s21platform/gateway-service/internal/config"
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Service struct {
@@ -49,4 +52,56 @@ func (s *Service) DoLogin(ctx context.Context, username, password string) (*JWT,
 		return nil, status.Error(codes.Internal, "Unknown error")
 	}
 	return &JWT{Jwt: resp.Jwt}, nil
+}
+
+func (s *Service) CheckEmailAvailability(ctx context.Context, email string) (*auth.CheckEmailAvailabilityOut, error) {
+	resp, err := s.client.CheckEmailAvailability(ctx, &auth.CheckEmailAvailabilityIn{Email: email})
+	if err != nil {
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to check email in grpc: %v", err))
+	}
+
+	return resp, nil
+}
+
+func (s *Service) SendUserVerificationCode(ctx context.Context, email string) (*auth.SendUserVerificationCodeOut, error) {
+	resp, err := s.client.SendUserVerificationCode(ctx, &auth.SendUserVerificationCodeIn{Email: email})
+	if err != nil {
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to send code in grpc: %v", err))
+	}
+
+	return resp, nil
+}
+
+func (s *Service) RegisterUser(ctx context.Context, requestData *model.RegisterRequest) (*emptypb.Empty, error) {
+	resp, err := s.client.RegisterUser(ctx, &auth.RegisterUserIn{
+		Email:           requestData.Email,
+		Password:        requestData.Password,
+		ConfirmPassword: requestData.ConfirmPassword,
+		Code:            requestData.Code,
+		CodeLookupUuid:  requestData.CodeLookupUUID,
+	})
+	if err != nil {
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to register in grpc: %v", err))
+	}
+
+	return resp, nil
+}
+
+func (s *Service) LoginV2(ctx context.Context, login, password string) (*auth.LoginV2Out, error) {
+	resp, err := s.client.LoginV2(ctx, &auth.LoginV2In{
+		Login:    login,
+		Password: password,
+	})
+	if err != nil {
+		if statusError, ok := status.FromError(err); ok {
+			switch statusError.Code() {
+			case codes.InvalidArgument:
+				return nil, status.Error(codes.InvalidArgument, "Неверно введены логин или пароль")
+			default:
+				return nil, status.Error(codes.Internal, "Неизвестная ошибка")
+			}
+		}
+		return nil, status.Error(codes.Internal, "Unknown error")
+	}
+	return resp, nil
 }

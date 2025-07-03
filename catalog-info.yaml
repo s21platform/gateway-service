@@ -1,0 +1,20 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: gateway
+  description: Входная точка в микросервисы.
+  annotations:
+    github.com/project-slug: s21platform/gateway-service  # Укажите правильный репозиторий
+  #    backstage.io/techdocs-ref: dir:.  # Если планируете использовать TechDocs
+  tags:
+    - grpc
+    - rest
+    - proto
+  links:
+    - url: https://metric.x.space-21.ru/d/adywc4ygmr3eoe/gateway-service?orgId=1&refresh=30s
+      title: Grafana
+      icon: dashboard
+spec:
+  type: service
+  lifecycle: production
+  owner: alexseipopov  # GitHub-логин ответственного

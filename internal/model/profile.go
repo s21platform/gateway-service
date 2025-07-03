@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	userproto "github.com/s21platform/user-proto/user-proto"
+	"github.com/s21platform/user-service/pkg/user"
 )
 
 type OS struct {
@@ -20,7 +20,7 @@ type ProfileData struct {
 	Os        OS         `json:"os"`
 }
 
-func (pd *ProfileData) FromDTO() *userproto.UpdateProfileIn {
+func (pd *ProfileData) FromDTO() *user.UpdateProfileIn {
 	var birthday string
 	if pd.Birthdate != nil {
 		birthday = pd.Birthdate.Format(time.RFC3339)
@@ -32,7 +32,7 @@ func (pd *ProfileData) FromDTO() *userproto.UpdateProfileIn {
 		pd.Telegram = pd.Telegram[1:]
 	}
 
-	return &userproto.UpdateProfileIn{
+	return &user.UpdateProfileIn{
 		Name:     pd.Name,
 		Birthday: birthday,
 		Telegram: pd.Telegram,

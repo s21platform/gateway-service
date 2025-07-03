@@ -5,22 +5,28 @@ package api
 import (
 	"net/http"
 
-	chat "github.com/s21platform/chat-proto/chat-proto"
+	"google.golang.org/protobuf/types/known/emptypb"
 
-	avatar "github.com/s21platform/avatar-proto/avatar-proto"
-	friends "github.com/s21platform/friends-proto/friends-proto"
-	notificationproto "github.com/s21platform/notification-proto/notification-proto"
+	"github.com/s21platform/avatar-service/pkg/avatar"
+	"github.com/s21platform/chat-service/pkg/chat"
+	"github.com/s21platform/notification-service/pkg/notification"
+	"github.com/s21platform/user-service/pkg/user"
+
+	advert "github.com/s21platform/advert-proto/advert-proto"
 	optionhub "github.com/s21platform/optionhub-proto/optionhub-proto"
 	societyproto "github.com/s21platform/society-proto/society-proto"
-	userproto "github.com/s21platform/user-proto/user-proto"
 
 	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type UserService interface {
-	GetInfoByUUID(r *http.Request) (*userproto.GetUserInfoByUUIDOut, error)
-	UpdateProfileInfo(r *http.Request) (*userproto.UpdateProfileOut, error)
-	GetPeerInfo(r *http.Request) (*userproto.GetUserInfoByUUIDOut, error)
+	GetInfoByUUID(r *http.Request) (*user.GetUserInfoByUUIDOut, error)
+	UpdateProfileInfo(r *http.Request) (*user.UpdateProfileOut, error)
+	GetPeerInfo(r *http.Request) (*user.GetUserInfoByUUIDOut, error)
+	CreateUserPost(r *http.Request) (*user.CreatePostOut, error)
+	SetUserFriends(r *http.Request) (*user.SetFriendsOut, error)
+	RemoveUserFriends(r *http.Request) (*user.RemoveFriendsOut, error)
+	GetUserCountFriends(r *http.Request) (*user.GetCountFriendsOut, error)
 }
 
 type AvatarService interface {
@@ -34,15 +40,9 @@ type AvatarService interface {
 }
 
 type NotificationService interface {
-	GetCountNotification(r *http.Request) (*notificationproto.NotificationCountOut, error)
-	GetNotification(r *http.Request) (*notificationproto.NotificationOut, error)
-}
-
-type FriendsService interface {
-	GetCountFriends(r *http.Request) (*friends.GetCountFriendsOut, error)
-	SetFriends(r *http.Request) (*friends.SetFriendsOut, error)
-	RemoveFriends(r *http.Request) (*friends.RemoveFriendsOut, error)
-	CheckSubscribe(r *http.Request) (*model.CheckSubscribe, error)
+	GetCountNotification(r *http.Request) (*notification.NotificationCountOut, error)
+	GetNotification(r *http.Request) (*notification.NotificationOut, error)
+	MarkNotificationsAsRead(r *http.Request) (*emptypb.Empty, error)
 }
 
 type OptionService interface {
@@ -53,10 +53,13 @@ type OptionService interface {
 	GetSkillList(r *http.Request) (*optionhub.GetByNameOut, error)
 	GetCityList(r *http.Request) (*optionhub.GetByNameOut, error)
 	GetSocietyDirectionList(r *http.Request) (*optionhub.GetByNameOut, error)
+	GetOptionRequests(r *http.Request) (model.OptionRequestsList, error)
 }
 
 type SocietyService interface {
 	CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error)
+	GetSocietyInfo(r *http.Request) (*model.SocietyInfo, error)
+	UpdateSociety(r *http.Request) error
 	RemoveSociety(r *http.Request) (*societyproto.EmptySociety, error)
 	//GetAccessLevel(r *http.Request) (*societyproto.GetAccessLevelOut, error)
 	//GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error)
@@ -72,5 +75,16 @@ type SearchService interface {
 }
 
 type ChatService interface {
-	GetRecentMessages(r *http.Request) (*chat.GetRecentMessagesOut, error)
+	GetChats(r *http.Request) (*chat.GetChatsOut, error)
+	CreatePrivateChat(r *http.Request) (*chat.CreatePrivateChatOut, error)
+	GetPrivateRecentMessages(r *http.Request) (*chat.GetPrivateRecentMessagesOut, error)
 }
+
+type AdvertService interface {
+	GetAdverts(r *http.Request) (*advert.GetAdvertsOut, error)
+	CreateAdvert(r *http.Request) (*advert.AdvertEmpty, error)
+	CancelAdvert(r *http.Request) (*advert.AdvertEmpty, error)
+	RestoreAdvert(r *http.Request) (*advert.AdvertEmpty, error)
+}
+
+type FeedService interface{}

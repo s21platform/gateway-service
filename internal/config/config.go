@@ -11,10 +11,11 @@ import (
 type key string
 
 const (
-	KeyMetrics  = key("metrics")
-	KeyUUID     = key("uuid")
-	KeyUsername = key("username")
-	KeyLogger   = key("logger")
+	KeyMetrics   = key("metrics")
+	KeyUUID      = key("uuid")
+	KeyUsername  = key("username")
+	KeyLogger    = key("logger")
+	KeyStaffUUID = key("staff_uuid")
 )
 
 // Config Common config struct
@@ -32,6 +33,9 @@ type Config struct {
 	Logger       Logger
 	Search       Search
 	Chat         Chat
+	Advert       Advert
+	Feed         Feed
+	Staff        Staff
 }
 
 // Service struct for storage this server config variables
@@ -99,6 +103,21 @@ type Search struct {
 type Chat struct {
 	Host string `env:"CHAT_SERVICE_HOST"`
 	Port string `env:"CHAT_SERVICE_PORT"`
+}
+
+type Advert struct {
+	Host string `env:"ADVERT_SERVICE_HOST"`
+	Port string `env:"ADVERT_SERVICE_PORT"`
+}
+
+type Feed struct {
+	Host string `env:"FEED_SERVICE_HOST"`
+	Port string `env:"FEED_SERVICE_PORT"`
+}
+
+type Staff struct {
+	Host string `env:"STAFF_SERVICE_HOST"`
+	Port string `env:"STAFF_SERVICE_PORT"`
 }
 
 func MustLoad() *Config {

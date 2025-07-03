@@ -7,11 +7,14 @@ import (
 	"log"
 	"mime/multipart"
 
-	avatar "github.com/s21platform/avatar-proto/avatar-proto"
-	"github.com/s21platform/gateway-service/internal/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/protobuf/types/known/emptypb"
+
+	"github.com/s21platform/avatar-service/pkg/avatar"
+
+	"github.com/s21platform/gateway-service/internal/config"
 )
 
 type Service struct {
@@ -28,18 +31,21 @@ func New(cfg *config.Config) *Service {
 	return &Service{client: client}
 }
 
-func (s *Service) SetUserAvatar(ctx context.Context, filename string, file multipart.File, uuid string) (*avatar.SetUserAvatarOut, error) {
+func (s *Service) SetUserAvatar(ctx context.Context, filename string, file multipart.File) (*avatar.SetUserAvatarOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
 	stream, err := s.client.SetUserAvatar(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to set avatar: %w", err)
 	}
+
 	req := avatar.SetUserAvatarIn{
 		Filename: filename,
-		Uuid:     uuid,
 	}
 	if err = stream.Send(&req); err != nil {
 		return nil, fmt.Errorf("failed to send set avatar: %v", err)
 	}
+
 	buf := make([]byte, 1024)
 	for {
 		n, err := file.Read(buf)
@@ -62,12 +68,10 @@ func (s *Service) SetUserAvatar(ctx context.Context, filename string, file multi
 	return resp, nil
 }
 
-func (s *Service) GetAllUserAvatars(ctx context.Context, uuid string) (*avatar.GetAllUserAvatarsOut, error) {
-	req := avatar.GetAllUserAvatarsIn{
-		Uuid: uuid,
-	}
+func (s *Service) GetAllUserAvatars(ctx context.Context) (*avatar.GetAllUserAvatarsOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
-	resp, err := s.client.GetAllUserAvatars(ctx, &req)
+
+	resp, err := s.client.GetAllUserAvatars(ctx, &emptypb.Empty{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get all user avatars: %w", err)
 	}
@@ -81,7 +85,6 @@ func (s *Service) DeleteUserAvatar(ctx context.Context, id int32) (*avatar.Avata
 	req := avatar.DeleteUserAvatarIn{
 		AvatarId: id,
 	}
-
 	resp, err := s.client.DeleteUserAvatar(ctx, &req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to delete user avatar: %w", err)
@@ -95,6 +98,7 @@ func (s *Service) SetSocietyAvatar(ctx context.Context, filename string, file mu
 	if err != nil {
 		return nil, fmt.Errorf("failed to set avatar: %w", err)
 	}
+
 	req := avatar.SetSocietyAvatarIn{
 		Filename: filename,
 		Uuid:     uuid,
@@ -102,6 +106,7 @@ func (s *Service) SetSocietyAvatar(ctx context.Context, filename string, file mu
 	if err = stream.Send(&req); err != nil {
 		return nil, fmt.Errorf("failed to send set avatar: %v", err)
 	}
+
 	buf := make([]byte, 1024)
 	for {
 		n, err := file.Read(buf)
@@ -125,10 +130,11 @@ func (s *Service) SetSocietyAvatar(ctx context.Context, filename string, file mu
 }
 
 func (s *Service) GetAllSocietyAvatars(ctx context.Context, uuid string) (*avatar.GetAllSocietyAvatarsOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
 	req := avatar.GetAllSocietyAvatarsIn{
 		Uuid: uuid,
 	}
-	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 	resp, err := s.client.GetAllSocietyAvatars(ctx, &req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get all society avatars: %w", err)
@@ -143,7 +149,6 @@ func (s *Service) DeleteSocietyAvatar(ctx context.Context, id int32) (*avatar.Av
 	req := avatar.DeleteSocietyAvatarIn{
 		AvatarId: id,
 	}
-
 	resp, err := s.client.DeleteSocietyAvatar(ctx, &req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to delete society avatar: %w", err)

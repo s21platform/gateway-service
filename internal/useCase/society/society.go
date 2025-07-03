@@ -7,6 +7,8 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/s21platform/gateway-service/internal/model"
+
 	societyproto "github.com/s21platform/society-proto/society-proto"
 )
 
@@ -31,7 +33,7 @@ type RequestData struct {
 //}
 
 func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error) {
-	requestData := RequestData{}
+	requestData := model.RequestData{}
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read request body: %w", err)
@@ -76,28 +78,56 @@ func (u *UseCase) RemoveSociety(r *http.Request) (*societyproto.EmptySociety, er
 	return resp, nil
 }
 
-//func (u *UseCase) GetAccessLevel(r *http.Request) (*societyproto.GetAccessLevelOut, error) {
-//	resp, err := u.sC.GetAccessLevel(r.Context())
-//	if err != nil {
-//		return nil, fmt.Errorf("failed to get access level: %v", err)
-//	}
-//	return resp, nil
-//}
-//
-//func (u *UseCase) GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error) {
-//	strId := r.URL.Query().Get("id")
-//	id, err := strconv.Atoi(strId)
-//	if err != nil {
-//		return nil, fmt.Errorf("failed to convert id to int: %v", err)
-//	}
-//
-//	resp, err := u.sC.GetSocietyInfo(r.Context(), int64(id))
-//	if err != nil {
-//		return nil, fmt.Errorf("failed to get society info: %v", err)
-//	}
-//
-//	return resp, nil
-//}
+func (u *UseCase) GetSocietyInfo(r *http.Request) (*model.SocietyInfo, error) {
+	societyUUID := r.URL.Query().Get("society_id")
+	if societyUUID == "" {
+		return nil, fmt.Errorf("society_id is required")
+	}
+
+	res, err := u.sC.GetSocietyInfo(r.Context(), societyUUID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get society: %v", err)
+	}
+
+	var tags []int64
+	for _, tag := range res.TagsID {
+		tags = append(tags, tag.TagID)
+	}
+
+	result := &model.SocietyInfo{
+		SocietyUUID:      societyUUID,
+		Name:             res.Name,
+		Description:      res.Description,
+		OwnerUUID:        res.OwnerUUID,
+		PhotoURL:         res.PhotoURL,
+		FormatID:         res.FormatID,
+		PostPermissionID: res.PostPermission,
+		IsSearch:         res.IsSearch,
+		CountSubscribe:   res.CountSubscribe,
+		Tags:             tags,
+		CanEditSociety:   res.CanEditSociety,
+	}
+
+	return result, nil
+}
+
+func (u *UseCase) UpdateSociety(r *http.Request) error {
+	var updateSociety model.SocietyUpdate
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return fmt.Errorf("failed to read request body: %w", err)
+	}
+	defer r.Body.Close()
+	if err = json.Unmarshal(body, &updateSociety); err != nil {
+		return fmt.Errorf("failed to decode request body: %w", err)
+	}
+	err = u.sC.UpdateSociety(r.Context(), &updateSociety)
+	if err != nil {
+		return fmt.Errorf("failed to update society: %v", err)
+	}
+	return nil
+}
+
 //
 //func (u *UseCase) SubscribeToSociety(r *http.Request) (*societyproto.SubscribeToSocietyOut, error) {
 //	strId := r.URL.Query().Get("id")
@@ -110,14 +140,6 @@ func (u *UseCase) RemoveSociety(r *http.Request) (*societyproto.EmptySociety, er
 //		return nil, fmt.Errorf("failed subscribe to society: %v", err)
 //	}
 //
-//	return resp, nil
-//}
-//
-//func (u *UseCase) GetPermission(r *http.Request) (*societyproto.GetPermissionsOut, error) {
-//	resp, err := u.sC.GetPermission(r.Context())
-//	if err != nil {
-//		return nil, fmt.Errorf("failed to get permission: %v", err)
-//	}
 //	return resp, nil
 //}
 //

@@ -3,9 +3,11 @@ package chat
 import (
 	"context"
 
-	chat "github.com/s21platform/chat-proto/chat-proto"
+	"github.com/s21platform/chat-service/pkg/chat"
 )
 
 type ChatClient interface {
-	GetRecentMessages(ctx context.Context, uuid string) (*chat.GetRecentMessagesOut, error)
+	GetChats(ctx context.Context) (*chat.GetChatsOut, error)
+	CreatePrivateChat(ctx context.Context, uuid string) (*chat.CreatePrivateChatOut, error)
+	GetPrivateRecentMessages(ctx context.Context, uuid string) (*chat.GetPrivateRecentMessagesOut, error)
 }

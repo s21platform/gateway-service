@@ -81,8 +81,9 @@ type Metrics struct {
 }
 
 type Platform struct {
-	Secret string `env:"SECRET_KEY"`
-	Env    string `env:"ENV"`
+	AccessSecret string `env:"ACCESS_SECRET"`
+	Secret       string `env:"SECRET_KEY"`
+	Env          string `env:"ENV"`
 }
 
 type Society struct {

@@ -3,6 +3,7 @@ package society
 import (
 	"context"
 	"fmt"
+	"github.com/s21platform/gateway-service/internal/model"
 	"log"
 
 	"github.com/s21platform/gateway-service/internal/useCase/society"
@@ -44,6 +45,16 @@ func (s *Service) CreateSociety(ctx context.Context, req *society.RequestData) (
 	}
 	log.Println("resp: ", resp)
 	return resp, nil
+}
+
+func (s *Service) RemoveSociety(ctx context.Context, req *model.SocietyId) (*societyproto.EmptySociety, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+	request := &societyproto.RemoveSocietyIn{SocietyUUID: req.Id}
+	resp, err := s.client.RemoveSociety(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to remove society: %v", err)
+	}
+	return resp, err
 }
 
 //func (s *Service) GetAccessLevel(ctx context.Context) (*societyproto.GetAccessLevelOut, error) {

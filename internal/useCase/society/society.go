@@ -3,6 +3,7 @@ package society
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/s21platform/gateway-service/internal/model"
 	"io"
 	"net/http"
 
@@ -24,9 +25,6 @@ type RequestData struct {
 	IsSearch         bool   `json:"is_search"`
 }
 
-//type SocietyId struct {
-//	Id int64 `json:"id"`
-//}
 //
 //type Uuid struct {
 //	Uuid string `json:"uuid"`
@@ -51,6 +49,29 @@ func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, e
 	resp, err := u.sC.CreateSociety(r.Context(), &requestData)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create society: %v", err)
+	}
+	return resp, nil
+}
+
+func (u *UseCase) RemoveSociety(r *http.Request) (*societyproto.EmptySociety, error) {
+	requestData := model.SocietyId{}
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read request body: %w", err)
+	}
+	defer r.Body.Close()
+
+	if len(body) == 0 {
+		return nil, fmt.Errorf("request body is empty")
+	}
+
+	if err := json.Unmarshal(body, &requestData); err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %w", err)
+	}
+
+	resp, err := u.sC.RemoveSociety(r.Context(), &requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to remove society: %v", err)
 	}
 	return resp, nil
 }

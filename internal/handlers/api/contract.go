@@ -57,6 +57,7 @@ type OptionService interface {
 
 type SocietyService interface {
 	CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error)
+	RemoveSociety(r *http.Request) (*societyproto.EmptySociety, error)
 	//GetAccessLevel(r *http.Request) (*societyproto.GetAccessLevelOut, error)
 	//GetSocietyInfo(r *http.Request) (*societyproto.GetSocietyInfoOut, error)
 	//SubscribeToSociety(r *http.Request) (*societyproto.SubscribeToSocietyOut, error)

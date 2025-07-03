@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 	logger_lib "github.com/s21platform/logger-lib"
@@ -46,6 +47,11 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 		claims, ok := token.Claims.(*model.ClaimsV2)
 		if !ok || !token.Valid {
 			logger.Error("failed to validation token from access_token")
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		if time.Now().After(time.Unix(claims.Exp, 0)) {
+			logger.Error("token expired")
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}

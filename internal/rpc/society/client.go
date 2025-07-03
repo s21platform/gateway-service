@@ -7,8 +7,6 @@ import (
 
 	"github.com/s21platform/gateway-service/internal/model"
 
-	"github.com/s21platform/gateway-service/internal/model"
-
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"

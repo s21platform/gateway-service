@@ -77,8 +77,16 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Logout(w http.ResponseWriter, r *http.Request) {
+	// FIXME deprecated
 	http.SetCookie(w, &http.Cookie{
 		Name:     "S21SPACE_AUTH_TOKEN",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1,
+		HttpOnly: true,
+	})
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
 		Value:    "",
 		Path:     "/",
 		MaxAge:   -1,

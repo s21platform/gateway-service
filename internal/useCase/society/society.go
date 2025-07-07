@@ -55,22 +55,12 @@ func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, e
 }
 
 func (u *UseCase) RemoveSociety(r *http.Request) (*societyproto.EmptySociety, error) {
-	requestData := model.SocietyId{}
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read request body: %w", err)
-	}
-	defer r.Body.Close()
-
-	if len(body) == 0 {
-		return nil, fmt.Errorf("request body is empty")
+	uuid := r.PathValue("uuid")
+	if uuid == "" {
+		return nil, fmt.Errorf("uuid is empty")
 	}
 
-	if err := json.Unmarshal(body, &requestData); err != nil {
-		return nil, fmt.Errorf("failed to decode request body: %w", err)
-	}
-
-	resp, err := u.sC.RemoveSociety(r.Context(), &requestData)
+	resp, err := u.sC.RemoveSociety(r.Context(), &model.SocietyId{Id: uuid})
 	if err != nil {
 		return nil, fmt.Errorf("failed to remove society: %v", err)
 	}

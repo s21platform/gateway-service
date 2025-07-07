@@ -832,21 +832,16 @@ func (h *Handler) CreateUserPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) RemoveSociety(w http.ResponseWriter, r *http.Request) {
-	result, err := h.sS.RemoveSociety(r)
+	_, err := h.sS.RemoveSociety(r)
 	if err != nil {
 		log.Printf("failed to remove society error: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	jsn, err := json.Marshal(result)
-	if err != nil {
-		log.Printf("failed to json marshal error: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write(jsn)
+	_, _ = w.Write([]byte("{}\n"))
 }
 
 //func (h *Handler) GetSocietiesForUser(w http.ResponseWriter, r *http.Request) {

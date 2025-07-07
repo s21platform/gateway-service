@@ -16,4 +16,5 @@ type AuthClient interface {
 	SendUserVerificationCode(ctx context.Context, email string) (*authproto.SendUserVerificationCodeOut, error)
 	RegisterUser(ctx context.Context, requestData *model.RegisterRequest) (*emptypb.Empty, error)
 	LoginV2(ctx context.Context, login, password string) (*authproto.LoginV2Out, error)
+	RefreshAccessToken(ctx context.Context, refreshToken string) (*authproto.RefreshAccessTokenOut, error)
 }

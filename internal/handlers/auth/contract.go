@@ -17,4 +17,5 @@ type Usecase interface {
 	SendUserVerificationCode(r *http.Request) (*authproto.SendUserVerificationCodeOut, error)
 	RegisterUser(r *http.Request) (*emptypb.Empty, error)
 	LoginV2(r *http.Request) (*authproto.LoginV2Out, error)
+	RefreshAccessToken(r *http.Request) (*authproto.RefreshAccessTokenOut, error)
 }

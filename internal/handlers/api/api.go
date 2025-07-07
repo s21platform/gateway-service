@@ -832,9 +832,12 @@ func (h *Handler) CreateUserPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) RemoveSociety(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("RemoveSociety")
+
 	_, err := h.sS.RemoveSociety(r)
 	if err != nil {
-		log.Printf("failed to remove society error: %v", err)
+		logger.Error(fmt.Sprintf("failed to remove society: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

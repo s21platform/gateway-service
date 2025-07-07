@@ -1137,12 +1137,10 @@ func TestHandler_RemoveSociety(t *testing.T) {
 		req := httptest.NewRequest(http.MethodDelete, "/api/society/remove", nil)
 		req.Header.Set("Content-Type", "application/json")
 
-		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
-		req = req.WithContext(ctx)
+		ctxWithLogger := context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctxWithLogger)
 
-		expectedResult := &societyproto.EmptySociety{}
-
-		mockSocietyService.EXPECT().RemoveSociety(req).Return(expectedResult, nil)
+		mockSocietyService.EXPECT().RemoveSociety(req).Return(nil, nil)
 
 		w := httptest.NewRecorder()
 
@@ -1162,11 +1160,7 @@ func TestHandler_RemoveSociety(t *testing.T) {
 
 		assert.Equal(t, http.StatusOK, w.Code)
 		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
-
-		var responseBody societyproto.EmptySociety
-		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
-		assert.NoError(t, err)
-		assert.Equal(t, expectedResult, &responseBody)
+		assert.JSONEq(t, `{}`, w.Body.String()) // <- простая проверка тела
 	})
 
 	t.Run("should_return_internal_server_error_if_RemoveSociety_fails", func(t *testing.T) {
@@ -1175,11 +1169,11 @@ func TestHandler_RemoveSociety(t *testing.T) {
 		req := httptest.NewRequest(http.MethodDelete, "/api/society/remove", nil)
 		req.Header.Set("Content-Type", "application/json")
 
-		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
-		req = req.WithContext(ctx)
+		ctxWithLogger := context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctxWithLogger)
 
 		expectedError := errors.New("failed to remove society")
-		mockSocietyService.EXPECT().RemoveSociety(req).Return(&societyproto.EmptySociety{}, expectedError)
+		mockSocietyService.EXPECT().RemoveSociety(req).Return(nil, expectedError)
 
 		w := httptest.NewRecorder()
 

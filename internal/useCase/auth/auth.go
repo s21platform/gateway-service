@@ -89,3 +89,20 @@ func (uc *Usecase) LoginV2(r *http.Request) (*authproto.LoginV2Out, error) {
 
 	return resp, nil
 }
+
+func (uc *Usecase) RefreshAccessToken(r *http.Request) (*authproto.RefreshAccessTokenOut, error) {
+	var requestData model.RefreshAccessTokenRequest
+
+	err := json.NewDecoder(r.Body).Decode(&requestData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode request body: %v", err)
+	}
+	defer r.Body.Close()
+
+	resp, err := uc.aC.RefreshAccessToken(r.Context(), requestData.RefreshToken)
+	if err != nil {
+		return nil, fmt.Errorf("failed to refresh access token in usecase: %v", err)
+	}
+
+	return resp, nil
+}

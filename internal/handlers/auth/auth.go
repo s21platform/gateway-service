@@ -274,6 +274,29 @@ func (h *Handler) LoginV2(w http.ResponseWriter, r *http.Request) {
 	logger.Info("OK")
 }
 
+func (h *Handler) RefreshAccessToken(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("RefreshAccessToken")
+
+	resp, err := h.aucSrv.RefreshAccessToken(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to refresh access token: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(resp)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func AttachAuthRoutes(r chi.Router, handler *Handler) {
 	r.Route("/auth", func(authRouter chi.Router) {
 		authRouter.Post("/login", handler.Login)
@@ -283,5 +306,6 @@ func AttachAuthRoutes(r chi.Router, handler *Handler) {
 		authRouter.Post("/send-code", handler.SendUserVerificationCode)
 		authRouter.Post("/register-user", handler.RegisterUser)
 		authRouter.Post("/v2/login", handler.LoginV2)
+		authRouter.Post("/refresh", handler.RefreshAccessToken)
 	})
 }

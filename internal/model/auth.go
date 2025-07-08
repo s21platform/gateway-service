@@ -47,3 +47,7 @@ type LoginRequest struct {
 type LoginV2Response struct {
 	AccessToken string `json:"access_token"`
 }
+
+type RefreshAccessTokenRequest struct {
+	RefreshToken string `json:"refresh_token"`
+}

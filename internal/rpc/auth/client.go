@@ -105,3 +105,12 @@ func (s *Service) LoginV2(ctx context.Context, login, password string) (*auth.Lo
 	}
 	return resp, nil
 }
+
+func (s *Service) RefreshAccessToken(ctx context.Context, refreshToken string) (*auth.RefreshAccessTokenOut, error) {
+	resp, err := s.client.RefreshAccessToken(ctx, &auth.RefreshAccessTokenIn{RefreshToken: refreshToken})
+	if err != nil {
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to refresh access token in grpc: %v", err))
+	}
+
+	return resp, nil
+}

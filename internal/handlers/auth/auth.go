@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -101,7 +100,6 @@ func (h *Handler) CheckAuth(w http.ResponseWriter, r *http.Request) {
 	tokenH := r.Header.Get("authorization")
 	if tokenH == "" {
 		logger.Error("failed to get authorization value")
-		log.Println("failed to get authorization value")
 		w.WriteHeader(http.StatusUnauthorized)
 		msg, err := prepareResponse("failed to get authorization value", false)
 		if err != nil {
@@ -123,7 +121,6 @@ func (h *Handler) CheckAuth(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		logger.Error(fmt.Sprintf("failed to parse token: %v", err))
-		log.Printf("failed to parse token: %v", err)
 		w.WriteHeader(http.StatusUnauthorized)
 		msg, err := prepareResponse("failed to parse token", false)
 		if err != nil {

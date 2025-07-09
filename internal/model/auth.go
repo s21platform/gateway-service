@@ -12,8 +12,6 @@ type Claims struct {
 }
 
 type ClaimsV2 struct {
-	Sub      string `json:"sub"`
-	Exp      int64  `json:"exp"`
 	Nickname string `json:"nickname"`
 	jwt.RegisteredClaims
 }

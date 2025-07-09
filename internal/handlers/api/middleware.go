@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/golang-jwt/jwt/v4"
+
 	logger_lib "github.com/s21platform/logger-lib"
 
 	"github.com/s21platform/gateway-service/internal/config"
@@ -51,14 +51,10 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
-		if time.Now().After(time.Unix(claims.Exp, 0)) {
-			logger.Error("token expired")
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
-			return
-		}
+
 		ctx := context.WithValue(r.Context(), config.KeyUsername, claims.Nickname)
-		ctx = context.WithValue(ctx, config.KeyUUID, claims.Sub)
-		logger.Info(fmt.Sprintf("save to context: %s, %s", claims.Nickname, claims.Sub))
+		ctx = context.WithValue(ctx, config.KeyUUID, claims.Subject)
+		logger.Info(fmt.Sprintf("save to context: %s, %s", claims.Nickname, claims.Subject))
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

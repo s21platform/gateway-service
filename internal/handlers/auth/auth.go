@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -20,11 +20,12 @@ import (
 
 type Handler struct {
 	secretToken string
+	accessToken string
 	aucSrv      Usecase
 }
 
 func New(cfg *config.Config, aucSrv Usecase) *Handler {
-	return &Handler{aucSrv: aucSrv, secretToken: cfg.Platform.Secret}
+	return &Handler{aucSrv: aucSrv, secretToken: cfg.Platform.Secret, accessToken: cfg.Platform.AccessSecret}
 }
 
 func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
@@ -75,8 +76,17 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Logout(w http.ResponseWriter, r *http.Request) {
+	// FIXME deprecated
 	http.SetCookie(w, &http.Cookie{
 		Name:     "S21SPACE_AUTH_TOKEN",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1,
+		HttpOnly: true,
+	})
+	// TODO завершать сессию пользователя запросом в auth
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
 		Value:    "",
 		Path:     "/",
 		MaxAge:   -1,
@@ -88,18 +98,11 @@ func (h *Handler) CheckAuth(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 	logger.AddFuncName("CheckAuth")
 
-	cookie, err := r.Cookie("S21SPACE_AUTH_TOKEN")
-	if err != nil {
-		logger.Error("failed to get cookie value")
-		log.Println("failed to get cookie value")
-		http.SetCookie(w, &http.Cookie{
-			Name:     "S21SPACE_AUTH_TOKEN",
-			Value:    "",
-			MaxAge:   -1,
-			HttpOnly: true,
-		})
+	tokenH := r.Header.Get("authorization")
+	if tokenH == "" {
+		logger.Error("failed to get authorization value")
 		w.WriteHeader(http.StatusUnauthorized)
-		msg, err := prepareResponse("failed to get cookie value", false)
+		msg, err := prepareResponse("failed to get authorization value", false)
 		if err != nil {
 			logger.Error(fmt.Sprintf("failed make response: %s", err.Error()))
 			w.WriteHeader(http.StatusInternalServerError)
@@ -109,22 +112,16 @@ func (h *Handler) CheckAuth(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write(msg)
 		return
 	}
+	tokenStr := strings.Split(tokenH, " ")[1]
 
-	token, err := jwt.ParseWithClaims(cookie.Value, &model.Claims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenStr, &model.ClaimsV2{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(h.secretToken), nil
+		return []byte(h.accessToken), nil
 	})
 	if err != nil {
 		logger.Error(fmt.Sprintf("failed to parse token: %v", err))
-		log.Printf("failed to parse token: %v", err)
-		http.SetCookie(w, &http.Cookie{
-			Name:     "S21SPACE_AUTH_TOKEN",
-			Value:    "",
-			MaxAge:   -1,
-			HttpOnly: true,
-		})
 		w.WriteHeader(http.StatusUnauthorized)
 		msg, err := prepareResponse("failed to parse token", false)
 		if err != nil {
@@ -137,12 +134,6 @@ func (h *Handler) CheckAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if !token.Valid {
-		http.SetCookie(w, &http.Cookie{
-			Name:     "S21SPACE_AUTH_TOKEN",
-			Value:    "",
-			MaxAge:   -1,
-			HttpOnly: true,
-		})
 		w.WriteHeader(http.StatusUnauthorized)
 		msg, err := prepareResponse("token not valid", true)
 		if err != nil {

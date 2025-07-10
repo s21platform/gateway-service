@@ -28,7 +28,7 @@ func CheckJWT(next http.Handler, cfg *config.Config) http.Handler {
 		logger.Info("try new flow (Bearer)")
 		accessToken := r.Header.Get("authorization")
 
-		if strings.Trim(accessToken, " ") == "" {
+		if strings.TrimSpace(accessToken) == "" {
 			logger.Error("access_token is empty")
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return

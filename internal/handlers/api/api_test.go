@@ -1121,3 +1121,79 @@ func TestHandler_MarkNotificationAsRead(t *testing.T) {
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})
 }
+
+func TestHandler_RemoveSociety(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("should_remove_society_successfully", func(t *testing.T) {
+		mockSocietyService := NewMockSocietyService(ctrl)
+
+		req := httptest.NewRequest(http.MethodDelete, "/api/society/remove", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx := context.WithValue(req.Context(), config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		mockLogger.EXPECT().AddFuncName("RemoveSociety")
+		mockSocietyService.EXPECT().RemoveSociety(req).Return(&societyproto.EmptySociety{}, nil)
+
+		w := httptest.NewRecorder()
+
+		h := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			mockSocietyService,
+			nil,
+			nil,
+			nil,
+			nil,
+		)
+
+		h.RemoveSociety(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
+		assert.JSONEq(t, `{}`, w.Body.String())
+	})
+
+	t.Run("should_return_internal_server_error_if_RemoveSociety_fails", func(t *testing.T) {
+		mockSocietyService := NewMockSocietyService(ctrl)
+
+		req := httptest.NewRequest(http.MethodDelete, "/api/society/remove", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx := context.WithValue(req.Context(), config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		expectedErr := errors.New("remove failed")
+
+		mockLogger.EXPECT().AddFuncName("RemoveSociety")
+		mockLogger.EXPECT().Error(gomock.Any())
+		mockSocietyService.EXPECT().RemoveSociety(req).Return(nil, expectedErr)
+
+		w := httptest.NewRecorder()
+
+		h := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			mockSocietyService,
+			nil,
+			nil,
+			nil,
+			nil,
+		)
+
+		h.RemoveSociety(w, req)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}

@@ -34,3 +34,7 @@ type SocietyInfo struct {
 	Tags             []int64 `json:"tags"`
 	CanEditSociety   bool    `json:"can_edit_society"`
 }
+
+type SocietyId struct {
+	Id string `json:"id"`
+}

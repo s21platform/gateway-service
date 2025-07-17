@@ -19,6 +19,18 @@ func New(sC SocietyClient) *UseCase {
 	return &UseCase{sC: sC}
 }
 
+type RequestData struct {
+	Name             string `json:"name"`
+	FormatID         int64  `json:"format_id"`
+	PostPermissionID int64  `json:"post_permission_id"`
+	IsSearch         bool   `json:"is_search"`
+}
+
+//
+//type Uuid struct {
+//	Uuid string `json:"uuid"`
+//}
+
 func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, error) {
 	requestData := model.RequestData{}
 	body, err := io.ReadAll(r.Body)
@@ -38,6 +50,19 @@ func (u *UseCase) CreateSociety(r *http.Request) (*societyproto.SetSocietyOut, e
 	resp, err := u.sC.CreateSociety(r.Context(), &requestData)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create society: %v", err)
+	}
+	return resp, nil
+}
+
+func (u *UseCase) RemoveSociety(r *http.Request) (*societyproto.EmptySociety, error) {
+	uuid := r.PathValue("uuid")
+	if uuid == "" {
+		return nil, fmt.Errorf("uuid is empty")
+	}
+
+	resp, err := u.sC.RemoveSociety(r.Context(), &model.SocietyId{Id: uuid})
+	if err != nil {
+		return nil, fmt.Errorf("failed to remove society: %v", err)
 	}
 	return resp, nil
 }

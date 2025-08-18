@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
 
 	"github.com/go-chi/chi/v5"
 
@@ -831,8 +833,26 @@ func (h *Handler) CreateUserPost(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func proxy(target string) http.Handler {
+	u, _ := url.Parse(target)
+	prx := httputil.NewSingleHostReverseProxy(u)
+	log.Println("in proxy", u.String())
+	// меняем Director, чтобы вставить X-User-ID
+	originalDirector := prx.Director
+	prx.Director = func(req *http.Request) {
+		originalDirector(req)
+
+		//if userID, ok := req.Context().Value(userIDKey).(string); ok {
+		//	req.Header.Set("X-User-ID", userID)
+		//}
+	}
+
+	return prx
+}
+
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Route("/api", func(apiRouter chi.Router) {
+		apiRouter.Handle("/user/profile", proxy(fmt.Sprintf("http://%s:%s", cfg.User.Host, cfg.User.Port)))
 		apiRouter.Use(func(next http.Handler) http.Handler {
 			return CheckJWT(next, cfg)
 		})

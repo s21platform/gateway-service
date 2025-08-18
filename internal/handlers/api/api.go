@@ -852,11 +852,11 @@ func proxy(target string) http.Handler {
 
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Route("/api", func(apiRouter chi.Router) {
-		apiRouter.Handle("/user/profile", proxy(fmt.Sprintf("http://%s:%s", cfg.User.Host, cfg.User.Port)))
 		apiRouter.Use(func(next http.Handler) http.Handler {
 			return CheckJWT(next, cfg)
 		})
 
+		apiRouter.Handle("/user/profile", proxy(fmt.Sprintf("http://%s:%s", cfg.User.Host, cfg.User.Port)))
 		apiRouter.Get("/profile", handler.MyProfile)
 		apiRouter.Put("/profile", handler.UpdateProfile)
 		apiRouter.Post("/avatar/user", handler.SetUserAvatar)

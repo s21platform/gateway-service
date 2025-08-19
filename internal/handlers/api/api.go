@@ -833,8 +833,8 @@ func (h *Handler) CreateUserPost(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
-func proxy(target string) http.Handler {
-	u, _ := url.Parse(target)
+func proxy(host, port string) http.Handler {
+	u, _ := url.Parse(fmt.Sprintf("http://%s:%s", host, port))
 	prx := httputil.NewSingleHostReverseProxy(u)
 	log.Println("in proxy", u.String())
 	// меняем Director, чтобы вставить X-User-ID
@@ -842,8 +842,10 @@ func proxy(target string) http.Handler {
 	prx.Director = func(req *http.Request) {
 		originalDirector(req)
 
+		// Тут в целом будем насыщать и обогащать наши внутренние заголовки
+
+		// пример создания X-User-ID
 		if userID, ok := req.Context().Value(config.KeyUUID).(string); ok {
-			log.Println("in set userId", userID)
 			req.Header.Set("X-User-ID", userID)
 		}
 	}
@@ -857,7 +859,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 			return CheckJWT(next, cfg)
 		})
 
-		apiRouter.Handle("/user/*", proxy(fmt.Sprintf("http://%s:%s", cfg.User.Host, cfg.User.Port)))
+		apiRouter.Handle("/user/*", proxy(cfg.User.Host, cfg.User.Port))
 		apiRouter.Get("/profile", handler.MyProfile)
 		apiRouter.Put("/profile", handler.UpdateProfile)
 		apiRouter.Post("/avatar/user", handler.SetUserAvatar)

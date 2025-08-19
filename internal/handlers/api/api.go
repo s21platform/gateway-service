@@ -857,7 +857,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 			return CheckJWT(next, cfg)
 		})
 
-		apiRouter.Handle("/user/profile", proxy(fmt.Sprintf("http://%s:%s", cfg.User.Host, cfg.User.Port)))
+		apiRouter.Handle("/user/*", proxy(fmt.Sprintf("http://%s:%s", cfg.User.Host, cfg.User.Port)))
 		apiRouter.Get("/profile", handler.MyProfile)
 		apiRouter.Put("/profile", handler.UpdateProfile)
 		apiRouter.Post("/avatar/user", handler.SetUserAvatar)

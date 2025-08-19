@@ -899,7 +899,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Put("/advert/cancel", handler.CancelAdvert)
 		apiRouter.Patch("/advert/restore", handler.RestoreAdvert)
 		apiRouter.Post("/user/post", handler.CreateUserPost)
-		apiRouter.Post("/materials", handler.GetAllMaterials)
+		apiRouter.Get("/materials", handler.GetAllMaterials)
 
 		//crm routes
 		apiRouter.Get("/option_requests", handler.GetOptionRequests)

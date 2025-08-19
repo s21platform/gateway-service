@@ -842,9 +842,10 @@ func proxy(target string) http.Handler {
 	prx.Director = func(req *http.Request) {
 		originalDirector(req)
 
-		//if userID, ok := req.Context().Value(userIDKey).(string); ok {
-		//	req.Header.Set("X-User-ID", userID)
-		//}
+		if userID, ok := req.Context().Value(config.KeyUUID).(string); ok {
+			log.Println("in set userId", userID)
+			req.Header.Set("X-User-ID", userID)
+		}
 	}
 
 	return prx

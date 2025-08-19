@@ -36,6 +36,7 @@ type Config struct {
 	Advert       Advert
 	Feed         Feed
 	Staff        Staff
+	Materials    Materials
 }
 
 // Service struct for storage this server config variables
@@ -119,6 +120,11 @@ type Feed struct {
 type Staff struct {
 	Host string `env:"STAFF_SERVICE_HOST"`
 	Port string `env:"STAFF_SERVICE_PORT"`
+}
+
+type Materials struct {
+	Host string `env:"MATERIALS_SERVICE_HOST"`
+	Port string `env:"MATERIALS_SERVICE_PORT"`
 }
 
 func MustLoad() *Config {

@@ -20,6 +20,7 @@ import (
 	advertproto "github.com/s21platform/advert-proto/advert-proto"
 	chatproto "github.com/s21platform/chat-service/pkg/chat"
 	logger_lib "github.com/s21platform/logger-lib"
+	"github.com/s21platform/materials-service/pkg/materials"
 	societyproto "github.com/s21platform/society-proto/society-proto"
 	"github.com/s21platform/user-service/pkg/user"
 
@@ -1141,6 +1142,104 @@ func TestHandler_MarkNotificationAsRead(t *testing.T) {
 
 		handler := New(nil, nil, mockNotificationService, nil, nil, nil, nil, nil, nil, nil)
 		handler.MarkNotificationAsRead(w, r)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
+func TestHandler_GetAllMaterials(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("should_return_materials_successfully", func(t *testing.T) {
+		mockMaterialsService := NewMockMaterialsService(ctrl)
+
+		req := httptest.NewRequest(http.MethodGet, "/api/materials", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		expectedResult := &materials.GetAllMaterialsOut{
+			MaterialList: []*materials.Material{
+				{
+					Uuid:        uuid.New().String(),
+					Title:       "Material 1",
+					Description: "Description 1",
+					Content:     "Some content",
+				},
+				{
+					Uuid:        uuid.New().String(),
+					Title:       "Material 2",
+					Description: "Description 2",
+					Content:     "Other content",
+				},
+			},
+		}
+
+		mockLogger.EXPECT().AddFuncName("GetAllMaterials")
+		mockMaterialsService.EXPECT().GetAllMaterialsList(gomock.Any()).Return(expectedResult, nil)
+
+		w := httptest.NewRecorder()
+
+		h := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockMaterialsService,
+		)
+
+		h.GetAllMaterials(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
+
+		var responseBody materials.GetAllMaterialsOut
+		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
+		assert.NoError(t, err)
+		assert.Equal(t, len(expectedResult.MaterialList), len(responseBody.MaterialList))
+		assert.Equal(t, expectedResult.MaterialList[0].Title, responseBody.MaterialList[0].Title)
+	})
+
+	t.Run("should_return_internal_server_error_if_service_fails", func(t *testing.T) {
+		mockMaterialsService := NewMockMaterialsService(ctrl)
+
+		req := httptest.NewRequest(http.MethodGet, "/api/materials", nil)
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		expectedError := errors.New("database error")
+		mockLogger.EXPECT().AddFuncName("GetAllMaterials")
+		mockLogger.EXPECT().Error("failed to get material: database error")
+		mockMaterialsService.EXPECT().GetAllMaterialsList(gomock.Any()).Return(nil, expectedError)
+
+		w := httptest.NewRecorder()
+
+		h := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockMaterialsService,
+		)
+
+		h.GetAllMaterials(w, req)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})

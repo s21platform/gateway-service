@@ -9,6 +9,7 @@ import (
 
 	"github.com/s21platform/avatar-service/pkg/avatar"
 	"github.com/s21platform/chat-service/pkg/chat"
+	"github.com/s21platform/materials-service/pkg/materials"
 	"github.com/s21platform/notification-service/pkg/notification"
 	"github.com/s21platform/user-service/pkg/user"
 
@@ -81,3 +82,7 @@ type AdvertService interface {
 }
 
 type FeedService interface{}
+
+type MaterialsService interface {
+	EditMaterial(r *http.Request) (*materials.EditMaterialOut, error)
+}

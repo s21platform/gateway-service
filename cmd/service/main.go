@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/s21platform/gateway-service/internal/rpc/materials"
+
 	"github.com/go-chi/chi/v5"
 
 	logger_lib "github.com/s21platform/logger-lib"
@@ -35,6 +37,7 @@ import (
 	avatarusecase "github.com/s21platform/gateway-service/internal/useCase/avatar"
 	chatusecase "github.com/s21platform/gateway-service/internal/useCase/chat"
 	feedusecase "github.com/s21platform/gateway-service/internal/useCase/feed"
+	materialsusecase "github.com/s21platform/gateway-service/internal/useCase/materials"
 
 	//friendsusecase "github.com/s21platform/gateway-service/internal/useCase/friends"
 	notificationusecase "github.com/s21platform/gateway-service/internal/useCase/notification"
@@ -69,6 +72,7 @@ func main() {
 	advertClient := advert.New(cfg)
 	feedClient := feed.New(cfg)
 	staffClient := staff.New(cfg)
+	materialsClient := materials.NewService(cfg)
 
 	// usecases declaration
 	authUseCase := authusecase.New(authClient)
@@ -83,10 +87,11 @@ func main() {
 	advertUseCase := advertusecase.New(advertClient)
 	feedUseCase := feedusecase.New(feedClient)
 	staffUseCase := staffusecase.New(staffClient)
+	materialsUseCase := materialsusecase.New(materialsClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(cfg, authUseCase)
-	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, optionUsecase, societyUseCase, searchUseCase, chatUseCase, advertUseCase, feedUseCase)
+	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, optionUsecase, societyUseCase, searchUseCase, chatUseCase, advertUseCase, feedUseCase, materialsUseCase)
 	admHandlers := adm.New(staffUseCase)
 
 	r := chi.NewRouter()

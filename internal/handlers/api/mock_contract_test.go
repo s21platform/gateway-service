@@ -13,7 +13,6 @@ import (
 	avatar "github.com/s21platform/avatar-service/pkg/avatar"
 	chat "github.com/s21platform/chat-service/pkg/chat"
 	model "github.com/s21platform/gateway-service/internal/model"
-	materials "github.com/s21platform/materials-service/pkg/materials"
 	notification "github.com/s21platform/notification-service/pkg/notification"
 	optionhub_proto "github.com/s21platform/optionhub-proto/optionhub-proto"
 	society_proto "github.com/s21platform/society-proto/society-proto"
@@ -791,10 +790,10 @@ func (m *MockMaterialsService) EXPECT() *MockMaterialsServiceMockRecorder {
 }
 
 // GetAllMaterialsList mocks base method.
-func (m *MockMaterialsService) GetAllMaterialsList(r *http.Request) (*materials.GetAllMaterialsOut, error) {
+func (m *MockMaterialsService) GetAllMaterialsList(r *http.Request) (*model.MaterialList, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAllMaterialsList", r)
-	ret0, _ := ret[0].(*materials.GetAllMaterialsOut)
+	ret0, _ := ret[0].(*model.MaterialList)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

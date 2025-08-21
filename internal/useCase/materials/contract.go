@@ -3,9 +3,9 @@ package materials
 import (
 	"context"
 
-	"github.com/s21platform/materials-service/pkg/materials"
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type MaterialsClient interface {
-	GetAllMaterials(ctx context.Context) (*materials.GetAllMaterialsOut, error)
+	GetAllMaterials(ctx context.Context) (*model.MaterialList, error)
 }

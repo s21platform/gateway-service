@@ -838,7 +838,7 @@ func (h *Handler) GetAllMaterials(w http.ResponseWriter, r *http.Request) {
 
 	result, err := h.mS.GetAllMaterialsList(r)
 	if err != nil {
-		logger.Error(fmt.Sprintf("failed to get material: %v", err))
+		logger.Error(fmt.Sprintf("failed to get materials: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

@@ -20,7 +20,6 @@ import (
 	advertproto "github.com/s21platform/advert-proto/advert-proto"
 	chatproto "github.com/s21platform/chat-service/pkg/chat"
 	logger_lib "github.com/s21platform/logger-lib"
-	"github.com/s21platform/materials-service/pkg/materials"
 	societyproto "github.com/s21platform/society-proto/society-proto"
 	"github.com/s21platform/user-service/pkg/user"
 
@@ -1165,20 +1164,29 @@ func TestHandler_GetAllMaterials(t *testing.T) {
 		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
 		req = req.WithContext(ctx)
 
-		expectedResult := &materials.GetAllMaterialsOut{
-			MaterialList: []*materials.Material{
-				{
-					Uuid:        uuid.New().String(),
-					Title:       "Material 1",
-					Description: "Description 1",
-					Content:     "Some content",
-				},
-				{
-					Uuid:        uuid.New().String(),
-					Title:       "Material 2",
-					Description: "Description 2",
-					Content:     "Other content",
-				},
+		now := time.Now()
+		content1 := "Some content"
+		content2 := "Other content"
+		expectedResult := &model.MaterialList{
+			{
+				UUID:            uuid.New().String(),
+				Title:           "Material 1",
+				Description:     "Description 1",
+				Content:         &content1,
+				ReadTimeMinutes: 5,
+				Status:          "published",
+				CreatedAt:       &now,
+				LikesCount:      10,
+			},
+			{
+				UUID:            uuid.New().String(),
+				Title:           "Material 2",
+				Description:     "Description 2",
+				Content:         &content2,
+				ReadTimeMinutes: 3,
+				Status:          "draft",
+				CreatedAt:       &now,
+				LikesCount:      5,
 			},
 		}
 
@@ -1205,11 +1213,12 @@ func TestHandler_GetAllMaterials(t *testing.T) {
 		assert.Equal(t, http.StatusOK, w.Code)
 		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
 
-		var responseBody materials.GetAllMaterialsOut
+		var responseBody model.MaterialList
 		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
 		assert.NoError(t, err)
-		assert.Equal(t, len(expectedResult.MaterialList), len(responseBody.MaterialList))
-		assert.Equal(t, expectedResult.MaterialList[0].Title, responseBody.MaterialList[0].Title)
+		assert.Equal(t, len(*expectedResult), len(responseBody))
+		assert.Equal(t, (*expectedResult)[0].Title, responseBody[0].Title)
+		assert.Equal(t, (*expectedResult)[1].Title, responseBody[1].Title)
 	})
 
 	t.Run("should_return_internal_server_error_if_service_fails", func(t *testing.T) {
@@ -1221,7 +1230,7 @@ func TestHandler_GetAllMaterials(t *testing.T) {
 
 		expectedError := errors.New("database error")
 		mockLogger.EXPECT().AddFuncName("GetAllMaterials")
-		mockLogger.EXPECT().Error("failed to get material: database error")
+		mockLogger.EXPECT().Error("failed to get materials: database error") // Обновлено сообщение об ошибке
 		mockMaterialsService.EXPECT().GetAllMaterialsList(gomock.Any()).Return(nil, expectedError)
 
 		w := httptest.NewRecorder()

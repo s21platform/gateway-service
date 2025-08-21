@@ -11,6 +11,8 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/types/known/emptypb"
 
+	"github.com/s21platform/gateway-service/internal/model"
+
 	"github.com/s21platform/gateway-service/internal/config"
 )
 
@@ -28,13 +30,14 @@ func New(cfg *config.Config) *Service {
 	return &Service{client: client}
 }
 
-func (s *Service) GetAllMaterials(ctx context.Context) (*materials.GetAllMaterialsOut, error) {
+func (s *Service) GetAllMaterials(ctx context.Context) (*model.MaterialList, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 
 	resp, err := s.client.GetAllMaterials(ctx, &emptypb.Empty{})
 	if err != nil {
-		return nil, fmt.Errorf("failed to get all user avatars: %w", err)
+		return nil, fmt.Errorf("failed to get materials: %w", err)
 	}
 
-	return resp, nil
+	materialList := model.FromProto(resp.MaterialList)
+	return &materialList, nil
 }

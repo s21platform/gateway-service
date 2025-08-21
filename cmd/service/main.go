@@ -7,8 +7,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/s21platform/gateway-service/internal/rpc/materials"
-
 	"github.com/go-chi/chi/v5"
 
 	logger_lib "github.com/s21platform/logger-lib"
@@ -26,6 +24,7 @@ import (
 	"github.com/s21platform/gateway-service/internal/rpc/feed"
 
 	//"github.com/s21platform/gateway-service/internal/rpc/friends"
+	"github.com/s21platform/gateway-service/internal/rpc/materials"
 	"github.com/s21platform/gateway-service/internal/rpc/notification"
 	"github.com/s21platform/gateway-service/internal/rpc/option"
 	"github.com/s21platform/gateway-service/internal/rpc/search"

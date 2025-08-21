@@ -123,8 +123,8 @@ type Staff struct {
 }
 
 type Materials struct {
-	Host string `env:"MATERIAL_SERVICE_HOST"`
-	Port string `env:"MATERIAL_SERVICE_PORT"`
+	Host string `env:"MATERIALS_SERVICE_HOST"`
+	Port string `env:"MATERIALS_SERVICE_PORT"`
 }
 
 func MustLoad() *Config {

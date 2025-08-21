@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
 
 	"github.com/go-chi/chi/v5"
 
@@ -855,12 +857,33 @@ func (h *Handler) EditMaterial(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func proxy(host, port string) http.Handler {
+	u, _ := url.Parse(fmt.Sprintf("http://%s:%s", host, port))
+	prx := httputil.NewSingleHostReverseProxy(u)
+	log.Println("in proxy", u.String())
+	// меняем Director, чтобы вставить X-User-ID
+	originalDirector := prx.Director
+	prx.Director = func(req *http.Request) {
+		originalDirector(req)
+
+		// Тут в целом будем насыщать и обогащать наши внутренние заголовки
+
+		// пример создания X-User-ID
+		if userID, ok := req.Context().Value(config.KeyUUID).(string); ok {
+			req.Header.Set("X-User-ID", userID)
+		}
+	}
+
+	return prx
+}
+
 func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 	r.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(func(next http.Handler) http.Handler {
 			return CheckJWT(next, cfg)
 		})
 
+		apiRouter.Handle("/user/*", proxy(cfg.User.Host, cfg.User.Port))
 		apiRouter.Get("/profile", handler.MyProfile)
 		apiRouter.Put("/profile", handler.UpdateProfile)
 		apiRouter.Post("/avatar/user", handler.SetUserAvatar)

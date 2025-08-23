@@ -12,10 +12,11 @@ require (
 	github.com/s21platform/auth-service v0.0.3
 	github.com/s21platform/avatar-service v0.0.0-20250413162426-a937ac435e67
 	github.com/s21platform/chat-service v0.0.3
+	github.com/s21platform/community-service v0.0.0-20250818134518-f0a5cc3aae07
 	github.com/s21platform/feed-proto v0.0.1
 	github.com/s21platform/logger-lib v0.0.6
 	github.com/s21platform/metrics-lib v0.0.9
-	github.com/s21platform/notification-service v0.0.4
+	github.com/s21platform/notification-service v0.0.5
 	github.com/s21platform/optionhub-proto v1.0.18
 	github.com/s21platform/search-proto v0.0.11
 	github.com/s21platform/society-proto v0.0.24

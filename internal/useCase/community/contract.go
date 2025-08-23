@@ -3,8 +3,9 @@ package community
 import (
 	"context"
 
-	"github.com/s21platform/gateway-service/internal/model"
 	"google.golang.org/protobuf/types/known/emptypb"
+
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type CommunityClient interface {

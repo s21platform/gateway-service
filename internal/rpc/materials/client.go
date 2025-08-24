@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/s21platform/materials-service/pkg/materials"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/types/known/emptypb"
+
+	"github.com/s21platform/materials-service/pkg/materials"
 
 	"github.com/s21platform/gateway-service/internal/config"
 )

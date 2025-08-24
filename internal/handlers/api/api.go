@@ -16,20 +16,20 @@ import (
 )
 
 type Handler struct {
-	uS  UserService
-	aS  AvatarService
-	nS  NotificationService
-	oS  OptionService
-	sS  SocietyService
-	srS SearchService
-	cS  ChatService
-	adS AdvertService
-	feS FeedService
-	mS  MaterialsService
+	uS   UserService
+	aS   AvatarService
+	nS   NotificationService
+	oS   OptionService
+	sS   SocietyService
+	srS  SearchService
+	cS   ChatService
+	adS  AdvertService
+	feS  FeedService
+	mS   MaterialsService
 	comS CommunityService
 }
 
-func New(uS UserService, aS AvatarService, nS NotificationService, oS OptionService, sS SocietyService, srS SearchService, cS ChatService, adS AdvertService, feS FeedService) *Handler {
+func New(uS UserService, aS AvatarService, nS NotificationService, oS OptionService, sS SocietyService, srS SearchService, cS ChatService, adS AdvertService, feS FeedService, mS MaterialsService, comS CommunityService) *Handler {
 	return &Handler{uS: uS, aS: aS, nS: nS, oS: oS, sS: sS, srS: srS, cS: cS, adS: adS, feS: feS, mS: mS, comS: comS}
 }
 

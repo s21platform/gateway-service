@@ -80,6 +80,10 @@ type AdvertService interface {
 	RestoreAdvert(r *http.Request) (*advert.AdvertEmpty, error)
 }
 
+type CommunityService interface {
+	SendEduLinkingCode(r *http.Request) (*emptypb.Empty, error)
+}
+
 type FeedService interface{}
 
 type MaterialsService interface {

@@ -62,6 +62,7 @@ func TestApi_GetProfile(t *testing.T) {
 			nil,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.MyProfile(w, r)
@@ -85,6 +86,7 @@ func TestApi_GetProfile(t *testing.T) {
 
 		s := New(
 			mockUserService,
+			nil,
 			nil,
 			nil,
 			nil,
@@ -145,6 +147,7 @@ func TestApi_CreateSociety(t *testing.T) {
 			nil,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.CreateSociety(w, req)
@@ -188,6 +191,7 @@ func TestApi_CreateSociety(t *testing.T) {
 			nil,
 			nil,
 			mockSocietyService,
+			nil,
 			nil,
 			nil,
 			nil,
@@ -250,6 +254,7 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 			nil,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.GetSocietyInfo(w, req)
@@ -286,6 +291,7 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 			nil,
 			nil,
 			mockSocietyService,
+			nil,
 			nil,
 			nil,
 			nil,
@@ -338,6 +344,7 @@ func TestApi_GetAdverts(t *testing.T) {
 			mockAdvertService,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.GetAdverts(w, r)
@@ -368,6 +375,7 @@ func TestApi_GetAdverts(t *testing.T) {
 			nil,
 			nil,
 			mockAdvertService,
+			nil,
 			nil,
 			nil,
 		)
@@ -410,6 +418,7 @@ func TestApi_CreateAdvert(t *testing.T) {
 			mockAdvertService,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.CreateAdvert(w, r)
@@ -440,6 +449,7 @@ func TestApi_CreateAdvert(t *testing.T) {
 			nil,
 			nil,
 			mockAdvertService,
+			nil,
 			nil,
 			nil,
 		)
@@ -496,6 +506,7 @@ func TestApi_GetChats(t *testing.T) {
 			nil,
 			nil,
 			mockChatService,
+			nil,
 			nil,
 			nil,
 			nil,
@@ -1231,5 +1242,38 @@ func TestApi_EditMaterial(t *testing.T) {
 		s.EditMaterial(w, req)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
+func TestHandler_SendEduLinkingCode(t *testing.T) {
+	t.Parallel()
+
+	t.Run("successful_send_edu_linking_code", func(t *testing.T) {
+		t.Parallel()
+
+		mockCtrl := gomock.NewController(t)
+		defer mockCtrl.Finish()
+
+		mockLogger := logger_lib.NewMockLoggerInterface(mockCtrl)
+		mockCommunityService := NewMockCommunityService(mockCtrl)
+
+		expected := &emptypb.Empty{}
+
+		mockLogger.EXPECT().AddFuncName("SendEduLinkingCode")
+		mockCommunityService.EXPECT().
+			SendEduLinkingCode(gomock.Any()).
+			Return(expected, nil)
+
+		ctx := context.WithValue(context.Background(), config.KeyLogger, mockLogger)
+
+		r := httptest.NewRequest(http.MethodPost, "/community", nil)
+		r = r.WithContext(ctx)
+		w := httptest.NewRecorder()
+
+		s := New(nil, nil, nil, nil, nil, nil, nil, nil, nil, mockCommunityService)
+		s.SendEduLinkingCode(w, r)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.JSONEq(t, `{}`+"\n", w.Body.String())
 	})
 }

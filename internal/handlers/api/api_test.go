@@ -1253,3 +1253,36 @@ func TestHandler_GetAllMaterials(t *testing.T) {
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})
 }
+
+func TestHandler_SendEduLinkingCode(t *testing.T) {
+	t.Parallel()
+
+	t.Run("successful_send_edu_linking_code", func(t *testing.T) {
+		t.Parallel()
+
+		mockCtrl := gomock.NewController(t)
+		defer mockCtrl.Finish()
+
+		mockLogger := logger_lib.NewMockLoggerInterface(mockCtrl)
+		mockCommunityService := NewMockCommunityService(mockCtrl)
+
+		expected := &emptypb.Empty{}
+
+		mockLogger.EXPECT().AddFuncName("SendEduLinkingCode")
+		mockCommunityService.EXPECT().
+			SendEduLinkingCode(gomock.Any()).
+			Return(expected, nil)
+
+		ctx := context.WithValue(context.Background(), config.KeyLogger, mockLogger)
+
+		r := httptest.NewRequest(http.MethodPost, "/community", nil)
+		r = r.WithContext(ctx)
+		w := httptest.NewRecorder()
+
+		s := New(nil, nil, nil, nil, nil, nil, nil, nil, nil, mockCommunityService)
+		s.SendEduLinkingCode(w, r)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.JSONEq(t, `{}`+"\n", w.Body.String())
+	})
+}

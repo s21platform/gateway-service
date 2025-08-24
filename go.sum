@@ -47,6 +47,8 @@ github.com/s21platform/avatar-service v0.0.0-20250413162426-a937ac435e67 h1:G4ml
 github.com/s21platform/avatar-service v0.0.0-20250413162426-a937ac435e67/go.mod h1:lWVhJj2Sg6f7yk2b8vN8wU5AQX4WE4bJYaIZCosV5cw=
 github.com/s21platform/chat-service v0.0.3 h1:oFRpgNhwplRyryvAvn+rDnBT3liTOmpTA81ekGIsVxA=
 github.com/s21platform/chat-service v0.0.3/go.mod h1:eLS/50WgAm4ksZgUNbOStqHWOzKjMNtKc5GaiIRDnXY=
+github.com/s21platform/community-service v0.0.0-20250818134518-f0a5cc3aae07 h1:838Xze5pLlzDZ2amPv07tfSKr1h2zxt1/GkCqSHmAGw=
+github.com/s21platform/community-service v0.0.0-20250818134518-f0a5cc3aae07/go.mod h1:d9yeT5VlgEUQrUpdtH16lhy/AqQtgDhz4XyAA1pvJzg=
 github.com/s21platform/feed-proto v0.0.1 h1:BkFhIg28M4iCNXOhbkWU++7RedAFjiaeEe8J74poloo=
 github.com/s21platform/feed-proto v0.0.1/go.mod h1:7R83BXKl3QiSwj0tG+2Z9vYqoKmFbGoYYvw2/8rTJHA=
 github.com/s21platform/logger-lib v0.0.6 h1:Aa3wV7zsaUSUkLa4P8stKNKxmKpZEn9dNBsk00I7Ncw=
@@ -55,8 +57,8 @@ github.com/s21platform/materials-service v0.0.0-20250817153147-e1c7f6f2fb94 h1:1
 github.com/s21platform/materials-service v0.0.0-20250817153147-e1c7f6f2fb94/go.mod h1:Ti29McUTaSMmpjpZgUUQ1bc78VylhJijtAjIWlagdas=
 github.com/s21platform/metrics-lib v0.0.9 h1:nFz4W+xps2nlxpOyGW/JLjZf2sTN/YXomumuC9nXwQ0=
 github.com/s21platform/metrics-lib v0.0.9/go.mod h1:Z1Aiy5uuyEmM//rQmhqkVh0JR8l5sVwe83TQegdNFxQ=
-github.com/s21platform/notification-service v0.0.4 h1:o0PP7tRGTqSXamz/NUniTnrdE68jCxooLL1hhkZ7TL0=
-github.com/s21platform/notification-service v0.0.4/go.mod h1:hx2tTur02F9MD9TYvoKlO1lgPlcts/h/3okGII00xfs=
+github.com/s21platform/notification-service v0.0.5 h1:CM4cYuKU4NxyEj+BnxAtNQ7uWLHd/8Lv6rpi0llJwgE=
+github.com/s21platform/notification-service v0.0.5/go.mod h1:hx2tTur02F9MD9TYvoKlO1lgPlcts/h/3okGII00xfs=
 github.com/s21platform/optionhub-proto v1.0.18 h1:V1yagpNA3aZZVXKP8PdDdDKLAyXsHd5+pum6RcX5PnE=
 github.com/s21platform/optionhub-proto v1.0.18/go.mod h1:drAGej/ZykdMnAOs4xljgKo6KZrNCZzrCslQ6noBqhM=
 github.com/s21platform/search-proto v0.0.11 h1:cNKFOmxEtYwCe76bXo99a5xJal0tT8UNJPxr9DjveYM=

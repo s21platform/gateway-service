@@ -743,6 +743,44 @@ func (mr *MockAdvertServiceMockRecorder) RestoreAdvert(r interface{}) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RestoreAdvert", reflect.TypeOf((*MockAdvertService)(nil).RestoreAdvert), r)
 }
 
+// MockCommunityService is a mock of CommunityService interface.
+type MockCommunityService struct {
+	ctrl     *gomock.Controller
+	recorder *MockCommunityServiceMockRecorder
+}
+
+// MockCommunityServiceMockRecorder is the mock recorder for MockCommunityService.
+type MockCommunityServiceMockRecorder struct {
+	mock *MockCommunityService
+}
+
+// NewMockCommunityService creates a new mock instance.
+func NewMockCommunityService(ctrl *gomock.Controller) *MockCommunityService {
+	mock := &MockCommunityService{ctrl: ctrl}
+	mock.recorder = &MockCommunityServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockCommunityService) EXPECT() *MockCommunityServiceMockRecorder {
+	return m.recorder
+}
+
+// SendEduLinkingCode mocks base method.
+func (m *MockCommunityService) SendEduLinkingCode(r *http.Request) (*emptypb.Empty, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SendEduLinkingCode", r)
+	ret0, _ := ret[0].(*emptypb.Empty)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SendEduLinkingCode indicates an expected call of SendEduLinkingCode.
+func (mr *MockCommunityServiceMockRecorder) SendEduLinkingCode(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendEduLinkingCode", reflect.TypeOf((*MockCommunityService)(nil).SendEduLinkingCode), r)
+}
+
 // MockFeedService is a mock of FeedService interface.
 type MockFeedService struct {
 	ctrl     *gomock.Controller

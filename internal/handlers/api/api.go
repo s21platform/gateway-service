@@ -26,10 +26,11 @@ type Handler struct {
 	adS AdvertService
 	feS FeedService
 	mS  MaterialsService
+	comS CommunityService
 }
 
 func New(uS UserService, aS AvatarService, nS NotificationService, oS OptionService, sS SocietyService, srS SearchService, cS ChatService, adS AdvertService, feS FeedService, mS MaterialsService) *Handler {
-	return &Handler{uS: uS, aS: aS, nS: nS, oS: oS, sS: sS, srS: srS, cS: cS, adS: adS, feS: feS, mS: mS}
+	return &Handler{uS: uS, aS: aS, nS: nS, oS: oS, sS: sS, srS: srS, cS: cS, adS: adS, feS: feS, mS: mS, comS: comS}
 }
 
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
@@ -857,6 +858,29 @@ func (h *Handler) GetAllMaterials(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) SendEduLinkingCode(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("SendEduLinkingCode")
+
+	result, err := h.comS.SendEduLinkingCode(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to send edu linking code: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(&result)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func proxy(host, port string) http.Handler {
 	u, _ := url.Parse(fmt.Sprintf("http://%s:%s", host, port))
 	prx := httputil.NewSingleHostReverseProxy(u)
@@ -923,6 +947,8 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Patch("/advert/restore", handler.RestoreAdvert)
 		apiRouter.Post("/user/post", handler.CreateUserPost)
 		apiRouter.Get("/materials", handler.GetAllMaterials)
+		apiRouter.Post("/community/code", handler.SendEduLinkingCode)
+
 		//crm routes
 		apiRouter.Get("/option_requests", handler.GetOptionRequests)
 	})

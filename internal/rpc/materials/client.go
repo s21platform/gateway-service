@@ -31,7 +31,7 @@ func NewService(cfg *config.Config) *Service {
 	return &Service{client: client}
 }
 
-func (s *Service) EditMaterial(ctx context.Context, req *model.EditMaterial) (*materialsproto.EditMaterialOut, error) {
+func (s *Service) EditMaterial(ctx context.Context, req *model.EditMaterialRequest) (*materialsproto.EditMaterialOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 
 	request := &materialsproto.EditMaterialIn{
@@ -45,7 +45,7 @@ func (s *Service) EditMaterial(ctx context.Context, req *model.EditMaterial) (*m
 
 	resp, err := s.client.EditMaterial(ctx, request)
 	if err != nil {
-		return nil, fmt.Errorf("failed to restore advert in grpc: %w", err)
+		return nil, fmt.Errorf("failed to edit material in grpc: %w", err)
 	}
 
 	return resp, nil

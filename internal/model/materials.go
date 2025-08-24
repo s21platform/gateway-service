@@ -19,7 +19,7 @@ type Material struct {
 	LikesCount      int32     `json:"likes_count"`
 }
 
-type EditMaterial struct {
+type EditMaterialRequest struct {
 	UUID            string `json:"uuid"`
 	Title           string `json:"title"`
 	CoverImageURL   string `json:"cover_image_url"`

@@ -17,7 +17,7 @@ func New(mC MaterialsClient) *UseCase {
 }
 
 func (u *UseCase) EditMaterial(r *http.Request) (*model.Material, error) {
-	var requestData model.EditMaterial
+	var requestData model.EditMaterialRequest
 
 	err := json.NewDecoder(r.Body).Decode(&requestData)
 	if err != nil {
@@ -30,23 +30,21 @@ func (u *UseCase) EditMaterial(r *http.Request) (*model.Material, error) {
 		return nil, fmt.Errorf("failed to edit material in usecase: %v", err)
 	}
 
-	mat := resp.GetMaterial()
-
 	material := &model.Material{
-		UUID:            mat.Uuid,
-		OwnerUUID:       mat.OwnerUuid,
-		Title:           mat.Title,
-		CoverImageURL:   mat.CoverImageUrl,
-		Description:     mat.Description,
-		Content:         mat.Content,
-		ReadTimeMinutes: mat.ReadTimeMinutes,
-		Status:          mat.Status,
-		CreatedAt:       mat.CreatedAt.AsTime(),
-		EditedAt:        mat.EditedAt.AsTime(),
-		PublishedAt:     mat.PublishedAt.AsTime(),
-		ArchivedAt:      mat.ArchivedAt.AsTime(),
-		DeletedAt:       mat.DeletedAt.AsTime(),
-		LikesCount:      mat.LikesCount,
+		UUID:            resp.Material.Uuid,
+		OwnerUUID:       resp.Material.OwnerUuid,
+		Title:           resp.Material.Title,
+		CoverImageURL:   resp.Material.CoverImageUrl,
+		Description:     resp.Material.Description,
+		Content:         resp.Material.Content,
+		ReadTimeMinutes: resp.Material.ReadTimeMinutes,
+		Status:          resp.Material.Status,
+		CreatedAt:       resp.Material.CreatedAt.AsTime(),
+		EditedAt:        resp.Material.EditedAt.AsTime(),
+		PublishedAt:     resp.Material.PublishedAt.AsTime(),
+		ArchivedAt:      resp.Material.ArchivedAt.AsTime(),
+		DeletedAt:       resp.Material.DeletedAt.AsTime(),
+		LikesCount:      resp.Material.LikesCount,
 	}
 
 	return material, nil

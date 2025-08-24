@@ -9,5 +9,5 @@ import (
 )
 
 type MaterialsClient interface {
-	EditMaterial(ctx context.Context, req *model.EditMaterial) (*materialsproto.EditMaterialOut, error)
+	EditMaterial(ctx context.Context, req *model.EditMaterialRequest) (*materialsproto.EditMaterialOut, error)
 }

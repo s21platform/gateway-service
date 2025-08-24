@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/s21platform/materials-service/pkg/materials"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type MaterialList []Material
@@ -26,8 +25,8 @@ type Material struct {
 	LikesCount      int32      `json:"likes_count"`
 }
 
-func FromProto(protoList []*materials.Material) MaterialList {
-	result := make(MaterialList, 0, len(protoList))
+func (ml *MaterialList) ToDTO(protoList []*materials.Material) {
+	*ml = make(MaterialList, 0, len(protoList))
 	for _, proto := range protoList {
 		m := Material{
 			UUID:            proto.Uuid,
@@ -63,44 +62,6 @@ func FromProto(protoList []*materials.Material) MaterialList {
 			t := proto.DeletedAt.AsTime()
 			m.DeletedAt = &t
 		}
-		result = append(result, m)
+		*ml = append(*ml, m)
 	}
-	return result
-}
-
-func (a *MaterialList) ListFromDTO() []*materials.Material {
-	result := make([]*materials.Material, 0, len(*a))
-
-	for _, material := range *a {
-		m := &materials.Material{
-			Uuid:            material.UUID,
-			OwnerUuid:       material.OwnerUUID,
-			Title:           material.Title,
-			CoverImageUrl:   material.CoverImageURL,
-			Description:     material.Description,
-			ReadTimeMinutes: material.ReadTimeMinutes,
-			Status:          material.Status,
-			LikesCount:      material.LikesCount,
-		}
-
-		if material.Content != nil {
-			m.Content = *material.Content
-		}
-		if material.EditedAt != nil {
-			m.EditedAt = timestamppb.New(*material.EditedAt)
-		}
-		if material.PublishedAt != nil {
-			m.PublishedAt = timestamppb.New(*material.PublishedAt)
-		}
-		if material.ArchivedAt != nil {
-			m.ArchivedAt = timestamppb.New(*material.ArchivedAt)
-		}
-		if material.DeletedAt != nil {
-			m.DeletedAt = timestamppb.New(*material.DeletedAt)
-		}
-
-		result = append(result, m)
-	}
-
-	return result
 }

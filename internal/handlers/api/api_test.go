@@ -1280,6 +1280,96 @@ func TestHandler_GetAllMaterials(t *testing.T) {
 	})
 }
 
+func TestApi_EditMaterial(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("edit_material_successfully", func(t *testing.T) {
+		mockMaterialsService := NewMockMaterialsService(ctrl)
+
+		req := httptest.NewRequest(http.MethodPatch, "/material", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		expectedMaterial := &model.Material{
+			UUID:    "testUuid",
+			Title:   "Updated title",
+			Content: "Updated content",
+		}
+
+		mockLogger.EXPECT().AddFuncName("EditMaterial")
+		mockMaterialsService.EXPECT().EditMaterial(gomock.Any()).Return(expectedMaterial, nil)
+
+		w := httptest.NewRecorder()
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockMaterialsService,
+			nil,
+		)
+
+		s.EditMaterial(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
+
+		var responseBody model.Material
+		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedMaterial, &responseBody)
+	})
+
+	t.Run("edit_material_fails", func(t *testing.T) {
+		mockMaterialsService := NewMockMaterialsService(ctrl)
+
+		req := httptest.NewRequest(http.MethodPatch, "/material", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		expectedError := errors.New("database error")
+		mockLogger.EXPECT().AddFuncName("EditMaterial")
+		mockLogger.EXPECT().Error(fmt.Sprintf("failed to edit material: %v", expectedError))
+		mockMaterialsService.EXPECT().EditMaterial(gomock.Any()).Return(nil, expectedError)
+
+		w := httptest.NewRecorder()
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockMaterialsService,
+			nil,
+		)
+
+		s.EditMaterial(w, req)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
 func TestHandler_SendEduLinkingCode(t *testing.T) {
 	t.Parallel()
 

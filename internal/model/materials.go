@@ -25,6 +25,15 @@ type Material struct {
 	LikesCount      int32      `json:"likes_count"`
 }
 
+type EditMaterialRequest struct {
+	UUID            string `json:"uuid"`
+	Title           string `json:"title"`
+	CoverImageURL   string `json:"cover_image_url"`
+	Description     string `json:"description"`
+	Content         string `json:"content"`
+	ReadTimeMinutes int32  `json:"read_time_minutes"`
+}
+
 func (ml *MaterialList) ToDTO(protoList []*materials.Material) {
 	*ml = make(MaterialList, 0, len(protoList))
 	for _, proto := range protoList {

@@ -10,13 +10,14 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	"github.com/s21platform/materials-service/pkg/materials"
+	materialsproto "github.com/s21platform/materials-service/pkg/materials"
 
 	"github.com/s21platform/gateway-service/internal/config"
+	"github.com/s21platform/gateway-service/internal/model"
 )
 
 type Service struct {
-	client materials.MaterialsServiceClient
+	client materialsproto.MaterialsServiceClient
 }
 
 func New(cfg *config.Config) *Service {
@@ -25,11 +26,31 @@ func New(cfg *config.Config) *Service {
 	if err != nil {
 		log.Fatalf("failed to create grpc client: %v", err)
 	}
-	client := materials.NewMaterialsServiceClient(conn)
+	client := materialsproto.NewMaterialsServiceClient(conn)
 	return &Service{client: client}
 }
 
-func (s *Service) GetAllMaterials(ctx context.Context) (*materials.GetAllMaterialsOut, error) {
+func (s *Service) EditMaterial(ctx context.Context, req *model.EditMaterialRequest) (*materialsproto.EditMaterialOut, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
+	request := &materialsproto.EditMaterialIn{
+		Uuid:            req.UUID,
+		Title:           req.Title,
+		CoverImageUrl:   req.CoverImageURL,
+		Description:     req.Description,
+		Content:         req.Content,
+		ReadTimeMinutes: req.ReadTimeMinutes,
+	}
+
+	resp, err := s.client.EditMaterial(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to edit material in grpc: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (s *Service) GetAllMaterials(ctx context.Context) (*materialsproto.GetAllMaterialsOut, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 
 	resp, err := s.client.GetAllMaterials(ctx, &emptypb.Empty{})

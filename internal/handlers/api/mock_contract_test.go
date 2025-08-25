@@ -827,6 +827,21 @@ func (m *MockMaterialsService) EXPECT() *MockMaterialsServiceMockRecorder {
 	return m.recorder
 }
 
+// EditMaterial mocks base method.
+func (m *MockMaterialsService) EditMaterial(r *http.Request) (*model.Material, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "EditMaterial", r)
+	ret0, _ := ret[0].(*model.Material)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// EditMaterial indicates an expected call of EditMaterial.
+func (mr *MockMaterialsServiceMockRecorder) EditMaterial(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EditMaterial", reflect.TypeOf((*MockMaterialsService)(nil).EditMaterial), r)
+}
+
 // GetAllMaterialsList mocks base method.
 func (m *MockMaterialsService) GetAllMaterialsList(r *http.Request) (*model.MaterialList, error) {
 	m.ctrl.T.Helper()

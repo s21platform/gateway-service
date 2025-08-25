@@ -25,11 +25,12 @@ type Handler struct {
 	cS   ChatService
 	adS  AdvertService
 	feS  FeedService
+	mS   MaterialsService
 	comS CommunityService
 }
 
-func New(uS UserService, aS AvatarService, nS NotificationService, oS OptionService, sS SocietyService, srS SearchService, cS ChatService, adS AdvertService, feS FeedService, comS CommunityService) *Handler {
-	return &Handler{uS: uS, aS: aS, nS: nS, oS: oS, sS: sS, srS: srS, cS: cS, adS: adS, feS: feS, comS: comS}
+func New(uS UserService, aS AvatarService, nS NotificationService, oS OptionService, sS SocietyService, srS SearchService, cS ChatService, adS AdvertService, feS FeedService, mS MaterialsService, comS CommunityService) *Handler {
+	return &Handler{uS: uS, aS: aS, nS: nS, oS: oS, sS: sS, srS: srS, cS: cS, adS: adS, feS: feS, mS: mS, comS: comS}
 }
 
 func (h *Handler) MyProfile(w http.ResponseWriter, r *http.Request) {
@@ -834,6 +835,29 @@ func (h *Handler) CreateUserPost(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) EditMaterial(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("EditMaterial")
+
+	result, err := h.mS.EditMaterial(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to edit material: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(result)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func (h *Handler) SendEduLinkingCode(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 	logger.AddFuncName("SendEduLinkingCode")
@@ -922,6 +946,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Put("/advert/cancel", handler.CancelAdvert)
 		apiRouter.Patch("/advert/restore", handler.RestoreAdvert)
 		apiRouter.Post("/user/post", handler.CreateUserPost)
+		apiRouter.Patch("/materials", handler.EditMaterial)
 		apiRouter.Post("/community/code", handler.SendEduLinkingCode)
 
 		//crm routes

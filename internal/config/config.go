@@ -36,6 +36,7 @@ type Config struct {
 	Advert       Advert
 	Feed         Feed
 	Staff        Staff
+	Materials    Materials
 	Community    Community
 }
 
@@ -120,6 +121,11 @@ type Feed struct {
 type Staff struct {
 	Host string `env:"STAFF_SERVICE_HOST"`
 	Port string `env:"STAFF_SERVICE_PORT"`
+}
+
+type Materials struct {
+	Host string `env:"MATERIALS_SERVICE_HOST"`
+	Port string `env:"MATERIALS_SERVICE_PORT"`
 }
 
 type Community struct {

@@ -25,6 +25,7 @@ import (
 	"github.com/s21platform/gateway-service/internal/rpc/feed"
 
 	//"github.com/s21platform/gateway-service/internal/rpc/friends"
+	"github.com/s21platform/gateway-service/internal/rpc/materials"
 	"github.com/s21platform/gateway-service/internal/rpc/notification"
 	"github.com/s21platform/gateway-service/internal/rpc/option"
 	"github.com/s21platform/gateway-service/internal/rpc/search"
@@ -37,6 +38,7 @@ import (
 	chatusecase "github.com/s21platform/gateway-service/internal/useCase/chat"
 	communityusecase "github.com/s21platform/gateway-service/internal/useCase/community"
 	feedusecase "github.com/s21platform/gateway-service/internal/useCase/feed"
+	materialsusecase "github.com/s21platform/gateway-service/internal/useCase/materials"
 
 	//friendsusecase "github.com/s21platform/gateway-service/internal/useCase/friends"
 	notificationusecase "github.com/s21platform/gateway-service/internal/useCase/notification"
@@ -71,6 +73,7 @@ func main() {
 	advertClient := advert.New(cfg)
 	feedClient := feed.New(cfg)
 	staffClient := staff.New(cfg)
+	materialsClient := materials.NewService(cfg)
 	CommunityClient := community.New(cfg)
 
 	// usecases declaration
@@ -86,11 +89,12 @@ func main() {
 	advertUseCase := advertusecase.New(advertClient)
 	feedUseCase := feedusecase.New(feedClient)
 	staffUseCase := staffusecase.New(staffClient)
+	materialsUseCase := materialsusecase.New(materialsClient)
 	communityUseCase := communityusecase.New(CommunityClient)
 
 	// handlers declaration
 	authHandlers := authhandler.New(cfg, authUseCase)
-	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, optionUsecase, societyUseCase, searchUseCase, chatUseCase, advertUseCase, feedUseCase, communityUseCase)
+	apiHandlers := api.New(userUsecase, avatarUsecase, notificationUsecase, optionUsecase, societyUseCase, searchUseCase, chatUseCase, advertUseCase, feedUseCase, materialsUseCase, communityUseCase)
 	admHandlers := adm.New(staffUseCase)
 
 	r := chi.NewRouter()

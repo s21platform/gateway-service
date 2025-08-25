@@ -803,3 +803,41 @@ func NewMockFeedService(ctrl *gomock.Controller) *MockFeedService {
 func (m *MockFeedService) EXPECT() *MockFeedServiceMockRecorder {
 	return m.recorder
 }
+
+// MockMaterialsService is a mock of MaterialsService interface.
+type MockMaterialsService struct {
+	ctrl     *gomock.Controller
+	recorder *MockMaterialsServiceMockRecorder
+}
+
+// MockMaterialsServiceMockRecorder is the mock recorder for MockMaterialsService.
+type MockMaterialsServiceMockRecorder struct {
+	mock *MockMaterialsService
+}
+
+// NewMockMaterialsService creates a new mock instance.
+func NewMockMaterialsService(ctrl *gomock.Controller) *MockMaterialsService {
+	mock := &MockMaterialsService{ctrl: ctrl}
+	mock.recorder = &MockMaterialsServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockMaterialsService) EXPECT() *MockMaterialsServiceMockRecorder {
+	return m.recorder
+}
+
+// EditMaterial mocks base method.
+func (m *MockMaterialsService) EditMaterial(r *http.Request) (*model.Material, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "EditMaterial", r)
+	ret0, _ := ret[0].(*model.Material)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// EditMaterial indicates an expected call of EditMaterial.
+func (mr *MockMaterialsServiceMockRecorder) EditMaterial(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EditMaterial", reflect.TypeOf((*MockMaterialsService)(nil).EditMaterial), r)
+}

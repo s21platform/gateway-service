@@ -62,6 +62,7 @@ func TestApi_GetProfile(t *testing.T) {
 			nil,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.MyProfile(w, r)
@@ -85,6 +86,7 @@ func TestApi_GetProfile(t *testing.T) {
 
 		s := New(
 			mockUserService,
+			nil,
 			nil,
 			nil,
 			nil,
@@ -145,6 +147,7 @@ func TestApi_CreateSociety(t *testing.T) {
 			nil,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.CreateSociety(w, req)
@@ -188,6 +191,7 @@ func TestApi_CreateSociety(t *testing.T) {
 			nil,
 			nil,
 			mockSocietyService,
+			nil,
 			nil,
 			nil,
 			nil,
@@ -250,6 +254,7 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 			nil,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.GetSocietyInfo(w, req)
@@ -286,6 +291,7 @@ func TestApi_GetSocietyInfo(t *testing.T) {
 			nil,
 			nil,
 			mockSocietyService,
+			nil,
 			nil,
 			nil,
 			nil,
@@ -338,6 +344,7 @@ func TestApi_GetAdverts(t *testing.T) {
 			mockAdvertService,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.GetAdverts(w, r)
@@ -368,6 +375,7 @@ func TestApi_GetAdverts(t *testing.T) {
 			nil,
 			nil,
 			mockAdvertService,
+			nil,
 			nil,
 			nil,
 		)
@@ -410,6 +418,7 @@ func TestApi_CreateAdvert(t *testing.T) {
 			mockAdvertService,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.CreateAdvert(w, r)
@@ -440,6 +449,7 @@ func TestApi_CreateAdvert(t *testing.T) {
 			nil,
 			nil,
 			mockAdvertService,
+			nil,
 			nil,
 			nil,
 		)
@@ -499,6 +509,7 @@ func TestApi_GetChats(t *testing.T) {
 			nil,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.GetChats(w, r)
@@ -528,6 +539,7 @@ func TestApi_GetChats(t *testing.T) {
 			nil,
 			nil,
 			mockChatService,
+			nil,
 			nil,
 			nil,
 			nil,
@@ -573,6 +585,7 @@ func TestApi_CreatePrivateChat(t *testing.T) {
 			nil,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.CreatePrivateChat(w, r)
@@ -602,6 +615,7 @@ func TestApi_CreatePrivateChat(t *testing.T) {
 			nil,
 			nil,
 			mockChatService,
+			nil,
 			nil,
 			nil,
 			nil,
@@ -666,6 +680,7 @@ func TestApi_GetPrivateRecentMessages(t *testing.T) {
 			nil,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.GetPrivateRecentMessages(w, r)
@@ -697,6 +712,7 @@ func TestApi_GetPrivateRecentMessages(t *testing.T) {
 			nil,
 			nil,
 			mockChatService,
+			nil,
 			nil,
 			nil,
 			nil,
@@ -800,6 +816,7 @@ func TestApi_CancelAdvert(t *testing.T) {
 			mockAdvertService,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.CancelAdvert(w, r)
@@ -830,6 +847,7 @@ func TestApi_CancelAdvert(t *testing.T) {
 			nil,
 			nil,
 			mockAdvertService,
+			nil,
 			nil,
 			nil,
 		)
@@ -872,6 +890,7 @@ func TestApi_RestoreAdvert(t *testing.T) {
 			mockAdvertService,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.RestoreAdvert(w, r)
@@ -902,6 +921,7 @@ func TestApi_RestoreAdvert(t *testing.T) {
 			nil,
 			nil,
 			mockAdvertService,
+			nil,
 			nil,
 			nil,
 		)
@@ -959,6 +979,7 @@ func TestHandler_GetOptionRequests(t *testing.T) {
 			nil,
 			nil,
 			nil,
+			nil,
 		)
 
 		h.GetOptionRequests(w, req)
@@ -996,6 +1017,7 @@ func TestHandler_GetOptionRequests(t *testing.T) {
 			nil,
 			nil,
 			mockOptionService,
+			nil,
 			nil,
 			nil,
 			nil,
@@ -1048,6 +1070,7 @@ func TestHandler_CreateUserPost(t *testing.T) {
 			nil,
 			nil,
 			nil,
+			nil,
 		)
 
 		s.CreateUserPost(w, r)
@@ -1071,6 +1094,7 @@ func TestHandler_CreateUserPost(t *testing.T) {
 
 		s := New(
 			mockUserService,
+			nil,
 			nil,
 			nil,
 			nil,
@@ -1111,7 +1135,7 @@ func TestHandler_MarkNotificationAsRead(t *testing.T) {
 		r = r.WithContext(ctx)
 		w := httptest.NewRecorder()
 
-		handler := New(nil, nil, mockNotificationService, nil, nil, nil, nil, nil, nil, nil)
+		handler := New(nil, nil, mockNotificationService, nil, nil, nil, nil, nil, nil, nil, nil)
 		handler.MarkNotificationAsRead(w, r)
 
 		assert.Equal(t, http.StatusOK, w.Code)
@@ -1139,8 +1163,98 @@ func TestHandler_MarkNotificationAsRead(t *testing.T) {
 		r = r.WithContext(ctx)
 		w := httptest.NewRecorder()
 
-		handler := New(nil, nil, mockNotificationService, nil, nil, nil, nil, nil, nil, nil)
+		handler := New(nil, nil, mockNotificationService, nil, nil, nil, nil, nil, nil, nil, nil)
 		handler.MarkNotificationAsRead(w, r)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
+func TestApi_EditMaterial(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("edit_material_successfully", func(t *testing.T) {
+		mockMaterialsService := NewMockMaterialsService(ctrl)
+
+		req := httptest.NewRequest(http.MethodPatch, "/material", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		expectedMaterial := &model.Material{
+			UUID:    "testUuid",
+			Title:   "Updated title",
+			Content: "Updated content",
+		}
+
+		mockLogger.EXPECT().AddFuncName("EditMaterial")
+		mockMaterialsService.EXPECT().EditMaterial(gomock.Any()).Return(expectedMaterial, nil)
+
+		w := httptest.NewRecorder()
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockMaterialsService,
+			nil,
+		)
+
+		s.EditMaterial(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
+
+		var responseBody model.Material
+		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedMaterial, &responseBody)
+	})
+
+	t.Run("edit_material_fails", func(t *testing.T) {
+		mockMaterialsService := NewMockMaterialsService(ctrl)
+
+		req := httptest.NewRequest(http.MethodPatch, "/material", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		expectedError := errors.New("database error")
+		mockLogger.EXPECT().AddFuncName("EditMaterial")
+		mockLogger.EXPECT().Error(fmt.Sprintf("failed to edit material: %v", expectedError))
+		mockMaterialsService.EXPECT().EditMaterial(gomock.Any()).Return(nil, expectedError)
+
+		w := httptest.NewRecorder()
+
+		s := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockMaterialsService,
+			nil,
+		)
+
+		s.EditMaterial(w, req)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})
@@ -1171,7 +1285,7 @@ func TestHandler_SendEduLinkingCode(t *testing.T) {
 		r = r.WithContext(ctx)
 		w := httptest.NewRecorder()
 
-		s := New(nil, nil, nil, nil, nil, nil, nil, nil, nil, mockCommunityService)
+		s := New(nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, mockCommunityService)
 		s.SendEduLinkingCode(w, r)
 
 		assert.Equal(t, http.StatusOK, w.Code)

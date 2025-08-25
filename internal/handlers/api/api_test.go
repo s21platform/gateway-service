@@ -1170,6 +1170,116 @@ func TestHandler_MarkNotificationAsRead(t *testing.T) {
 	})
 }
 
+func TestHandler_GetAllMaterials(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("should_return_materials_successfully", func(t *testing.T) {
+		mockMaterialsService := NewMockMaterialsService(ctrl)
+
+		req := httptest.NewRequest(http.MethodGet, "/api/materials", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		now := time.Now()
+		content1 := "Some content"
+		content2 := "Other content"
+		expectedResult := &model.MaterialList{
+			{
+				UUID:            uuid.New().String(),
+				Title:           "Material 1",
+				Description:     "Description 1",
+				Content:         content1,
+				ReadTimeMinutes: 5,
+				Status:          "published",
+				CreatedAt:       now,
+				LikesCount:      10,
+			},
+			{
+				UUID:            uuid.New().String(),
+				Title:           "Material 2",
+				Description:     "Description 2",
+				Content:         content2,
+				ReadTimeMinutes: 3,
+				Status:          "draft",
+				CreatedAt:       now,
+				LikesCount:      5,
+			},
+		}
+
+		mockLogger.EXPECT().AddFuncName("GetAllMaterials")
+		mockMaterialsService.EXPECT().GetAllMaterialsList(gomock.Any()).Return(expectedResult, nil)
+
+		w := httptest.NewRecorder()
+
+		h := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockMaterialsService,
+			nil,
+		)
+
+		h.GetAllMaterials(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
+
+		var responseBody model.MaterialList
+		err := json.Unmarshal(w.Body.Bytes(), &responseBody)
+		assert.NoError(t, err)
+		assert.Equal(t, len(*expectedResult), len(responseBody))
+		assert.Equal(t, (*expectedResult)[0].Title, responseBody[0].Title)
+		assert.Equal(t, (*expectedResult)[1].Title, responseBody[1].Title)
+	})
+
+	t.Run("should_return_internal_server_error_if_service_fails", func(t *testing.T) {
+		mockMaterialsService := NewMockMaterialsService(ctrl)
+
+		req := httptest.NewRequest(http.MethodGet, "/api/materials", nil)
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		expectedError := errors.New("database error")
+		mockLogger.EXPECT().AddFuncName("GetAllMaterials")
+		mockLogger.EXPECT().Error("failed to get materials: database error") // Обновлено сообщение об ошибке
+		mockMaterialsService.EXPECT().GetAllMaterialsList(gomock.Any()).Return(nil, expectedError)
+
+		w := httptest.NewRecorder()
+
+		h := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockMaterialsService,
+			nil,
+		)
+
+		h.GetAllMaterials(w, req)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
 func TestApi_EditMaterial(t *testing.T) {
 	t.Parallel()
 

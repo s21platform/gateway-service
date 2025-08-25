@@ -23,9 +23,9 @@ import (
 	"github.com/s21platform/gateway-service/internal/rpc/chat"
 	"github.com/s21platform/gateway-service/internal/rpc/community"
 	"github.com/s21platform/gateway-service/internal/rpc/feed"
+	"github.com/s21platform/gateway-service/internal/rpc/materials"
 
 	//"github.com/s21platform/gateway-service/internal/rpc/friends"
-	"github.com/s21platform/gateway-service/internal/rpc/materials"
 	"github.com/s21platform/gateway-service/internal/rpc/notification"
 	"github.com/s21platform/gateway-service/internal/rpc/option"
 	"github.com/s21platform/gateway-service/internal/rpc/search"
@@ -73,7 +73,7 @@ func main() {
 	advertClient := advert.New(cfg)
 	feedClient := feed.New(cfg)
 	staffClient := staff.New(cfg)
-	materialsClient := materials.NewService(cfg)
+	materialsClient := materials.New(cfg)
 	CommunityClient := community.New(cfg)
 
 	// usecases declaration

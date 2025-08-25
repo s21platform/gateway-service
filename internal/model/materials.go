@@ -1,6 +1,12 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"github.com/s21platform/materials-service/pkg/materials"
+)
+
+type MaterialList []Material
 
 type Material struct {
 	UUID            string    `json:"uuid"`
@@ -26,4 +32,42 @@ type EditMaterialRequest struct {
 	Description     string `json:"description"`
 	Content         string `json:"content"`
 	ReadTimeMinutes int32  `json:"read_time_minutes"`
+}
+
+func (ml *MaterialList) ToDTO(protoList []*materials.Material) {
+	*ml = make(MaterialList, 0, len(protoList))
+	for _, proto := range protoList {
+		m := Material{
+			UUID:            proto.Uuid,
+			OwnerUUID:       proto.OwnerUuid,
+			Title:           proto.Title,
+			CoverImageURL:   proto.CoverImageUrl,
+			Description:     proto.Description,
+			Content:         proto.Content,
+			ReadTimeMinutes: proto.ReadTimeMinutes,
+			Status:          proto.Status,
+			LikesCount:      proto.LikesCount,
+		}
+		if proto.CreatedAt != nil {
+			t := proto.CreatedAt.AsTime()
+			m.CreatedAt = t
+		}
+		if proto.EditedAt != nil {
+			t := proto.EditedAt.AsTime()
+			m.EditedAt = t
+		}
+		if proto.PublishedAt != nil {
+			t := proto.PublishedAt.AsTime()
+			m.PublishedAt = t
+		}
+		if proto.ArchivedAt != nil {
+			t := proto.ArchivedAt.AsTime()
+			m.ArchivedAt = t
+		}
+		if proto.DeletedAt != nil {
+			t := proto.DeletedAt.AsTime()
+			m.DeletedAt = t
+		}
+		*ml = append(*ml, m)
+	}
 }

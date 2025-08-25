@@ -88,4 +88,5 @@ type FeedService interface{}
 
 type MaterialsService interface {
 	EditMaterial(r *http.Request) (*model.Material, error)
+	GetAllMaterialsList(r *http.Request) (*model.MaterialList, error)
 }

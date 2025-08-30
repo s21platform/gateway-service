@@ -881,6 +881,21 @@ func (h *Handler) GetAllMaterials(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) DeleteMaterial(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("DeleteMaterial")
+
+	err := h.mS.DeleteMaterial(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to delete material: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+}
+
 func (h *Handler) SendEduLinkingCode(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 	logger.AddFuncName("SendEduLinkingCode")
@@ -971,6 +986,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/user/post", handler.CreateUserPost)
 		apiRouter.Patch("/materials", handler.EditMaterial)
 		apiRouter.Get("/materials", handler.GetAllMaterials)
+		apiRouter.Get("/materials", handler.DeleteMaterial)
 		apiRouter.Post("/community/code", handler.SendEduLinkingCode)
 
 		//crm routes

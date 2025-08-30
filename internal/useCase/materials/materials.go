@@ -61,3 +61,25 @@ func (uc *UseCase) GetAllMaterialsList(r *http.Request) (*model.MaterialList, er
 	materialList.ToDTO(resp.GetMaterialList())
 	return &materialList, nil
 }
+
+func (u *UseCase) DeleteMaterial(r *http.Request) error {
+	var requestData model.DeleteMaterialRequest
+
+	err := json.NewDecoder(r.Body).Decode(&requestData)
+	if err != nil {
+		return fmt.Errorf("failed to decode request body: %v", err)
+	}
+	defer r.Body.Close()
+
+	rowsAffected, err := u.mC.DeleteMaterial(r.Context(), requestData.UUID)
+
+	if err != nil {
+		return fmt.Errorf("failed to delete material in usecase: %v", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("material already deleted or not found")
+	}
+
+	return nil
+}

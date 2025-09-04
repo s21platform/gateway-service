@@ -917,7 +917,7 @@ func proxy(host, port string) http.Handler {
 
 		// пример создания X-User-ID
 		if userID, ok := req.Context().Value(config.KeyUUID).(string); ok {
-			req.Header.Set("X-User-ID", userID)
+			req.Header.Set(AuthorizationHeader, userID)
 		}
 	}
 

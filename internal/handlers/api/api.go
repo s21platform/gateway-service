@@ -931,6 +931,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		})
 
 		apiRouter.Handle("/user/*", proxy(cfg.User.Host, cfg.User.Port))
+		apiRouter.Handle("/optionhub/*", proxy(cfg.Optionhub.Host, cfg.Optionhub.Port))
 		apiRouter.Get("/profile", handler.MyProfile)
 		apiRouter.Put("/profile", handler.UpdateProfile)
 		apiRouter.Post("/avatar/user", handler.SetUserAvatar)

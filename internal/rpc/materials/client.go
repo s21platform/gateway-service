@@ -61,14 +61,14 @@ func (s *Service) GetAllMaterials(ctx context.Context) (*materialsproto.GetAllMa
 	return resp, nil
 }
 
-func (s *Service) DeleteMaterial(ctx context.Context, uuid string) error {
+func (s *Service) DeleteMaterial(ctx context.Context, req *model.DeleteMaterialRequest) (*emptypb.Empty, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
 
-	req := &materialsproto.DeleteMaterialIn{Uuid: uuid}
+	protoReq := &materialsproto.DeleteMaterialIn{Uuid: req.UUID}
 
-	_, err := s.client.DeleteMaterial(ctx, req)
+	resp, err := s.client.DeleteMaterial(ctx, protoReq)
 	if err != nil {
-		return fmt.Errorf("failed to delete material: %w", err)
+		return nil, fmt.Errorf("failed to delete material: %w", err)
 	}
-	return nil
+	return resp, nil
 }

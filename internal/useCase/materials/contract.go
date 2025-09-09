@@ -2,11 +2,11 @@ package materials
 
 import (
 	"context"
+
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	materialsproto "github.com/s21platform/materials-service/pkg/materials"
-
 	"github.com/s21platform/gateway-service/internal/model"
+	materialsproto "github.com/s21platform/materials-service/pkg/materials"
 )
 
 type MaterialsClient interface {

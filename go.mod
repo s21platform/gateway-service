@@ -3,7 +3,7 @@ module github.com/s21platform/gateway-service
 go 1.24.0
 
 require (
-	github.com/go-chi/chi/v5 v5.2.2
+	github.com/go-chi/chi/v5 v5.2.3
 	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.6.0
@@ -15,7 +15,7 @@ require (
 	github.com/s21platform/community-service v0.0.0-20250818134518-f0a5cc3aae07
 	github.com/s21platform/feed-proto v0.0.1
 	github.com/s21platform/logger-lib v0.0.6
-	github.com/s21platform/materials-service v0.0.0-20250817153147-e1c7f6f2fb94
+	github.com/s21platform/materials-service v0.0.1
 	github.com/s21platform/metrics-lib v0.0.9
 	github.com/s21platform/notification-service v0.0.5
 	github.com/s21platform/optionhub-proto v1.0.18

@@ -887,13 +887,13 @@ func (h *Handler) DeleteMaterial(w http.ResponseWriter, r *http.Request) {
 
 	err := h.mS.DeleteMaterial(r)
 	if err != nil {
-		logger.Error(fmt.Sprintf("failed to delete material: %v", err))
+		logger.Error(fmt.Sprintf("failed to delete materials: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func (h *Handler) SendEduLinkingCode(w http.ResponseWriter, r *http.Request) {

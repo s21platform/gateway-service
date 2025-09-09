@@ -891,7 +891,7 @@ func (h *Handler) DeleteMaterial(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 }
@@ -932,7 +932,7 @@ func proxy(host, port string) http.Handler {
 
 		// пример создания X-User-ID
 		if userID, ok := req.Context().Value(config.KeyUUID).(string); ok {
-			req.Header.Set("X-User-ID", userID)
+			req.Header.Set(AuthorizationHeader, userID)
 		}
 	}
 
@@ -946,6 +946,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		})
 
 		apiRouter.Handle("/user/*", proxy(cfg.User.Host, cfg.User.Port))
+		apiRouter.Handle("/optionhub/*", proxy(cfg.Optionhub.Host, cfg.Optionhub.Port))
 		apiRouter.Get("/profile", handler.MyProfile)
 		apiRouter.Put("/profile", handler.UpdateProfile)
 		apiRouter.Post("/avatar/user", handler.SetUserAvatar)

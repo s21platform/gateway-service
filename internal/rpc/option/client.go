@@ -22,7 +22,7 @@ type Service struct {
 }
 
 func New(cfg *config.Config) *Service {
-	connStr := fmt.Sprintf("%s:%s", cfg.Option.Host, cfg.Option.Port)
+	connStr := fmt.Sprintf("%s:%s", cfg.Optionhub.Host, cfg.Optionhub.Port)
 
 	conn, err := grpc.NewClient(connStr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {

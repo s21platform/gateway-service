@@ -35,7 +35,7 @@ type EditMaterialRequest struct {
 }
 
 type DeleteMaterialRequest struct {
-	UUID string `json:"uuid"`
+	MaterialUuid string `json:"materialUuid"`
 }
 
 func (ml *MaterialList) ToDTO(protoList []*materials.Material) {

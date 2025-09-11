@@ -1422,7 +1422,7 @@ func TestHandler_DeleteMaterials(t *testing.T) {
 
 		expectedError := errors.New("database error")
 		mockLogger.EXPECT().AddFuncName("DeleteMaterial")
-		mockLogger.EXPECT().Error("failed to delete materials: database error") // Обновлено сообщение об ошибке
+		mockLogger.EXPECT().Error("failed to delete material: database error")
 		mockMaterialsService.EXPECT().DeleteMaterial(gomock.Any()).Return(expectedError)
 
 		w := httptest.NewRecorder()

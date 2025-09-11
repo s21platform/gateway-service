@@ -887,7 +887,7 @@ func (h *Handler) DeleteMaterial(w http.ResponseWriter, r *http.Request) {
 
 	err := h.mS.DeleteMaterial(r)
 	if err != nil {
-		logger.Error(fmt.Sprintf("failed to delete materials: %v", err))
+		logger.Error(fmt.Sprintf("failed to delete material: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -987,7 +987,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/user/post", handler.CreateUserPost)
 		apiRouter.Patch("/materials", handler.EditMaterial)
 		apiRouter.Get("/materials", handler.GetAllMaterials)
-		apiRouter.Get("/materials", handler.DeleteMaterial)
+		apiRouter.Delete("/materials", handler.DeleteMaterial)
 		apiRouter.Post("/community/code", handler.SendEduLinkingCode)
 
 		//crm routes

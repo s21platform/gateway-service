@@ -13,5 +13,5 @@ import (
 type MaterialsClient interface {
 	GetAllMaterials(ctx context.Context) (*materialsproto.GetAllMaterialsOut, error)
 	EditMaterial(ctx context.Context, req *model.EditMaterialRequest) (*materialsproto.EditMaterialOut, error)
-	DeleteMaterial(ctx context.Context, req *model.DeleteMaterialRequest) (*emptypb.Empty, error)
+	DeleteMaterial(ctx context.Context, materialUuid string) (*emptypb.Empty, error)
 }

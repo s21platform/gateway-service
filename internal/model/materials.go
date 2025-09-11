@@ -34,10 +34,6 @@ type EditMaterialRequest struct {
 	ReadTimeMinutes int32  `json:"read_time_minutes"`
 }
 
-type DeleteMaterialRequest struct {
-	MaterialUuid string `json:"materialUuid"`
-}
-
 func (ml *MaterialList) ToDTO(protoList []*materials.Material) {
 	*ml = make(MaterialList, 0, len(protoList))
 	for _, proto := range protoList {

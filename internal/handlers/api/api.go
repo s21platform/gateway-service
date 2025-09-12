@@ -896,6 +896,21 @@ func (h *Handler) DeleteMaterial(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+func (h *Handler) ArchivedMaterial(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("ArchivedMaterial")
+
+	err := h.mS.ArchivedMaterial(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to archived material: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func (h *Handler) SendEduLinkingCode(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 	logger.AddFuncName("SendEduLinkingCode")
@@ -947,6 +962,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 
 		apiRouter.Handle("/user/*", proxy(cfg.User.Host, cfg.User.Port))
 		apiRouter.Handle("/optionhub/*", proxy(cfg.Optionhub.Host, cfg.Optionhub.Port))
+		apiRouter.Handle("/materials/*", proxy(cfg.Materials.Host, cfg.Materials.Port))
 		apiRouter.Get("/profile", handler.MyProfile)
 		apiRouter.Put("/profile", handler.UpdateProfile)
 		apiRouter.Post("/avatar/user", handler.SetUserAvatar)
@@ -988,6 +1004,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Patch("/materials", handler.EditMaterial)
 		apiRouter.Get("/materials", handler.GetAllMaterials)
 		apiRouter.Delete("/materials", handler.DeleteMaterial)
+		apiRouter.Post("/materials", handler.ArchivedMaterial)
 		apiRouter.Post("/community/code", handler.SendEduLinkingCode)
 
 		//crm routes

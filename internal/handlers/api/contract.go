@@ -90,4 +90,5 @@ type MaterialsService interface {
 	EditMaterial(r *http.Request) (*model.Material, error)
 	GetAllMaterialsList(r *http.Request) (*model.MaterialList, error)
 	DeleteMaterial(r *http.Request) error
+	ArchivedMaterial(r *http.Request) error
 }

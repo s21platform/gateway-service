@@ -63,9 +63,9 @@ func (uc *UseCase) GetAllMaterialsList(r *http.Request) (*model.MaterialList, er
 }
 
 func (uс *UseCase) DeleteMaterial(r *http.Request) error {
-	id := r.URL.Query().Get("materialUuid")
+	materialUuid := r.URL.Query().Get("id")
 
-	_, err := uс.mC.DeleteMaterial(r.Context(), id)
+	_, err := uс.mC.DeleteMaterial(r.Context(), materialUuid)
 	if err != nil {
 		return fmt.Errorf("failed to delete material in usecase: %v", err)
 	}

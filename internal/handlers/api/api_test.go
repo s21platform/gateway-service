@@ -1447,7 +1447,7 @@ func TestHandler_DeleteMaterial(t *testing.T) {
 	})
 }
 
-func TestHandler_ArchivedMaterial(t *testing.T) {
+func TestHandler_ArchiveMaterial(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -1456,7 +1456,7 @@ func TestHandler_ArchivedMaterial(t *testing.T) {
 	ctx := context.Background()
 	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
 
-	t.Run("archived_material_successfully", func(t *testing.T) {
+	t.Run("archive_material_successfully", func(t *testing.T) {
 		mockMaterialsService := NewMockMaterialsService(ctrl)
 
 		req := httptest.NewRequest(http.MethodPost, "/api/materials", nil)
@@ -1465,8 +1465,8 @@ func TestHandler_ArchivedMaterial(t *testing.T) {
 		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
 		req = req.WithContext(ctx)
 
-		mockLogger.EXPECT().AddFuncName("ArchivedMaterial")
-		mockMaterialsService.EXPECT().ArchivedMaterial(gomock.Any()).Return(nil)
+		mockLogger.EXPECT().AddFuncName("ArchiveMaterial")
+		mockMaterialsService.EXPECT().ArchiveMaterial(gomock.Any()).Return(nil)
 
 		w := httptest.NewRecorder()
 
@@ -1484,13 +1484,13 @@ func TestHandler_ArchivedMaterial(t *testing.T) {
 			nil,
 		)
 
-		h.ArchivedMaterial(w, req)
+		h.ArchiveMaterial(w, req)
 
 		assert.Equal(t, http.StatusNoContent, w.Code)
 		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
 	})
 
-	t.Run("archived_material_fails", func(t *testing.T) {
+	t.Run("archive_material_fails", func(t *testing.T) {
 		mockMaterialsService := NewMockMaterialsService(ctrl)
 
 		req := httptest.NewRequest(http.MethodPost, "/api/materials", nil)
@@ -1498,9 +1498,9 @@ func TestHandler_ArchivedMaterial(t *testing.T) {
 		req = req.WithContext(ctx)
 
 		expectedError := errors.New("database error")
-		mockLogger.EXPECT().AddFuncName("ArchivedMaterial")
-		mockLogger.EXPECT().Error("failed to archived material: database error")
-		mockMaterialsService.EXPECT().ArchivedMaterial(gomock.Any()).Return(expectedError)
+		mockLogger.EXPECT().AddFuncName("ArchiveMaterial")
+		mockLogger.EXPECT().Error("failed to archive material: database error")
+		mockMaterialsService.EXPECT().ArchiveMaterial(gomock.Any()).Return(expectedError)
 
 		w := httptest.NewRecorder()
 
@@ -1518,7 +1518,7 @@ func TestHandler_ArchivedMaterial(t *testing.T) {
 			nil,
 		)
 
-		h.ArchivedMaterial(w, req)
+		h.ArchiveMaterial(w, req)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})

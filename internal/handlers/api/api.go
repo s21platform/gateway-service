@@ -896,13 +896,13 @@ func (h *Handler) DeleteMaterial(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (h *Handler) ArchivedMaterial(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) ArchiveMaterial(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
-	logger.AddFuncName("ArchivedMaterial")
+	logger.AddFuncName("ArchiveMaterial")
 
-	err := h.mS.ArchivedMaterial(r)
+	err := h.mS.ArchiveMaterial(r)
 	if err != nil {
-		logger.Error(fmt.Sprintf("failed to archived material: %v", err))
+		logger.Error(fmt.Sprintf("failed to archive material: %v", err))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -1004,7 +1004,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Patch("/materials", handler.EditMaterial)
 		apiRouter.Get("/materials", handler.GetAllMaterials)
 		apiRouter.Delete("/materials", handler.DeleteMaterial)
-		apiRouter.Post("/materials", handler.ArchivedMaterial)
+		apiRouter.Put("/materials", handler.ArchiveMaterial)
 		apiRouter.Post("/community/code", handler.SendEduLinkingCode)
 
 		//crm routes

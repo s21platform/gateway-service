@@ -74,12 +74,12 @@ func (s *Service) DeleteMaterial(ctx context.Context, materialUuid string) (*emp
 	return resp, nil
 }
 
-func (s *Service) ArchivedMaterial(ctx context.Context, materialUuid string) (*emptypb.Empty, error) {
+func (s *Service) ArchiveMaterial(ctx context.Context, materialUuid string) (*emptypb.Empty, error) {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", materialUuid))
 
-	protoReq := &materialsproto.ArchivedMaterialIn{Uuid: materialUuid}
+	protoReq := &materialsproto.ArchiveMaterialIn{Uuid: materialUuid}
 
-	resp, err := s.client.ArchivedMaterial(ctx, protoReq)
+	resp, err := s.client.ArchiveMaterial(ctx, protoReq)
 	if err != nil {
 		return nil, fmt.Errorf("failed to archive material: %w", err)
 	}

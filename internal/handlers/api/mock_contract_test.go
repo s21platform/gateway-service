@@ -827,18 +827,18 @@ func (m *MockMaterialsService) EXPECT() *MockMaterialsServiceMockRecorder {
 	return m.recorder
 }
 
-// ArchivedMaterial mocks base method.
-func (m *MockMaterialsService) ArchivedMaterial(r *http.Request) error {
+// ArchiveMaterial mocks base method.
+func (m *MockMaterialsService) ArchiveMaterial(r *http.Request) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ArchivedMaterial", r)
+	ret := m.ctrl.Call(m, "ArchiveMaterial", r)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// ArchivedMaterial indicates an expected call of ArchivedMaterial.
-func (mr *MockMaterialsServiceMockRecorder) ArchivedMaterial(r interface{}) *gomock.Call {
+// ArchiveMaterial indicates an expected call of ArchiveMaterial.
+func (mr *MockMaterialsServiceMockRecorder) ArchiveMaterial(r interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ArchivedMaterial", reflect.TypeOf((*MockMaterialsService)(nil).ArchivedMaterial), r)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ArchiveMaterial", reflect.TypeOf((*MockMaterialsService)(nil).ArchiveMaterial), r)
 }
 
 // DeleteMaterial mocks base method.

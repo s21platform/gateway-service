@@ -72,3 +72,14 @@ func (uс *UseCase) DeleteMaterial(r *http.Request) error {
 
 	return nil
 }
+
+func (uc *UseCase) ArchiveMaterial(r *http.Request) error {
+	materialUuid := r.URL.Query().Get("id")
+
+	_, err := uc.mC.ArchiveMaterial(r.Context(), materialUuid)
+	if err != nil {
+		return fmt.Errorf("failed to archive material in usecase: %v", err)
+	}
+
+	return nil
+}

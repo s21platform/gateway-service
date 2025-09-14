@@ -1370,7 +1370,7 @@ func TestApi_EditMaterial(t *testing.T) {
 	})
 }
 
-func TestHandler_DeleteMaterials(t *testing.T) {
+func TestHandler_DeleteMaterial(t *testing.T) {
 	t.Parallel()
 
 	ctrl := gomock.NewController(t)
@@ -1442,6 +1442,83 @@ func TestHandler_DeleteMaterials(t *testing.T) {
 		)
 
 		h.DeleteMaterial(w, req)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
+func TestHandler_ArchiveMaterial(t *testing.T) {
+	t.Parallel()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	ctx := context.Background()
+	mockLogger := logger_lib.NewMockLoggerInterface(ctrl)
+
+	t.Run("archive_material_successfully", func(t *testing.T) {
+		mockMaterialsService := NewMockMaterialsService(ctrl)
+
+		req := httptest.NewRequest(http.MethodPost, "/api/materials", nil)
+		req.Header.Set("Content-Type", "application/json")
+
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		mockLogger.EXPECT().AddFuncName("ArchiveMaterial")
+		mockMaterialsService.EXPECT().ArchiveMaterial(gomock.Any()).Return(nil)
+
+		w := httptest.NewRecorder()
+
+		h := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockMaterialsService,
+			nil,
+		)
+
+		h.ArchiveMaterial(w, req)
+
+		assert.Equal(t, http.StatusNoContent, w.Code)
+		assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
+	})
+
+	t.Run("archive_material_fails", func(t *testing.T) {
+		mockMaterialsService := NewMockMaterialsService(ctrl)
+
+		req := httptest.NewRequest(http.MethodPost, "/api/materials", nil)
+		ctx = context.WithValue(ctx, config.KeyLogger, mockLogger)
+		req = req.WithContext(ctx)
+
+		expectedError := errors.New("database error")
+		mockLogger.EXPECT().AddFuncName("ArchiveMaterial")
+		mockLogger.EXPECT().Error("failed to archive material: database error")
+		mockMaterialsService.EXPECT().ArchiveMaterial(gomock.Any()).Return(expectedError)
+
+		w := httptest.NewRecorder()
+
+		h := New(
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			nil,
+			mockMaterialsService,
+			nil,
+		)
+
+		h.ArchiveMaterial(w, req)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})

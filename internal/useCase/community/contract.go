@@ -11,5 +11,5 @@ import (
 
 type CommunityClient interface {
 	SendEduLinkingCode(ctx context.Context, in *model.SendEduLinkingCodeRequestData) (*emptypb.Empty, error)
-	ValidateCode(ctx context.Context, in *model.ValidateCode) (community.ValidateCodeOut, error)
+	ValidateCode(ctx context.Context, in *model.ValidateCode) (*community.ValidateCodeOut, error)
 }

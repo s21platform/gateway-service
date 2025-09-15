@@ -12,7 +12,7 @@ require (
 	github.com/s21platform/auth-service v0.0.3
 	github.com/s21platform/avatar-service v0.0.0-20250413162426-a937ac435e67
 	github.com/s21platform/chat-service v0.0.3
-	github.com/s21platform/community-service v0.0.0-20250818134518-f0a5cc3aae07
+	github.com/s21platform/community-service v0.0.0-20250903185406-591920fda799
 	github.com/s21platform/feed-proto v0.0.1
 	github.com/s21platform/logger-lib v0.0.6
 	github.com/s21platform/materials-service v0.0.0-20250817153147-e1c7f6f2fb94

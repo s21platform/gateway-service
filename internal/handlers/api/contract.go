@@ -3,6 +3,7 @@
 package api
 
 import (
+	"github.com/s21platform/community-service/pkg/community"
 	"net/http"
 
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -82,6 +83,7 @@ type AdvertService interface {
 
 type CommunityService interface {
 	SendEduLinkingCode(r *http.Request) (*emptypb.Empty, error)
+	ValidateCode(r *http.Request) (*community.ValidateCodeOut, error)
 }
 
 type FeedService interface{}

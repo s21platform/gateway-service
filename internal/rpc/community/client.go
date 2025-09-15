@@ -41,3 +41,17 @@ func (s *Service) SendEduLinkingCode(ctx context.Context, in *model.SendEduLinki
 
 	return resp, nil
 }
+
+func (s *Service) ValidateCode(ctx context.Context, in *model.ValidateCode) (*communityproto.ValidateCodeOut, error) {
+	request := &communityproto.ValidateCodeIn{
+		Login: in.Login,
+		Code:  in.Code,
+	}
+
+	resp, err := s.client.ValidateCode(ctx, request)
+	if err != nil {
+		return nil, fmt.Errorf("failed validate code in grpc: %w", err)
+	}
+
+	return resp, nil
+}

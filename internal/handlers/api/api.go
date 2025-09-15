@@ -904,6 +904,29 @@ func (h *Handler) SendEduLinkingCode(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) ValidateCode(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("ValidateCode")
+
+	result, err := h.comS.ValidateCode(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to validate code: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	jsn, err := json.Marshal(&result)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to json marshal: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsn)
+}
+
 func proxy(host, port string) http.Handler {
 	u, _ := url.Parse(fmt.Sprintf("http://%s:%s", host, port))
 	prx := httputil.NewSingleHostReverseProxy(u)
@@ -972,6 +995,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Patch("/materials", handler.EditMaterial)
 		apiRouter.Get("/materials", handler.GetAllMaterials)
 		apiRouter.Post("/community/code", handler.SendEduLinkingCode)
+		apiRouter.Post("/community/confirm-code", handler.ValidateCode)
 
 		//crm routes
 		apiRouter.Get("/option_requests", handler.GetOptionRequests)

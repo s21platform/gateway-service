@@ -12,6 +12,7 @@ import (
 	advert_proto "github.com/s21platform/advert-proto/advert-proto"
 	avatar "github.com/s21platform/avatar-service/pkg/avatar"
 	chat "github.com/s21platform/chat-service/pkg/chat"
+	community "github.com/s21platform/community-service/pkg/community"
 	model "github.com/s21platform/gateway-service/internal/model"
 	notification "github.com/s21platform/notification-service/pkg/notification"
 	optionhub_proto "github.com/s21platform/optionhub-proto/optionhub-proto"
@@ -779,6 +780,21 @@ func (m *MockCommunityService) SendEduLinkingCode(r *http.Request) (*emptypb.Emp
 func (mr *MockCommunityServiceMockRecorder) SendEduLinkingCode(r interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendEduLinkingCode", reflect.TypeOf((*MockCommunityService)(nil).SendEduLinkingCode), r)
+}
+
+// ValidateCode mocks base method.
+func (m *MockCommunityService) ValidateCode(r *http.Request) (*community.ValidateCodeOut, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ValidateCode", r)
+	ret0, _ := ret[0].(*community.ValidateCodeOut)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ValidateCode indicates an expected call of ValidateCode.
+func (mr *MockCommunityServiceMockRecorder) ValidateCode(r interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidateCode", reflect.TypeOf((*MockCommunityService)(nil).ValidateCode), r)
 }
 
 // MockFeedService is a mock of FeedService interface.

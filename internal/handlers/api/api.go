@@ -881,6 +881,36 @@ func (h *Handler) GetAllMaterials(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(jsn)
 }
 
+func (h *Handler) DeleteMaterial(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("DeleteMaterial")
+
+	err := h.mS.DeleteMaterial(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to delete material: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (h *Handler) ArchiveMaterial(w http.ResponseWriter, r *http.Request) {
+	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
+	logger.AddFuncName("ArchiveMaterial")
+
+	err := h.mS.ArchiveMaterial(r)
+	if err != nil {
+		logger.Error(fmt.Sprintf("failed to archive material: %v", err))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func (h *Handler) SendEduLinkingCode(w http.ResponseWriter, r *http.Request) {
 	logger := logger_lib.FromContext(r.Context(), config.KeyLogger)
 	logger.AddFuncName("SendEduLinkingCode")
@@ -940,7 +970,7 @@ func proxy(host, port string) http.Handler {
 
 		// пример создания X-User-ID
 		if userID, ok := req.Context().Value(config.KeyUUID).(string); ok {
-			req.Header.Set("X-User-ID", userID)
+			req.Header.Set(AuthorizationHeader, userID)
 		}
 	}
 
@@ -954,6 +984,8 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		})
 
 		apiRouter.Handle("/user/*", proxy(cfg.User.Host, cfg.User.Port))
+		apiRouter.Handle("/optionhub/*", proxy(cfg.Optionhub.Host, cfg.Optionhub.Port))
+		apiRouter.Handle("/materials/*", proxy(cfg.Materials.Host, cfg.Materials.Port))
 		apiRouter.Get("/profile", handler.MyProfile)
 		apiRouter.Put("/profile", handler.UpdateProfile)
 		apiRouter.Post("/avatar/user", handler.SetUserAvatar)
@@ -994,6 +1026,8 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Post("/user/post", handler.CreateUserPost)
 		apiRouter.Patch("/materials", handler.EditMaterial)
 		apiRouter.Get("/materials", handler.GetAllMaterials)
+		apiRouter.Delete("/materials", handler.DeleteMaterial)
+		apiRouter.Put("/materials", handler.ArchiveMaterial)
 		apiRouter.Post("/community/code", handler.SendEduLinkingCode)
 		apiRouter.Post("/community/confirm-code", handler.ValidateCode)
 

@@ -61,3 +61,25 @@ func (uc *UseCase) GetAllMaterialsList(r *http.Request) (*model.MaterialList, er
 	materialList.ToDTO(resp.GetMaterialList())
 	return &materialList, nil
 }
+
+func (uс *UseCase) DeleteMaterial(r *http.Request) error {
+	materialUuid := r.URL.Query().Get("id")
+
+	_, err := uс.mC.DeleteMaterial(r.Context(), materialUuid)
+	if err != nil {
+		return fmt.Errorf("failed to delete material in usecase: %v", err)
+	}
+
+	return nil
+}
+
+func (uc *UseCase) ArchiveMaterial(r *http.Request) error {
+	materialUuid := r.URL.Query().Get("id")
+
+	_, err := uc.mC.ArchiveMaterial(r.Context(), materialUuid)
+	if err != nil {
+		return fmt.Errorf("failed to archive material in usecase: %v", err)
+	}
+
+	return nil
+}

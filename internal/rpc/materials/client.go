@@ -60,3 +60,29 @@ func (s *Service) GetAllMaterials(ctx context.Context) (*materialsproto.GetAllMa
 
 	return resp, nil
 }
+
+func (s *Service) DeleteMaterial(ctx context.Context, materialUuid string) (*emptypb.Empty, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", ctx.Value(config.KeyUUID).(string)))
+
+	protoReq := &materialsproto.DeleteMaterialIn{Uuid: materialUuid}
+
+	resp, err := s.client.DeleteMaterial(ctx, protoReq)
+	if err != nil {
+		return nil, fmt.Errorf("failed to delete material: %w", err)
+	}
+
+	return resp, nil
+}
+
+func (s *Service) ArchiveMaterial(ctx context.Context, materialUuid string) (*emptypb.Empty, error) {
+	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("uuid", materialUuid))
+
+	protoReq := &materialsproto.ArchivedMaterialIn{Uuid: materialUuid}
+
+	resp, err := s.client.ArchivedMaterial(ctx, protoReq)
+	if err != nil {
+		return nil, fmt.Errorf("failed to archive material: %w", err)
+	}
+
+	return resp, nil
+}

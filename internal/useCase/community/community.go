@@ -48,7 +48,7 @@ func (u *Usecase) ValidateCode(r *http.Request) (*community.ValidateCodeOut, err
 
 	resp, err := u.cC.ValidateCode(r.Context(), &requestData)
 	if err != nil {
-		return nil, fmt.Errorf("failed to send code in usecase: %v", err)
+		return nil, fmt.Errorf("failed to validate code: %v", err)
 	}
 
 	return resp, nil

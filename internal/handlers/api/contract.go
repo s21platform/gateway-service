@@ -9,6 +9,7 @@ import (
 
 	"github.com/s21platform/avatar-service/pkg/avatar"
 	"github.com/s21platform/chat-service/pkg/chat"
+	"github.com/s21platform/community-service/pkg/community"
 	"github.com/s21platform/notification-service/pkg/notification"
 	"github.com/s21platform/user-service/pkg/user"
 
@@ -82,6 +83,7 @@ type AdvertService interface {
 
 type CommunityService interface {
 	SendEduLinkingCode(r *http.Request) (*emptypb.Empty, error)
+	ValidateCode(r *http.Request) (*community.ValidateCodeOut, error)
 }
 
 type FeedService interface{}

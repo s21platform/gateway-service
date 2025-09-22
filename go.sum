@@ -51,6 +51,8 @@ github.com/s21platform/chat-service v0.0.3 h1:oFRpgNhwplRyryvAvn+rDnBT3liTOmpTA8
 github.com/s21platform/chat-service v0.0.3/go.mod h1:eLS/50WgAm4ksZgUNbOStqHWOzKjMNtKc5GaiIRDnXY=
 github.com/s21platform/community-service v0.0.0-20250818134518-f0a5cc3aae07 h1:838Xze5pLlzDZ2amPv07tfSKr1h2zxt1/GkCqSHmAGw=
 github.com/s21platform/community-service v0.0.0-20250818134518-f0a5cc3aae07/go.mod h1:d9yeT5VlgEUQrUpdtH16lhy/AqQtgDhz4XyAA1pvJzg=
+github.com/s21platform/community-service v0.0.0-20250903185406-591920fda799 h1:fYshtJKX0NadGuglP7ai6hlqpNfcLTlQSxJTD4D5lsA=
+github.com/s21platform/community-service v0.0.0-20250903185406-591920fda799/go.mod h1:QozlfksIGjrAiaUQY9xW0j+9c7v7ELIsWh/JRE1/Vx8=
 github.com/s21platform/feed-proto v0.0.1 h1:BkFhIg28M4iCNXOhbkWU++7RedAFjiaeEe8J74poloo=
 github.com/s21platform/feed-proto v0.0.1/go.mod h1:7R83BXKl3QiSwj0tG+2Z9vYqoKmFbGoYYvw2/8rTJHA=
 github.com/s21platform/logger-lib v0.0.6 h1:Aa3wV7zsaUSUkLa4P8stKNKxmKpZEn9dNBsk00I7Ncw=

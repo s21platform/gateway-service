@@ -6,8 +6,6 @@ github.com/alexcesaro/statsd v2.0.0+incompatible/go.mod h1:vNepIbQAiyLe1j480173M
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/go-chi/chi/v5 v5.2.2 h1:CMwsvRVTbXVytCk1Wd72Zy1LAsAh9GxMmSNWLHCG618=
-github.com/go-chi/chi/v5 v5.2.2/go.mod h1:L2yAIGWB3H+phAw1NxKwWM+7eUH/lU8pOMm5hHcoops=
 github.com/go-chi/chi/v5 v5.2.3 h1:WQIt9uxdsAbgIYgid+BpYc+liqQZGMHRaUwp0JUcvdE=
 github.com/go-chi/chi/v5 v5.2.3/go.mod h1:L2yAIGWB3H+phAw1NxKwWM+7eUH/lU8pOMm5hHcoops=
 github.com/go-logr/logr v1.4.2 h1:6pFjapn8bFcIbiKo3XT4j/BhANplGihG6tvd+8rYgrY=
@@ -49,18 +47,12 @@ github.com/s21platform/avatar-service v0.0.0-20250413162426-a937ac435e67 h1:G4ml
 github.com/s21platform/avatar-service v0.0.0-20250413162426-a937ac435e67/go.mod h1:lWVhJj2Sg6f7yk2b8vN8wU5AQX4WE4bJYaIZCosV5cw=
 github.com/s21platform/chat-service v0.0.3 h1:oFRpgNhwplRyryvAvn+rDnBT3liTOmpTA81ekGIsVxA=
 github.com/s21platform/chat-service v0.0.3/go.mod h1:eLS/50WgAm4ksZgUNbOStqHWOzKjMNtKc5GaiIRDnXY=
-github.com/s21platform/community-service v0.0.0-20250818134518-f0a5cc3aae07 h1:838Xze5pLlzDZ2amPv07tfSKr1h2zxt1/GkCqSHmAGw=
-github.com/s21platform/community-service v0.0.0-20250818134518-f0a5cc3aae07/go.mod h1:d9yeT5VlgEUQrUpdtH16lhy/AqQtgDhz4XyAA1pvJzg=
 github.com/s21platform/community-service v0.0.0-20250903185406-591920fda799 h1:fYshtJKX0NadGuglP7ai6hlqpNfcLTlQSxJTD4D5lsA=
 github.com/s21platform/community-service v0.0.0-20250903185406-591920fda799/go.mod h1:QozlfksIGjrAiaUQY9xW0j+9c7v7ELIsWh/JRE1/Vx8=
 github.com/s21platform/feed-proto v0.0.1 h1:BkFhIg28M4iCNXOhbkWU++7RedAFjiaeEe8J74poloo=
 github.com/s21platform/feed-proto v0.0.1/go.mod h1:7R83BXKl3QiSwj0tG+2Z9vYqoKmFbGoYYvw2/8rTJHA=
 github.com/s21platform/logger-lib v0.0.6 h1:Aa3wV7zsaUSUkLa4P8stKNKxmKpZEn9dNBsk00I7Ncw=
 github.com/s21platform/logger-lib v0.0.6/go.mod h1:KjnZvBFSCUriTW9QCp9y1LAPU4gUo3m8PmWNR3Th7MI=
-github.com/s21platform/materials-service v0.0.0-20250817153147-e1c7f6f2fb94 h1:11OeAfBzoV93QIHyCV5VJVQUqJ8wrms4rv+5xVGhwnI=
-github.com/s21platform/materials-service v0.0.0-20250817153147-e1c7f6f2fb94/go.mod h1:Ti29McUTaSMmpjpZgUUQ1bc78VylhJijtAjIWlagdas=
-github.com/s21platform/materials-service v0.0.0-20250908082033-9654747b4fa8 h1:RazfOVvOIZahSMPAZUmkUfruHVdW+Fy12tKSWhRwrdA=
-github.com/s21platform/materials-service v0.0.0-20250908082033-9654747b4fa8/go.mod h1:KpB8rDhjdl3juJufng3l14wxrH+TuXIPEmQn7I/yO/M=
 github.com/s21platform/materials-service v0.0.1 h1:8jgqgCdABMGImStvlFjqPt83RipXUPhI6hn/FKzEz1s=
 github.com/s21platform/materials-service v0.0.1/go.mod h1:Ti29McUTaSMmpjpZgUUQ1bc78VylhJijtAjIWlagdas=
 github.com/s21platform/metrics-lib v0.0.9 h1:nFz4W+xps2nlxpOyGW/JLjZf2sTN/YXomumuC9nXwQ0=

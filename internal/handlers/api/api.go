@@ -985,6 +985,7 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 
 		apiRouter.Handle("/user/*", proxy(cfg.User.Host, cfg.User.Port))
 		apiRouter.Handle("/optionhub/*", proxy(cfg.Optionhub.Host, cfg.Optionhub.Port))
+		apiRouter.Handle("/materials", proxy(cfg.Materials.Host, cfg.Materials.Port))
 		apiRouter.Handle("/materials/*", proxy(cfg.Materials.Host, cfg.Materials.Port))
 		apiRouter.Get("/profile", handler.MyProfile)
 		apiRouter.Put("/profile", handler.UpdateProfile)
@@ -1024,10 +1025,6 @@ func AttachApiRoutes(r chi.Router, handler *Handler, cfg *config.Config) {
 		apiRouter.Put("/advert/cancel", handler.CancelAdvert)
 		apiRouter.Patch("/advert/restore", handler.RestoreAdvert)
 		apiRouter.Post("/user/post", handler.CreateUserPost)
-		apiRouter.Patch("/materials", handler.EditMaterial)
-		apiRouter.Get("/materials", handler.GetAllMaterials)
-		apiRouter.Delete("/materials", handler.DeleteMaterial)
-		apiRouter.Put("/materials", handler.ArchiveMaterial)
 		apiRouter.Post("/community/code", handler.SendEduLinkingCode)
 		apiRouter.Post("/community/confirm-code", handler.ValidateCode)
 
